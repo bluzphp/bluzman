@@ -1,0 +1,41 @@
+#!/usr/bin/env php
+<?php
+
+if (php_sapi_name() != 'cli') {
+    die('Must run from command line');
+}
+
+// Root path, double level up
+$root = realpath(dirname(dirname(__FILE__)));
+
+// Definitions
+define('PATH_ROOT', $root);
+define('PATH_VENDOR', $root . '/vendor');
+
+error_reporting(E_ALL | E_STRICT);
+ini_set('display_errors', 1);
+ini_set('log_errors', 0);
+ini_set('html_errors', 0);
+
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+    throw new \Exception();
+}
+
+require_once PATH_VENDOR . '/autoload.php';
+
+// @todo commands should to be autoloaded
+
+use Bluzman\Command\Init\AllCommand;
+use Bluzman\Command\Init\ControllerCommand;
+use Bluzman\Command\Init\ModelCommand;
+use Bluzman\Command\TestCommand;
+use Bluzman\Command\GreetCommand;
+
+$application = new Bluzman\Bluzman('bluzman', '0.0.1');
+
+$application->add(new AllCommand);
+$application->add(new ControllerCommand);
+$application->add(new ModelCommand);
+$application->add(new TestCommand);
+$application->run();
+

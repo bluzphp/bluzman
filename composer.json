@@ -1,0 +1,15 @@
+{
+  "name": "bashmach/bluzman",
+  "type": "composer-installer",
+  "version": "0.0.1",
+  "license": "MIT",
+  "require": {
+    "symfony/console": "dev-master"
+  },
+  "autoload": {
+    "psr-0": {
+      "": "vendor",
+      "Bluzman": "src"
+    }
+  }
+}
