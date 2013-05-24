@@ -4,7 +4,13 @@
   "version": "0.0.1",
   "license": "MIT",
   "require": {
+    "php": ">=5.4",
     "symfony/console": "dev-master"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "sh ./bin/install.sh"
+    ]
   },
   "autoload": {
     "psr-0": {
