@@ -91,12 +91,12 @@ class AllCommand extends AbstractCommand
             throw new \RuntimeException('Directory "' . $projectPath . '" is not writable.');
         }
 
+        $output->writeln('');
+
         // create new folder in current working directory if user doesn't set own path
         if (empty($path)) {
             $projectPath = $projectPath . DIRECTORY_SEPARATOR . $name;
         }
-
-        $output->writeln('');
 
         $environment = $this->askEnvironment($output);
 
@@ -117,7 +117,7 @@ class AllCommand extends AbstractCommand
         // change working directory
         chdir($projectPath);
 
-        $output->write(array('Cloning skeleton project...'), true);
+        $output->write(['Cloning skeleton project...'], true);
 
         // clone bluzphp skeleton
         $this->cloneSkeleton($output);
@@ -172,13 +172,21 @@ class AllCommand extends AbstractCommand
         $environment = $dialog->select(
             $output,
             '<question>Please choose your environment:</question> ',
-            array(
-                \Bluzman\Bluzman::ENVIRONMENT_PRODUCTION => 'production',
-                \Bluzman\Bluzman::ENVIRONMENT_DEVELOPMENT => 'development'
-            )
+            $this->getEnvironmentChoices()
         );
 
         return $environment;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getEnvironmentChoices()
+    {
+        return [
+            \Bluzman\Bluzman::ENVIRONMENT_PRODUCTION => 'production',
+            \Bluzman\Bluzman::ENVIRONMENT_DEVELOPMENT => 'development'
+        ];
     }
 
     /**
@@ -194,14 +202,6 @@ class AllCommand extends AbstractCommand
         }
 
         return true;
-    }
-
-    /**
-     * @todo
-     */
-    protected function revert()
-    {
-
     }
 
     /**
