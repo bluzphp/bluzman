@@ -25,17 +25,17 @@ class ControllerCommand extends AbstractCommand
     protected function configure()
     {
         $this
-            ->setName('init:controller')
-            ->setDescription('Initialize a new controller')
+            ->setName("init:controller")
+            ->setDescription("Initialize a new controller")
             ->addArgument(
-                'moduleName',
+                "moduleName",
                 InputArgument::OPTIONAL,
-                'Module name'
+                "Module name"
             )
             ->addArgument(
-                'controllerName',
+                "controllerName",
                 InputArgument::OPTIONAL,
-                'Controller name'
+                "Controller name"
             );
 
 
@@ -47,19 +47,18 @@ class ControllerCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<info>Running "init:controller" command</info>');
+        $output->writeln("<info>Running \"init:controller\" command</info>");
 
         $this->verify($input, $output);
 
-        $moduleName = $input->getArgument('moduleName');
-        $controllerName = $input->getArgument('controllerName');
+        $moduleName = $input->getArgument("moduleName");
+        $controllerName = $input->getArgument("controllerName");
 
         if (!empty($moduleName) && !empty($controllerName)) {
             $this->generate($controllerName, $moduleName, $input, $output);
 
-            $output->writeln('');
-            $output->writeln('Controller <info>"' . $controllerName . '"</info> ' .
-                'has been successfully created in module <info>"' . $moduleName . '"</info>.');
+            $output->writeln("\nController <info>\"" . $controllerName . "\"</info> " .
+                "has been successfully created in the module <info>\"" . $moduleName . "\"</info>.");
         }
     }
 
@@ -74,19 +73,19 @@ class ControllerCommand extends AbstractCommand
         // generate controller
         try {
             $arguments = array(
-                $controllerName . '.php',
-                $this->getPath($moduleName, 'controllers'),
+                $controllerName . ".php",
+                $this->getPath($moduleName, "controllers"),
                 Generator\Generator::ENTITY_TYPE_CONTROLLER
             );
 
-            call_user_func_array(array($generator, 'generateTemplate'), $arguments);
+            call_user_func_array(array($generator, "generateTemplate"), $arguments);
 
         } catch (Generator\Template\Exception\AlreadyExistsException $e) {
-            $dialog = $this->getHelperSet()->get('dialog');
+            $dialog = $this->getHelperSet()->get("dialog");
 
             $result = $dialog->askConfirmation(
                 $output,
-                '<question>Controller ' . $e->getMessage() . ' would be overwritten. y/N?:</question> ',
+                "\n<question>Controller " . $e->getMessage() . " would be overwritten. y/N?:</question> \n> ",
                 false
             );
 
@@ -94,75 +93,106 @@ class ControllerCommand extends AbstractCommand
                 $arguments[] = array(); //options argument
                 $arguments[] = true; // rewrite argument
 
-                call_user_func_array(array($generator, 'generateTemplate'), $arguments);
+                call_user_func_array(array($generator, "generateTemplate"), $arguments);
             }
         }
 
         // generate view
         try {
             $arguments = array(
-                $controllerName . '.phtml',
-                $this->getPath($moduleName, 'views'),
+                $controllerName . ".phtml",
+                $this->getPath($moduleName, "views"),
                 Generator\Generator::ENTITY_TYPE_VIEW,
                 array(
-                    'name' => $controllerName
+                    "name" => $controllerName
                 )
             );
 
-            call_user_func_array(array($generator, 'generateTemplate'), $arguments);
+            call_user_func_array(array($generator, "generateTemplate"), $arguments);
         } catch (Generator\Template\Exception\AlreadyExistsException $e) {
-            $dialog = $this->getHelperSet()->get('dialog');
+            $dialog = $this->getHelperSet()->get("dialog");
 
             $result = $dialog->askConfirmation(
                 $output,
-                '<question>View ' . $e->getMessage() . ' would be overwritten. y/N?:</question> ',
+                "\n<question>View " . $e->getMessage() . " would be overwritten. y/N?:</question> \n> ",
                 false
             );
 
             if ($result) {
                 //set rewrite argument as true
                 $arguments[] = true;
-                call_user_func_array(array($generator, 'generateTemplate'), $arguments);
+                call_user_func_array(array($generator, "generateTemplate"), $arguments);
             }
         }
     }
 
+    /**
+     * Get full path to the module
+     *
+     * @param $moduleName
+     * @param $directoryName
+     * @return string
+     * @throws \RuntimeException
+     */
     protected function getPath($moduleName, $directoryName)
     {
         $modulePath = $this->getApplication()->getModulePath($moduleName);
 
         if (!is_dir($modulePath)) {
-            throw new \RuntimeException('Directory "' . $modulePath . '" not exists.');
+            throw new \RuntimeException("Directory \"" . $modulePath . "\" not exists.");
         }
 
         $path = $modulePath . DIRECTORY_SEPARATOR . $directoryName;
 
         if (!is_dir($path)) {
-            throw new \RuntimeException('Directory "' . $path . '" not exists.');
+            throw new \RuntimeException("Directory \"" . $path . "\" not exists.");
         }
 
         return $path;
     }
 
+    /**
+     * Verify arguments
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     public function verify(InputInterface $input, OutputInterface $output)
     {
-        $input->setArgument(
-            'moduleName',
-            $this->validateModuleName($input->getArgument('moduleName'), $input, $output)
-        );
-        $input->setArgument(
-            'controllerName',
-            $this->validateControllerName($input->getArgument('controllerName'), $input, $output)
-        );
+        if (!$input->isInteractive()) {
+            throw new \RuntimeException("Command should be executed in interactive mode.");
+        }
+
+        $moduleName = $input->getArgument("moduleName");
+        $controllerName = $input->getArgument("controllerName");
+
+        // module name is required, but we don't need to validate it at the first time
+        if (empty($moduleName)) {
+            $this->askModuleName($input, $output);
+        } else {
+            $this->validateModuleName($input->getArgument("moduleName"), $input, $output);
+        }
+
+        // controller name is required, but we don't need to validate it at the first time
+        if (empty($controllerName)) {
+            $this->askControllerName($input, $output);
+        } else {
+            $this->validateControllerName($input->getArgument("controllerName"), $input, $output);
+        }
     }
 
+    /**
+     * @param $input
+     * @param $output
+     * @return mixed
+     */
     protected function askControllerName($input, $output)
     {
-        $dialog = $this->getHelperSet()->get('dialog');
+        $dialog = $this->getHelperSet()->get("dialog");
 
         return $dialog->askAndValidate(
             $output,
-            "<question>Please enter the name of the controller:</question> \n> ",
+            "\n<question>Please enter the name of the controller:</question> \n> ",
             function ($name) use ($input, $output, $dialog) {
                 return $this->validateControllerName($name, $input, $output);
             },
@@ -170,13 +200,18 @@ class ControllerCommand extends AbstractCommand
         );
     }
 
+    /**
+     * @param $input
+     * @param $output
+     * @return mixed
+     */
     protected function askModuleName($input, $output)
     {
-        $dialog = $this->getHelperSet()->get('dialog');
+        $dialog = $this->getHelperSet()->get("dialog");
 
         return $dialog->askAndValidate(
             $output,
-            "<question>Please enter the name of the module:</question> \n> ",
+            "\n<question>Please enter the name of the module:</question> \n> ",
             function ($name) use ($input, $output, $dialog) {
                 return $this->validateModuleName($name, $input, $output);
             },
@@ -184,51 +219,62 @@ class ControllerCommand extends AbstractCommand
         );
     }
 
+    /**
+     * @param $controllerName
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return mixed
+     * @throws \RuntimeException
+     */
     protected function validateControllerName($controllerName, InputInterface $input, OutputInterface $output)
     {
-        if (!$input->isInteractive()) {
-            throw new \RuntimeException('Command should be executed in interactive mode.');
-        }
-
         if (empty($controllerName)) {
             return $this->askControllerName($input, $output);
         }
 
+        $input->setArgument("controllerName", strtolower($controllerName));
+
         return $controllerName;
     }
 
+    /**
+     * @param $moduleName
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return mixed
+     */
     protected function validateModuleName($moduleName, InputInterface $input, OutputInterface $output)
     {
         if (empty($moduleName)) {
-            $output->writeln('');
-            $output->writeln('<error>ERROR: Please enter a correct name of the module</error>');
-            $output->writeln('');
+            $output->writeln("");
+            $output->writeln("<error>ERROR: Please enter a correct name of the module</error>");
 
             return $this->askModuleName($input, $output);
         }
 
+        // Ask user to type another name of module because current is not exist
         if (!$this->getApplication()->isModuleExists($moduleName)) {
 
-            $output->writeln('');
-            $output->writeln('<error>ERROR: Module ' . $moduleName . ' is not exists</error>');
-            $output->writeln('');
+            $output->writeln("\n<error>ERROR: Module " . $moduleName . " is not exist</error>");
 
-            $dialog = $this->getHelperSet()->get('dialog');
+            $dialog = $this->getHelperSet()->get("dialog");
 
+            // show dialog
             $result = $dialog->askConfirmation(
                 $output,
-                "<question>Do you want to try with another module name?. Y/n?:</question> \n> ",
+                "\n<question>Do you want to try with another module name?. Y/n?:</question> \n> ",
                 true
             );
 
             if (!$result) {
-                //Stop script
-
+                //Stop script if module is not exist.
                 exit();
             }
 
             return $this->askModuleName($input, $output);
         }
+
+        $input->setArgument("moduleName", strtolower($moduleName));
 
         return $moduleName;
     }
