@@ -138,6 +138,8 @@ class ModuleCommand extends AbstractCommand
      */
     public function verify(InputInterface $input, OutputInterface $output)
     {
+        $name = $input->getArgument('moduleName');
+
         if (empty($name)) {
             $this->askName($input, $output);
         } else {
