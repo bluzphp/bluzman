@@ -5,7 +5,13 @@
  */
 namespace Bluzman;
 
-use Bluzman\Command\Init;
+use Bluzman\Command\Init\AllCommand;
+use Bluzman\Command\Init\ControllerCommand;
+use Bluzman\Command\Init\ModelCommand;
+use Bluzman\Command\Init\ModuleCommand;
+use Bluzman\Command\TestCommand;
+use Bluzman\Command\GreetCommand;
+
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -54,11 +60,12 @@ class Bluzman extends Application
     {
         parent::__construct($name, $version);
 
-        $this->add(new Init\AllCommand);
-        $this->add(new Init\ControllerCommand);
-        $this->add(new Init\ModelCommand);
-        $this->add(new Init\ModuleCommand);
-        $this->add(new \Bluzman\Command\TestCommand);
+        // @todo commands should be added automatically
+        $this->add(new AllCommand);
+        $this->add(new ControllerCommand);
+        $this->add(new ModelCommand);
+        $this->add(new ModuleCommand);
+        $this->add(new TestCommand);
     }
 
     /**

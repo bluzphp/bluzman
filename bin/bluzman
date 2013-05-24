@@ -23,19 +23,5 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 
 require_once PATH_VENDOR . '/autoload.php';
 
-// @todo commands should to be autoloaded
-
-use Bluzman\Command\Init\AllCommand;
-use Bluzman\Command\Init\ControllerCommand;
-use Bluzman\Command\Init\ModelCommand;
-use Bluzman\Command\TestCommand;
-use Bluzman\Command\GreetCommand;
-
-$application = new Bluzman\Bluzman('bluzman', '0.0.1');
-
-$application->add(new AllCommand);
-$application->add(new ControllerCommand);
-$application->add(new ModelCommand);
-$application->add(new TestCommand);
+$application = new Bluzman\Bluzman('bluzman', '0.1.0');
 $application->run();
-
