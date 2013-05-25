@@ -7,11 +7,7 @@
     "php": ">=5.4",
     "symfony/console": "dev-master"
   },
-  "scripts": {
-    "post-install-cmd": [
-      "sh ./bin/install.sh"
-    ]
-  },
+  "scripts": {},
   "autoload": {
     "psr-0": {
       "": "vendor",

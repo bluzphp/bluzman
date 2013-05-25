@@ -15,6 +15,9 @@ then
 
     echo -e "\nSUCCESS\n";
     echo "Bluzman has been successfully installed.";
+
+    echo -e "\nStart new session in your terminal or run this command in current session:"
+    echo -e "\n     export PATH=\$PATH:/%path_to_bluzman_directory%/bin\n"
 else
     echo -e "\n\e[00;31mWARNING!\n\nMissed ~/.bashrc,so you should add bluzman to \$PATH manually:
     \n     $EXTEND_PATH

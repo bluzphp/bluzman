@@ -41,7 +41,7 @@ class ServerCommand extends Console\Command\Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            //@todo Add an ability to define address parameters in config.
+            //@todo Add an ability to define address parameters.
             $config = $this->getApplication()->getConfig();
 
             $address = $this->getAddress();

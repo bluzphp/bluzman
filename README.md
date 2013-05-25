@@ -23,7 +23,7 @@ This will provide an ability to use one bluzman installation with many applicati
 1. Clone from repository
 
     ```bash
-    $ git clone
+    $ git clone git://github.com/bashmach/bluzman.git
     $ cd bluzman
     ```
 
@@ -39,6 +39,11 @@ This will provide an ability to use one bluzman installation with many applicati
 
     ```bash
     $ sh ./bin/install.sh
+    ```
+
+    Start new session in your terminal or run this command in current session:
+    ```bash
+    $ export PATH=$PATH:/%path_to_bluzman_directory%/bin
     ```
 
 ## Usage
@@ -73,6 +78,12 @@ $ bluzman init:module
 
 ```bash
 $ bluzman init:controller
+```
+
+### Start server
+
+```bash
+$ bluzman server
 ```
 
 ## TODO

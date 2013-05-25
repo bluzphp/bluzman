@@ -313,13 +313,10 @@ EOF
         return $this->dbh;
     }
 
-    /**
-     * @throws \LogicException
-     */
     public function callForContribute($output)
     {
         $output->writeln('');
-        $output->writeln("<error> This command is not implemented yet. Don't be indifferent - you can contribute! https://github.com/bluzphp. </error>");
+        $output->writeln("<error> This command is not implemented yet. Don't be indifferent - you can contribute! https://github.com/bashmach/bluzman. </error>");
         $output->writeln('');
     }
 }
