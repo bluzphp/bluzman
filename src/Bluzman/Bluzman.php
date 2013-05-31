@@ -269,6 +269,7 @@ EOF
         include $loader;
 
         $config = new \Bluz\Config\Config();
+        $config->setPath(PATH_APPLICATION . DIRECTORY_SEPARATOR . 'configs');
         $config->load($this->getConfig()->environment);
 
         return $config;
@@ -284,7 +285,7 @@ EOF
     public function getDbConnection()
     {
         if (!$this->dbh) {
-            $config = $this->getApplicationConfig()->get('db');
+            $config = $this->getApplicationConfig()->db;
 
             if (!isset($config['connect'])) {
                 throw new \LogicException(
