@@ -24,7 +24,7 @@ class ServerCommand extends Console\Command\Command
 {
     protected $host = '127.0.0.1';
 
-    protected $port = '3501';
+    protected $port = '1337';
 
     protected function configure()
     {
@@ -41,20 +41,17 @@ class ServerCommand extends Console\Command\Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            //@todo Add an ability to define address parameters.
+            //@todo Add an ability to define address and environment parameters in config.
             $config = $this->getApplication()->getConfig();
 
             $address = $this->getAddress();
             $env = $config->environment;
 
         } catch (\RuntimeException $e) {
-            throw new \RuntimeException('Command must be runned from the root folder of application.');
+            throw new \RuntimeException('Command should be run from the root folder of application.');
         }
 
-        $text = "Running server at " . $address . "...\n";
-
-        //do init
-        $output->writeln($text);
+        $output->writeln('<info>Running "server" command at ' . $address . '</info>');
 
         $publicDirectory = $this->getApplication()->getPath() . DIRECTORY_SEPARATOR . 'public';
 
@@ -63,9 +60,7 @@ class ServerCommand extends Console\Command\Command
             throw new \RuntimeException('Failed to find `public` directory.');
         }
 
-        // @todo: BLUZ_ENV will be default anyway, because currently skeleton doesn't detect arguments from environment,
-        //        so, it's need to be fixed there with separate pull-request
-        exec('cd ' . $publicDirectory . ' && BLUZ_ENV=' . $env . ' php -S ' . $address);
+        exec('cd ' . $publicDirectory . ' && export BLUZ_ENV=' . $env . ' && php -S ' . $address);
     }
 
     /**
