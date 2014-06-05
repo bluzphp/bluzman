@@ -2,8 +2,11 @@
 
 namespace Bluzman\Command\Init;
 
-use Bluzman\Command\Command;
-use Bluzman\Generator\Template\AbstractTemplate;
+use Bluzman\Input;
+use Bluzman\Command;
+use Bluzman\Validation\Rules\DirectoryEmpty;
+use Respect;
+use Respect\Validation\Validator as v;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -21,26 +24,55 @@ use Symfony\Component\Console\Helper\ProgressHelper;
  * @created  3/20/13 5:45 PM
  */
 
-class AllCommand extends AbstractCommand
+class AllCommand extends Command\AbstractCommand
 {
     /**
-     * Configure command
+     * @var string
      */
-    protected function configure()
+    protected $name = 'init:all';
+
+    /**
+     * @var string
+     */
+    protected $description = 'Initialize and scaffold a new project';
+
+    protected $cmdPattern;
+
+    protected function getArguments()
     {
-        $this
-            ->setName('init:all')
-            ->setDescription('Initialize and scaffold a new project')
-            ->addArgument(
+        return [];
+    }
+
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            [
                 'name',
-                InputArgument::OPTIONAL,
-                'Name of new project'
-            )
-            ->addArgument(
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Name of new project',
+                null,
+                v::alnum('_-')->noWhitespace()
+            ],
+            [
                 'path',
-                InputArgument::OPTIONAL,
-                'Project root path'
-            );
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Project root path',
+                null,
+                v::directory()->writable()
+            ]
+        ];
+    }
+
+    public function __construct($name = null)
+    {
+        parent::__construct($name);
     }
 
     /**
@@ -51,176 +83,92 @@ class AllCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        try {
-            $this->getConfig();
+        $output->writeln($this->info('Running "init:all" command'));
 
-            // This means that config is exist in current directory, so there is another project.
-            throw new \Exception('Unable to initialize new project in the root folder of another.');
-        } catch (\RuntimeException $e) {
-            // continue normally
-
-        } catch (\Exception $e) {
-            // stop script
-            throw new \RuntimeException($e->getMessage());
-        }
-
-        $output->writeln('<info>Running "init:all" command</info>');
-
-        $name = $input->getArgument('name');
-        $path = $input->getArgument('path');
-
-        // `name` is required argument
-        if (empty($name)) {
-            // command should be executed only in interactive mode
-            if (!$input->isInteractive()) {
-                throw new \RuntimeException('Command should be executed in interactive mode.');
-            }
-
-            $output->writeln('');
-            $name = $this->askName($output);
-        }
-
-        $projectPath = realpath($path);
-
-        if (!$projectPath) {
-            throw new \RuntimeException('Directory "' . $path . '" is not exists.');
-        }
-
-        // check if project directory is writable
-        if (!is_writable($projectPath)) {
-            throw new \RuntimeException('Directory "' . $projectPath . '" is not writable.');
-        }
-
-        $output->writeln('');
-
-        // create new folder in current working directory if user doesn't set own path
-        if (empty($path)) {
-            $projectPath = $projectPath . DIRECTORY_SEPARATOR . $name;
-        }
-
-        $environment = $this->askEnvironment($output);
-
-        $output->writeln('');
-
-        // create new project directory
-        if (!is_dir($projectPath)) {
-            mkdir($projectPath);
-        } else {
-            //check if directory not empty
-            $empty = (($files = @scandir($projectPath)) && count($files) <= 2);
-
-            if (!$empty) {
-                throw new \RuntimeException('Directory "' . $projectPath . '" is not empty.');
-            }
-        }
-
-        // change working directory
-        chdir($projectPath);
-
-        $output->write(['Cloning skeleton project...'], true);
-
-        // clone bluzphp skeleton
-        $this->cloneSkeleton($output);
-
-        $output->writeln('Generating bluzman configuration file...');
-
-        // generate bluzman config
-        $this->getApplication()->generateConfig($name, $environment);
+        $this->cloneProject()
+            ->generateConfig();
 
         // verify the skeleton was clone and config was created
         $this->verify($input, $output);
 
-        $output->writeln('');
-
-        $output->writeln('Project <info>"' . $name . '"</info> was successfully initialized.');
+        $output->writeln($this->info('Project "' . $this->getOption('name') . '" has been successfully initialized.'));
     }
 
     /**
-     * @param OutputInterface $output
-     * @return mixed
+     * @return $this
+     * @throws \Bluzman\Input\InputException
      */
-    protected function askName(OutputInterface $output)
+    protected function cloneProject()
     {
-        $dialog = $this->getHelperSet()->get('dialog');
+        $name = $this->getOption('name');
+        $path = $this->getOption('path');
 
-        // ask user enter a valid name of new project
-        return $dialog->askAndValidate(
-            $output,
-            "<question>Please enter the name of the project:</question> \n> ",
-            function ($name) use ($output, $dialog) {
-                if (empty($name)) {
-                    $output->writeln('<error>ERROR: Please enter a correct name of the project</error>');
+        $this->getOutput()->writeln('Cloning skeleton project...');
 
-                    return $this->askName($output);
-                } else {
-                    return $name;
-                }
-            },
-            true
-        );
+        chdir($path);
+
+        $projectPath = realpath($path) . DS . $name;
+
+        if (is_dir($projectPath)) {
+            $validator = new DirectoryEmpty();
+            if (!$validator->validate($projectPath)) {
+                throw new Input\InputException('"' . $projectPath . '" must be empty.');
+            }
+        }
+
+        // create skeleton project
+        shell_exec(sprintf($this->getCmdPattern(), $name));
+
+        return $this;
     }
 
     /**
-     * @param OutputInterface $output
-     * @return mixed
+     * @return string
      */
-    protected function askEnvironment(OutputInterface $output)
+    protected function getCmdPattern()
     {
-        $dialog = $this->getHelperSet()->get('dialog');
-
-        // ask user enter a valid name of new model
-        $environment = $dialog->select(
-            $output,
-            '<question>Please choose your environment:</question> ',
-            $this->getEnvironmentChoices()
-        );
-
-        return $environment;
+        return 'php ' . PATH_VENDOR . DS . 'bin' . DS
+            . 'composer create-project bluzphp/skeleton %s'
+            . ' --stability=dev --no-dev --keep-vcs --verbose';
     }
 
     /**
-     * @return array
+     * @return $this
      */
-    protected function getEnvironmentChoices()
+    protected function generateConfig()
     {
-        return [
-            \Bluzman\Bluzman::ENVIRONMENT_PRODUCTION => 'production',
-            \Bluzman\Bluzman::ENVIRONMENT_DEVELOPMENT => 'development'
-        ];
+        $name = $this->getOption('name');
+        $path = $this->getOption('path');
+
+        $bluzmanDirectory = realpath($path) . DS . $name . DS . '.bluzman';
+
+        if (!is_dir($bluzmanDirectory)) {
+            mkdir($bluzmanDirectory);
+        }
+
+        $this->getOutput()->writeln('Generating bluzman configuration file...');
+
+        chdir($bluzmanDirectory . DS . '..');
+
+        // generate bluzman config
+        $this->getApplication()->getConfig()->putOptions([
+            'name' => $name,
+            'version' => $this->getApplication()->getVersion()
+        ]);
+
+        return $this;
     }
 
     /**
-     * @todo
-     *
      * @return bool
      * @throws \RuntimeException
      */
     public function verify(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->getConfig()) {
+        if (!$this->getApplication()->getConfig()) {
             throw new \RuntimeException('Something is wrong with project path. Unable to verify config.');
         }
 
         return true;
-    }
-
-    /**
-     * @param OutputInterface $output
-     * @throws \RuntimeException
-     */
-    protected function cloneSkeleton(OutputInterface $output)
-    {
-        $cmd = $this->getApplication()->getComposerCmd();
-
-        // install skeleton project
-        shell_exec($cmd . ' create-project bluzphp/skeleton . --stability=dev --no-progress --keep-vcs');
-
-        // clear VCS files related to skeleton project
-        shell_exec('rm .git -rf');
-
-        // verify that skeleton has been successfully cloned
-        if (!is_readable($this->getApplication()->getPath() . DIRECTORY_SEPARATOR . 'composer.json')) {
-            throw new \RuntimeException('Something went wrong. Project initialization failed. Please try again.');
-        }
     }
 }
