@@ -10,34 +10,37 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
+
 /**
- * TestCommand
+ * Class TestCommand
  *
- * !!!TODO
- *
- * @category Command
- * @package  Bluzman
+ * @package Bluzman\Command
  *
  * @author   Pavel Machekhin
  * @created  3/28/13 2:03 PM
  */
 
-class TestCommand extends Console\Command\Command
+class TestCommand extends AbstractCommand
 {
-    protected function configure()
-    {
-        $this
-            ->setName('test')
-            ->setDescription('Run tests');
-    }
+    /**
+     * @var string
+     */
+    protected $name = 'test';
 
+    /**
+     * @var string
+     */
+    protected $description = 'Run application tests';
+
+    /**
+     * @todo
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $text = 'Running tests...';
-
-        //do init
-        $output->writeln($text);
-
-        $this->getApplication()->callForContribute($output);
+        $this->callForContribute();
     }
 }

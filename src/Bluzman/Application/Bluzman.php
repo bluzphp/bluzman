@@ -112,8 +112,6 @@ class Bluzman extends Application
         }
 
         $this->config = json_decode(file_get_contents($this->getConfigPath()));
-
-        file_put_contents($this->getConfigPath(), json_encode($this->config, JSON_PRETTY_PRINT));
     }
 
     /**
@@ -154,7 +152,7 @@ EOF
     }
 
     /**
-     * Returns the path to application directory
+     * Returns the path to the directory with bluzman application
      *
      * @return string
      */

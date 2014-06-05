@@ -11,6 +11,7 @@ $root = realpath(dirname(dirname(__FILE__)));
 // Definitions
 define('PATH_ROOT', $root);
 define('PATH_VENDOR', $root . '/vendor');
+define('DS', DIRECTORY_SEPARATOR);
 
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
@@ -21,7 +22,16 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
     throw new \Exception();
 }
 
+// Get project info from composer.json
+$composerConfig = json_decode(
+    file_get_contents(PATH_ROOT . DIRECTORY_SEPARATOR . 'composer.json'),
+    true
+);
+
 require_once PATH_VENDOR . '/autoload.php';
 
-$application = new Bluzman\Bluzman('bluzman', '0.1.0');
+$application = new Bluzman\Application\Application(
+    $composerConfig['description'],
+    $composerConfig['version']
+);
 $application->run();
