@@ -81,7 +81,9 @@ class Application extends Console\Application
     protected function registerCommands()
     {
         $this->addCommands([
-            new Command\ServerCommand,
+            new Command\Server\StartCommand,
+            new Command\Server\StopCommand,
+            new Command\Server\StatusCommand,
             new Command\TestCommand,
             new Command\Init\AllCommand
         ]);

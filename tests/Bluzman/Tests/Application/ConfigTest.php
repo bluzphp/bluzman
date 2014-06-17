@@ -16,20 +16,9 @@ class ConfigTest extends TestCase
      */
     protected $config;
 
-    protected $data = ['foo' => 'bar'];
-
     public function setUp()
     {
-        $mock = m::mock('Bluz\Application\Application')
-            ->shouldReceive('getWorkingPath')
-            ->atLeast(1)
-            ->andReturn(__DIR__ . DS . 'fixtures' . DS . 'app')
-            ->getMock();
-
-        $config = new Config($this->getApplicationFixture());
-        $config->setApplication($mock);
-
-        $this->config = $config;
+        $this->config = new Config($this->getApplicationFixture());
 
         mkdir(PATH_TMP . DS . '.bluzman');
     }
@@ -53,6 +42,7 @@ class ConfigTest extends TestCase
      */
     public function testIsFixtureCorrect()
     {
+        $this->config->setApplication($this->getMockWithFixturesWorkingPath());
         $this->assertInstanceOf('\Bluzman\Application\Config', $this->config);
         $this->assertNotEquals($this->config->getApplication()->getWorkingPath(), __DIR__);
     }
@@ -60,6 +50,7 @@ class ConfigTest extends TestCase
 
     public function testMagicGetter()
     {
+        $this->config->setApplication($this->getMockWithFixturesWorkingPath());
         $this->assertEquals($this->config->foo, 'bar');
     }
 
@@ -70,6 +61,7 @@ class ConfigTest extends TestCase
      */
     public function testMagicSetter()
     {
+        $this->config->setApplication($this->getMockWithTemporaryWorkingPath());
         $this->config->bar = 'foo';
 
         $this->assertEquals('foo', $this->config->bar);
@@ -77,13 +69,7 @@ class ConfigTest extends TestCase
 
     public function testConfigCreate()
     {
-        $mock = m::mock('Bluz\Application\Application')
-            ->shouldReceive('getWorkingPath')
-            ->atLeast(1)
-            ->andReturn(PATH_TMP)
-            ->getMock();
-
-        $this->config->setApplication($mock);
+        $this->config->setApplication($this->getMockWithTemporaryWorkingPath());
         $this->config->putOptions(['foo' => 'bar']);
 
         $this->assertFileExists(PATH_TMP . DS . '.bluzman' . DS . 'config.json');
@@ -95,13 +81,7 @@ class ConfigTest extends TestCase
      */
     public function testConfigRead($data)
     {
-        $mock = m::mock('Bluz\Application\Application')
-            ->shouldReceive('getWorkingPath')
-            ->atLeast(1)
-            ->andReturn(PATH_TMP)
-            ->getMock();
-
-        $this->config->setApplication($mock);
+        $this->config->setApplication($this->getMockWithTemporaryWorkingPath());
         $this->config->putOptions($data);
 
         $options = $this->config->getOptions();
@@ -114,6 +94,8 @@ class ConfigTest extends TestCase
      */
     public function testGetBluzConfig()
     {
+        $this->config->setApplication($this->getMockWithFixturesWorkingPath());
+
         /**
          * @var \Bluz\Config\Config $bluzConfig
          */
@@ -122,6 +104,34 @@ class ConfigTest extends TestCase
         $this->assertInstanceOf('\Bluz\Config\Config', $bluzConfig);
         $this->assertEquals('bar', $bluzConfig->getData('foo'));
         $this->assertEquals('foo', $bluzConfig->getData('bar'));
+    }
+
+    /**
+     * @return \Bluz\Application\Application
+     */
+    protected function getMockWithFixturesWorkingPath()
+    {
+        $mock = m::mock('Bluz\Application\Application')
+            ->shouldReceive('getWorkingPath')
+            ->atLeast(1)
+            ->andReturn(__DIR__ . DS . 'fixtures' . DS . 'app')
+            ->getMock();
+
+        return $mock;
+    }
+
+    /**
+     * @return \Bluz\Application\Application
+     */
+    protected function getMockWithTemporaryWorkingPath()
+    {
+        $mock = m::mock('Bluz\Application\Application')
+            ->shouldReceive('getWorkingPath')
+            ->atLeast(1)
+            ->andReturn(PATH_TMP)
+            ->getMock();
+
+        return $mock;
     }
 
     public function foobarOptions()

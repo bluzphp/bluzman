@@ -2,3 +2,4 @@
 !**.stub
 composer.lock
 vendor
+build

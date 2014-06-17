@@ -1,13 +1,15 @@
 <?php
 
-namespace Bluzman\Command;
+namespace Bluzman\Command\Server;
 
+use Bluzman\Command\AbstractCommand;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Symfony\Component\Process\Process;
 
 /**
  * ServerCommand
@@ -19,12 +21,12 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  * @created  5/24/13 9:23 PM
  */
 
-class ServerCommand extends AbstractCommand
+class StartCommand extends AbstractCommand
 {
     /**
      * @var string
      */
-    protected $name = 'server';
+    protected $name = 'server:start';
 
     /**
      * @var string
@@ -53,10 +55,7 @@ class ServerCommand extends AbstractCommand
      */
     protected function getArguments()
     {
-        return array(
-            array('host', InputArgument::OPTIONAL, 'IP address of the server', '127.0.0.1'),
-            array('port', InputArgument::OPTIONAL, 'Port of the server', '1337'),
-        );
+        return [];
     }
 
     /**
@@ -66,11 +65,11 @@ class ServerCommand extends AbstractCommand
      */
     protected function getOptions()
     {
-        $options = [];
-
-        if ($this->systemIsCorrect()) {
-            $options[] = ['background', 'b', InputOption::VALUE_NONE, 'Run the server in the background'];
-        }
+        $options = [
+            ['host', null, InputOption::VALUE_OPTIONAL, 'IP address of the server', '127.0.0.1'],
+            ['port', null, InputOption::VALUE_OPTIONAL, 'Port of the server', '1337'],
+            ['background', 'b', InputOption::VALUE_NONE, 'Run the server in the background']
+        ];
 
         return $options;
     }
@@ -85,11 +84,11 @@ class ServerCommand extends AbstractCommand
         //get application config
         $config = $this->getApplication()->getConfig();
 
-        $this->setHost($this->getInput()->getArgument('host'));
-        $this->setPort($this->getInput()->getArgument('port'));
+        $this->setHost($this->getInput()->getOption('host'));
+        $this->setPort($this->getInput()->getOption('port'));
         $this->setEnvironment($this->getInput()->getOption('env'));
 
-        $this->getOutput()->writeln($this->info('Running "server" command at ' . $this->getAddress() . ' [' . $this->getEnvironment() . '].'));
+        $this->getOutput()->writeln($this->info('Running "server:start" command ... [' . $this->getEnvironment() . ']'));
 
         $this->startServer();
     }
@@ -150,11 +149,6 @@ class ServerCommand extends AbstractCommand
         return $this->getHost() . ':' . $this->getPort();
     }
 
-    protected function systemIsCorrect()
-    {
-        return strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN';
-    }
-
     protected function getBaseCommand()
     {
         return 'export BLUZ_ENV=' . $this->getEnvironment() . ' && php -S ' . $this->getAddress();
@@ -163,14 +157,13 @@ class ServerCommand extends AbstractCommand
     /**
      * @return string
      */
-    protected function getProcessId($pattern)
+    protected function getProcessId()
     {
         $this->showProgress();
 
-        // dirty hack - need to wait for the process creation
-        sleep(1);
+        $pattern = 'php -S ' . $this->getAddress();
 
-        return trim(shell_exec('ps aux | grep "'.$pattern.'" | awk \'{print $2}\' | sed -n \'2p\''));
+        return trim(shell_exec('ps aux | grep "'.$pattern.'" | grep -v grep  | grep -v BLUZ_ENV | awk \'{print $2}\''));
     }
 
     /**
@@ -180,20 +173,44 @@ class ServerCommand extends AbstractCommand
     protected function startServer()
     {
         $publicDir = $this->getApplication()->getWorkingPath() . DS . 'public';
-
-        chdir($publicDir);
-
         $shellCommand = $this->getBaseCommand();
 
-        if ($this->getInput()->getOption('background') && $this->systemIsCorrect()) {
-            $shellCommand .= ' > /dev/null &';
-            pclose(popen($shellCommand, 'r'));
+        $process = new Process($shellCommand, $publicDir);
 
-            $processId = $this->getProcessId($this->getAddress());
+        if ($this->getInput()->getOption('background')) {
+            $process->disableOutput();
+            $process->start();
 
-            $this->getOutput()->writeln($this->info('Server has been started in the background. Process ID: #' . $processId));
+            $processId = $this->getProcessId();
+
+            $this->getApplication()->getConfig()->setOption('server', [
+                'pid' => $processId,
+                'address' => 'http://' . $this->getAddress()
+            ]);
+
+            $this->getOutput()->writeln($this->info('Server has been started.'));
         } else {
-            shell_exec($shellCommand);
+
+            while($process instanceof Process) {
+                if (!$process->isStarted()) {
+                    $process->start();
+
+                    continue;
+                }
+
+                echo $process->getIncrementalOutput();
+                echo $process->getIncrementalErrorOutput();
+
+                if (!$process->isRunning() || $process->isTerminated()) {
+                    $process = false;
+
+                    echo " ";
+
+                    $this->getOutput()->writeln($this->info('Server has been stopped.'));
+                }
+
+                sleep(1);
+            }
         }
     }
 }

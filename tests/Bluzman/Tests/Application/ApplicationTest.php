@@ -43,7 +43,7 @@ class ApplicationTest extends TestCase
      */
     public function testCommandsAreAvailable()
     {
-        $this->assertTrue($this->application->get('server') instanceof Command);
+        $this->assertTrue($this->application->get('server:start') instanceof Command);
         $this->assertTrue($this->application->get('test') instanceof Command);
         $this->assertTrue($this->application->get('init:all') instanceof Command);
     }

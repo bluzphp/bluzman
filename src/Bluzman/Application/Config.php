@@ -96,6 +96,28 @@ class Config
     }
 
     /**
+     * @param $name
+     * @param $value
+     */
+    public function setOption($name, $value)
+    {
+        $options = $this->getOptions();
+
+        $options[$name] = $value;
+
+        $this->putOptions($options);
+    }
+
+    public function unsetOption($name)
+    {
+        $options = $this->getOptions();
+
+        unset($options[$name]);
+
+        $this->putOptions($options);
+    }
+
+    /**
      * @param array $options
      * @throws \RuntimeException
      */
@@ -107,7 +129,10 @@ class Config
             throw new \RuntimeException($configPath . 'Unable to create bluzman config in current directory.');
         }
 
-        return $this->getConfigFile()->write($options);
+        $this->getConfigFile()->write($options);
+
+        $this->options = null;
+        $this->getOptions();
     }
 
     /**
@@ -139,11 +164,10 @@ class Config
     /**
      * @param $name
      * @param $value
-     * @throws \Exception
      */
     public function __set($name, $value)
     {
-        throw new \Exception('Not implemented yet');
+        return $this->setOption($name, $value);
     }
 
     public function getConfigPath()
