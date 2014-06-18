@@ -181,7 +181,7 @@ abstract class AbstractCommand extends Console\Command\Command
             // ask user enter a valid option value
             return $dialog->askAndValidate(
                 $output,
-                $this->question("Please enter the " . strtolower($defOption->getDescription())),
+                $this->question("Please enter the " . trim(strtolower($defOption->getDescription()), ' .')),
                 function ($value) use ($name, $output, $dialog, $defOption) {
                     $defOption->validate($value);
 
