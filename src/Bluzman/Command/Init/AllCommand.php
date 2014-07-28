@@ -140,7 +140,7 @@ class AllCommand extends Command\AbstractCommand
         $name = $this->getOption('name');
         $path = $this->getOption('path');
 
-        $bluzmanDirectory = realpath($path) . DS . $name . DS . '.bluzman';
+        $bluzmanDirectory = $this->getApplication()->getBluzmanPath();
 
         if (!is_dir($bluzmanDirectory)) {
             mkdir($bluzmanDirectory);

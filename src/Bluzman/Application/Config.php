@@ -172,7 +172,7 @@ class Config
 
     public function getConfigPath()
     {
-        return $this->getApplication()->getWorkingPath() . DS . '.bluzman' . DS . 'config.json';
+        return $this->getApplication()->getBluzmanPath() . DS . 'config.json';
     }
 
     /**
@@ -180,7 +180,7 @@ class Config
      *
      * @return \Bluz\Config\Config
      */
-    public function getBluzConfig()
+    public function getBluzConfig($env)
     {
         $path = $this->getApplication()->getWorkingPath();
 
@@ -191,7 +191,7 @@ class Config
 
         $config = new \Bluz\Config\Config();
         $config->setPath(PATH_APPLICATION . DS . 'configs');
-        $config->load($this->getOption('environment'));
+        $config->load($env);
 
         return $config;
     }
