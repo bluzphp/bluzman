@@ -8,6 +8,7 @@ namespace Bluzman\Command;
 
 use Bluzman\Input\InputException;
 use Bluzman\Input\InputOption;
+use Bluzman\Input\InputArgument;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,6 +21,8 @@ use Respect;
  */
 abstract class AbstractCommand extends Console\Command\Command
 {
+    const MAX_ATTEMPTS = 1;
+
     protected $validatorNamespace = 'Bluzman\Command\Validator\\';
 
     /**
@@ -131,6 +134,31 @@ abstract class AbstractCommand extends Console\Command\Command
     }
 
     /**
+     * Adds an argument.
+     *
+     * @param string  $name        The argument name
+     * @param int     $mode        The argument mode: InputArgument::REQUIRED or InputArgument::OPTIONAL
+     * @param string  $description A description text
+     * @param mixed   $default     The default value (for InputArgument::OPTIONAL mode only)
+     *
+     * @return Command The current instance
+     *
+     * @api
+     */
+    public function addArgument($name, $mode = null, $description = '', $default = null, $validator = null)
+    {
+        $argument = new InputArgument($name, $mode, $description, $default);
+
+        if ($validator instanceof \Respect\Validation\Validator) {
+            $argument->setValidator($validator);
+        }
+
+        $this->getDefinition()->addArgument($argument);
+
+        return $this;
+    }
+
+    /**
      * Register arguments for the command.
      */
     final protected function registerArguments()
@@ -194,8 +222,52 @@ abstract class AbstractCommand extends Console\Command\Command
         } else {
             return $optionValue;
         }
+    }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
+    final public function getArgument($name)
+    {
+        /**
+         * @var InputOption $defArgument
+         */
+        $defArgument = $this->getDefinition()->getArgument($name);
 
+        $argumentValue = $this->getInput()->getArgument($name);
+
+        $isValid = is_null($argumentValue) ? false : $defArgument->validate($argumentValue);
+
+        if (!$isValid) {
+            $output = $this->getOutput();
+
+            // interact
+            if (!$this->getInput()->isInteractive()) {
+                throw new InputException;
+            }
+
+            /**
+             * @var Console\Helper\DialogHelper $dialog
+             */
+            $dialog = $this->getHelperSet()->get('dialog');
+
+            // ask user enter a valid option value
+            return $dialog->askAndValidate(
+                $output,
+                $this->question("Please enter the " . trim(strtolower($defArgument->getDescription()), ' .')),
+                function ($value) use ($name, $output, $dialog, $defArgument) {
+                    $defArgument->validate($value);
+
+                    $this->getInput()->setArgument($name, $value);
+
+                    return $value;
+                },
+                self::MAX_ATTEMPTS
+            );
+        } else {
+            return $argumentValue;
+        }
     }
 
     /**

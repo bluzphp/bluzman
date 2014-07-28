@@ -2,12 +2,15 @@
 
 namespace Bluzman\Command\Init;
 
-use Bluzman\Command\Command;
+use Bluzman\Command;
+use Respect;
+use Respect\Validation\Validator as v;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * ModuleCommand
@@ -19,18 +22,51 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  * @created  4/05/13 09:57 PM
  */
 
-class ModuleCommand extends AbstractCommand
+class ModuleCommand extends Command\AbstractCommand
 {
-    protected function configure()
+    /**
+     * @var string
+     */
+    protected $name = 'init:module';
+
+    /**
+     * @var string
+     */
+    protected $description = 'Initialize a new module';
+
+    /**
+     * @var Filesystem
+     */
+    protected $fs;
+
+    /**
+     * @param \Symfony\Component\Filesystem\Filesystem $fs
+     */
+    public function setFs($fs)
     {
-        $this
-            ->setName('init:module')
-            ->setDescription('Initialize a new module')
-            ->addArgument(
-                'moduleName',
-                InputArgument::OPTIONAL,
-                'New module name'
-            );
+        $this->fs = $fs;
+    }
+
+    /**
+     * @return \Symfony\Component\Filesystem\Filesystem
+     */
+    public function getFs()
+    {
+        return $this->fs;
+    }
+
+    public function __construct($name = null)
+    {
+        parent::__construct($name);
+
+        $this->setFs(new Filesystem);
+    }
+
+    protected function getOptions()
+    {
+        return [
+            ['name', null, InputOption::VALUE_OPTIONAL, 'The name of module.', null, v::alnum('_-')->noWhitespace()]
+        ];
     }
 
     /**
@@ -41,78 +77,32 @@ class ModuleCommand extends AbstractCommand
     {
         $output->writeln('<info>Running "init:module" command</info>');
 
+        $name = $this->getOption('name');
+
+        // create main folder and subfolders
+        $this->createModule($name);
+
         $this->verify($input, $output);
-
-        $name = $input->getArgument('moduleName');
-
-        $path = $this->getApplication()->getModulePath($name);
-
-        mkdir($path, 0755);
-
-        $this->addSubFolders($path, array('controllers', 'views'));
-
-        $output->writeln('');
 
         $output->writeln('Module <info>"' . $name . '"</info> has been successfully created.');
     }
 
     /**
-     * Ask and validate the name argument
      *
-     * @param $input
-     * @param $output
-     * @return mixed
-     */
-    protected function askName($input, $output)
-    {
-        $dialog = $this->getHelperSet()->get('dialog');
-
-        $output->writeln('');
-
-        return $dialog->askAndValidate(
-            $output,
-            "<question>Please enter the name of the module:</question> \n> ",
-            function ($name) use ($input, $output, $dialog) {
-                return $this->validateModuleName($name, $input, $output);
-            },
-            true
-        );
-    }
-
-    /**
-     * Validate the module
      *
      * @param $name
-     * @param $input
-     * @param $output
-     * @return mixed
-     * @throws \RuntimeException
      */
-    protected function validateModuleName($name, $input, $output)
+    protected function createModule($name)
     {
-        if (!$input->isInteractive()) {
-            throw new \RuntimeException('Command should be executed in interactive mode.');
+        $path = $this->getModulePath($name);
+
+        try {
+            $this->getFs()->mkdir($path);
+        } catch (IOExceptionInterface $e) {
+            echo "An error occurred while creating your directory at ".$e->getPath();
         }
 
-        if (empty($name)) {
-            $output->writeln('');
-            $output->writeln('<error>ERROR: Please enter a correct name of the module</error>');
-
-            return $this->askName($input, $output);
-        }
-
-        if ($this->getApplication()->isModuleExists($name)) {
-            $output->writeln('');
-            $output->writeln('<error>ERROR: Module with name ' . $name . ' is already exist.</error>');
-            $output->writeln('');
-            exit();
-
-            return $this->askName($input, $output);
-        }
-
-        $input->setArgument('moduleName', $name);
-
-        return $name;
+        $this->addSubFolders($path, array('controllers', 'views'));
     }
 
     /**
@@ -126,9 +116,21 @@ class ModuleCommand extends AbstractCommand
         foreach ($subfolders as $subfolderName) {
             $subfolderPath = $path . DIRECTORY_SEPARATOR . $subfolderName;
 
-            mkdir($subfolderPath, 0755);
-            shell_exec('touch ' . $subfolderPath . DIRECTORY_SEPARATOR . '.gitkeep');
+            $this->getFs()->mkdir($subfolderPath, 0755);
+            $this->getFs()->touch([$subfolderPath . DIRECTORY_SEPARATOR . '.keep']);
         }
+    }
+
+    /**
+     * @param $name
+     * @return string
+     */
+    protected function getModulePath($name)
+    {
+        return $this->getApplication()->getWorkingPath()
+            . DS . 'application'
+            . DS . 'modules'
+            . DS . $name;
     }
 
     /**
@@ -138,12 +140,12 @@ class ModuleCommand extends AbstractCommand
      */
     public function verify(InputInterface $input, OutputInterface $output)
     {
-        $name = $input->getArgument('moduleName');
+        $name = $input->getOption('name');
 
-        if (empty($name)) {
-            $this->askName($input, $output);
-        } else {
-            $this->validateModuleName($input->getArgument('moduleName'), $input, $output);
+        if (!$this->getFs()->exists($this->getModulePath($name))) {
+            throw new \RuntimeException('Failed to create new module ' . $name . '.');
         }
+
+        return true;
     }
 }

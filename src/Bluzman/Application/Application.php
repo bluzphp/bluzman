@@ -111,7 +111,8 @@ class Application extends Console\Application
             new Command\PhinxInitCommand,
             new Command\PhinxCreateCommand,
             new Command\PhinxStatusCommand,
-            new Command\Init\AllCommand
+            new Command\Init\AllCommand,
+            new Command\Init\ModuleCommand
         ]);
     }
 }
