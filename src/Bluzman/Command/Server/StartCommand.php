@@ -185,10 +185,10 @@ class StartCommand extends AbstractCommand
 
             $this->getApplication()->getConfig()->setOption('server', [
                 'pid' => $processId,
-                'address' => 'http://' . $this->getAddress()
+                'address' => $address = 'http://' . $this->getAddress()
             ]);
 
-            $this->getOutput()->writeln($this->info('Server has been started.'));
+            $this->getOutput()->writeln($this->info('Server has been started at ' . $address));
         } else {
 
             while($process instanceof Process) {
@@ -204,8 +204,7 @@ class StartCommand extends AbstractCommand
                 if (!$process->isRunning() || $process->isTerminated()) {
                     $process = false;
 
-                    echo " ";
-
+                    $this->getOutput()->writeln("");
                     $this->getOutput()->writeln($this->info('Server has been stopped.'));
                 }
 
