@@ -187,11 +187,13 @@ class Config
         //Init Bluz config
         define('DEBUG', true);
         define('PATH_APPLICATION', $path . DS . 'application');
+        define('PATH_PUBLIC', $path . DS . 'public');
         define('PATH_DATA', $path . DS . 'data');
 
         $config = new \Bluz\Config\Config();
-        $config->setPath(PATH_APPLICATION . DS . 'configs');
-        $config->load($env);
+        $config->setPath(PATH_APPLICATION);
+        $config->setEnvironment($env);
+        $config->init();
 
         return $config;
     }

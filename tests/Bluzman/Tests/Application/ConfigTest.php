@@ -113,8 +113,8 @@ class ConfigTest extends TestCase
         $bluzConfig = $this->config->getBluzConfig('dev');
 
         $this->assertInstanceOf('\Bluz\Config\Config', $bluzConfig);
-        $this->assertEquals('bar', $bluzConfig->getData('foo'));
-        $this->assertEquals('foo', $bluzConfig->getData('bar'));
+        $this->assertEquals(['foo' => 'bar'], $bluzConfig->getData('foo'));
+        $this->assertEquals(['bar' => 'foo'], $bluzConfig->getData('bar'));
     }
 
     /**
@@ -152,7 +152,13 @@ class ConfigTest extends TestCase
     public function foobarOptions()
     {
         return [
-            [['foo' => 'bar']]
+            [
+                [
+                    'foo' => [
+                        'foo' => 'bar'
+                    ]
+                ]
+            ]
         ];
     }
 }
