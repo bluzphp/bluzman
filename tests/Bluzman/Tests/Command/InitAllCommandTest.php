@@ -17,25 +17,29 @@ class InitAllCommandTest extends \PHPUnit_Framework_TestCase
 {
     protected $app;
 
+    protected $projectName;
+
     public function setUp()
     {
         $this->app = new Application();
+
+        $this->projectName = 'test';
     }
 
     public function tearDown()
     {
         m::close();
 
-        if (is_dir(PATH_TMP . DS . 'test' . DS . '.bluzman')) {
-            rmdir(PATH_TMP . DS . 'test' . DS . '.bluzman');
+        if (is_dir(PATH_TMP . DS . $this->projectName . DS . '.bluzman')) {
+            rmdir(PATH_TMP . DS . $this->projectName . DS . '.bluzman');
         }
 
-        if (is_file(PATH_TMP . DS . 'test' . DS . 'stub')) {
-            unlink(PATH_TMP . DS . 'test' . DS . 'stub');
+        if (is_file(PATH_TMP . DS . $this->projectName . DS . 'stub')) {
+            unlink(PATH_TMP . DS . $this->projectName . DS . 'stub');
         }
 
-        if (is_dir(PATH_TMP . DS . 'test')) {
-            rmdir(PATH_TMP . DS . 'test');
+        if (is_dir(PATH_TMP . DS . $this->projectName)) {
+            rmdir(PATH_TMP . DS . $this->projectName);
         }
     }
 
@@ -84,7 +88,7 @@ class InitAllCommandTest extends \PHPUnit_Framework_TestCase
 
         $commandTester = new CommandTester($command);
         $commandTester->execute(
-            ['command' => $command->getName(), '--name' => 'test', '--path' => '/root'],
+            ['command' => $command->getName(), '--name' => $this->projectName, '--path' => '/root'],
             ['interactive' => false]
         );
     }
@@ -101,7 +105,7 @@ class InitAllCommandTest extends \PHPUnit_Framework_TestCase
 
         $commandTester = new CommandTester($command);
         $commandTester->execute(
-            ['command' => $command->getName(), '--name' => 'test', '--path' => '/somepath'],
+            ['command' => $command->getName(), '--name' => $this->projectName, '--path' => '/somepath'],
             ['interactive' => false]
         );
     }
@@ -112,9 +116,9 @@ class InitAllCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotEmptyPathException()
     {
-        mkdir(PATH_TMP . DS . 'test');
+        mkdir(PATH_TMP . DS . $this->projectName);
 
-        touch(PATH_TMP . DS . 'test' . DS . 'stub');
+        touch(PATH_TMP . DS . $this->projectName . DS . 'stub');
 
         $command = new Init\AllCommand;
 
@@ -122,7 +126,7 @@ class InitAllCommandTest extends \PHPUnit_Framework_TestCase
 
         $commandTester = new CommandTester($command);
         $commandTester->execute(
-            ['command' => $command->getName(), '--name' => 'test', '--path' => PATH_TMP],
+            ['command' => $command->getName(), '--name' => $this->projectName, '--path' => PATH_TMP],
             ['interactive' => false]
         );
     }
@@ -160,7 +164,7 @@ class InitAllCommandTest extends \PHPUnit_Framework_TestCase
 
         $commandTester->execute([
             'command' => $command->getName(),
-            '--name' => 'test',
+            '--name' => $this->projectName,
             '--path' => PATH_TMP
         ]);
 
@@ -169,5 +173,8 @@ class InitAllCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/Running "init:all" command/', $display);
         $this->assertRegExp('/Cloning skeleton project/', $display);
         $this->assertRegExp('/has been successfully initialized/', $display);
+
+        $this->assertFileExists(PATH_TMP . DS . $this->projectName . DS . '.bluzman');
+        $this->assertFileNotExists(PATH_TMP . DS . '.bluzman');
     }
 }

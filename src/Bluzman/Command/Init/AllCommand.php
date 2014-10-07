@@ -119,6 +119,8 @@ class AllCommand extends Command\AbstractCommand
         // create skeleton project
         shell_exec(sprintf($this->getCmdPattern(), $name));
 
+        chdir($projectPath);
+
         return $this;
     }
 
