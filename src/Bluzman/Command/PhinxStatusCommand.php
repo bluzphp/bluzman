@@ -30,7 +30,7 @@ class PhinxStatusCommand extends AbstractCommand
     /**
      * @var string
      */
-    protected $description = 'Initialize phinx for application';
+    protected $description = 'Show status of phinx migrations';
 
     /**
      * @param InputInterface $input

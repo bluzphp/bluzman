@@ -37,7 +37,9 @@ class PhinxInitCommand extends AbstractCommand
     protected $description = 'Initialize phinx for application';
 
     /**
-     * @todo
+     * Require phinx as composer package
+     *
+     * @todo Use composer commands to require
      *
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -61,6 +63,7 @@ class PhinxInitCommand extends AbstractCommand
                 $process = false;
             }
 
+            // a little bit of workaround
             sleep(1);
         }
 
