@@ -2,6 +2,7 @@
 
 namespace Bluzman\Command\Init;
 
+use Bluzman\Application\Application;
 use Bluzman\Command;
 use Respect;
 use Respect\Validation\Validator as v;
@@ -75,16 +76,14 @@ class ModuleCommand extends Command\AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<info>Running "init:module" command</info>');
-
-        $name = $this->getOption('name');
+        $output->writeln($this->info('Running "init:module" command'));
 
         // create main folder and subfolders
-        $this->createModule($name);
+        $this->initModuleStructure($this->getOption('name'));
 
         $this->verify($input, $output);
 
-        $output->writeln('Module <info>"' . $name . '"</info> has been successfully created.');
+        $output->writeln('Module ' . $this->info($this->getOption('name')) . ' has been successfully created.');
     }
 
     /**
@@ -92,17 +91,15 @@ class ModuleCommand extends Command\AbstractCommand
      *
      * @param $name
      */
-    protected function createModule($name)
+    protected function initModuleStructure($name)
     {
-        $path = $this->getModulePath($name);
-
-        try {
-            $this->getFs()->mkdir($path);
-        } catch (IOExceptionInterface $e) {
-            echo "An error occurred while creating your directory at ".$e->getPath();
-        }
-
-        $this->addSubFolders($path, array('controllers', 'views'));
+        $this->addSubFolders(
+            $this->getModulePath($name),
+            [
+                'controllers',
+                'views'
+            ]
+        );
     }
 
     /**
@@ -113,6 +110,10 @@ class ModuleCommand extends Command\AbstractCommand
      */
     protected function addSubFolders($path, array $subfolders = array())
     {
+        if (!$this->getFs()->exists($path)) {
+            $this->getFs()->mkdir($path);
+        }
+
         foreach ($subfolders as $subfolderName) {
             $subfolderPath = $path . DIRECTORY_SEPARATOR . $subfolderName;
 
@@ -134,16 +135,25 @@ class ModuleCommand extends Command\AbstractCommand
     }
 
     /**
-     * @todo
+     * @todo Revert if not verified
      *
      * @return bool
      */
     public function verify(InputInterface $input, OutputInterface $output)
     {
-        $name = $input->getOption('name');
+        $modulesPath = $this->getApplication()->getWorkingPath() . DS . 'application' . DS . 'modules';
 
-        if (!$this->getFs()->exists($this->getModulePath($name))) {
-            throw new \RuntimeException('Failed to create new module ' . $name . '.');
+        $paths = [
+            $modulesPath,
+            $modulesPath . DS . $input->getOption('name'),
+            $modulesPath . DS . $input->getOption('name') .  DS . 'controllers',
+            $modulesPath . DS . $input->getOption('name') .  DS . 'views'
+        ];
+
+        foreach ($paths as $path) {
+            if (!$this->getFs()->exists($path)) {
+                return false;
+            }
         }
 
         return true;

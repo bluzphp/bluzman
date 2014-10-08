@@ -91,7 +91,7 @@ class AllCommand extends Command\AbstractCommand
         // verify the skeleton was clone and config was created
         $this->verify($input, $output);
 
-        $output->writeln($this->info('Project "' . $this->getOption('name') . '" has been successfully initialized.'));
+        $output->writeln('Project ' . $this->info($this->getOption('name') . ' has been successfully initialized.'));
     }
 
     /**
@@ -116,12 +116,18 @@ class AllCommand extends Command\AbstractCommand
             }
         }
 
+        //@todo Use symfony process
         // create skeleton project
         shell_exec(sprintf($this->getCmdPattern(), $name));
 
         chdir($projectPath);
 
         return $this;
+    }
+
+    protected function validate()
+    {
+
     }
 
     /**

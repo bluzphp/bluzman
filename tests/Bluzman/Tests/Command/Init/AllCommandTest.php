@@ -4,7 +4,7 @@
  * @created 2014-01-05 00:10
  */
 
-namespace Bluzman\Tests\Command;
+namespace Bluzman\Tests\Command\Init;
 
 use Bluzman\Command\Init;
 use Bluzman\Application\Application;
@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 use Mockery as m;
 
-class InitAllCommandTest extends \PHPUnit_Framework_TestCase
+class AllCommandTest extends AbstractCommandTest
 {
     protected $app;
 
@@ -21,26 +21,11 @@ class InitAllCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        parent::setUp();
+
         $this->app = new Application();
 
         $this->projectName = 'test';
-    }
-
-    public function tearDown()
-    {
-        m::close();
-
-        if (is_dir(PATH_TMP . DS . $this->projectName . DS . '.bluzman')) {
-            rmdir(PATH_TMP . DS . $this->projectName . DS . '.bluzman');
-        }
-
-        if (is_file(PATH_TMP . DS . $this->projectName . DS . 'stub')) {
-            unlink(PATH_TMP . DS . $this->projectName . DS . 'stub');
-        }
-
-        if (is_dir(PATH_TMP . DS . $this->projectName)) {
-            rmdir(PATH_TMP . DS . $this->projectName);
-        }
     }
 
     /**
@@ -116,9 +101,9 @@ class InitAllCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotEmptyPathException()
     {
-        mkdir(PATH_TMP . DS . $this->projectName);
+        mkdir($this->workingPath . DS . $this->projectName);
 
-        touch(PATH_TMP . DS . $this->projectName . DS . 'stub');
+        touch($this->workingPath . DS . $this->projectName . DS . 'stub');
 
         $command = new Init\AllCommand;
 
@@ -126,7 +111,7 @@ class InitAllCommandTest extends \PHPUnit_Framework_TestCase
 
         $commandTester = new CommandTester($command);
         $commandTester->execute(
-            ['command' => $command->getName(), '--name' => $this->projectName, '--path' => PATH_TMP],
+            ['command' => $command->getName(), '--name' => $this->projectName, '--path' => $this->workingPath],
             ['interactive' => false]
         );
     }
@@ -156,16 +141,14 @@ class InitAllCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Bluzman\Command\Init\AllCommand', $commandMock);
         $this->assertInstanceOf('\Bluzman\Application\Config', $configMock);
 
-        $command = $commandMock;
-        $commandTester = new CommandTester($command);
-
-        $this->app->addCommands([$command]);
+        $this->app->addCommands([$commandMock]);
         $this->app->setConfig($configMock);
 
+        $commandTester = new CommandTester($commandMock);
         $commandTester->execute([
-            'command' => $command->getName(),
+            'command' => $commandMock->getName(),
             '--name' => $this->projectName,
-            '--path' => PATH_TMP
+            '--path' => $this->workingPath
         ]);
 
         $display = $commandTester->getDisplay();
@@ -174,7 +157,6 @@ class InitAllCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/Cloning skeleton project/', $display);
         $this->assertRegExp('/has been successfully initialized/', $display);
 
-        $this->assertFileExists(PATH_TMP . DS . $this->projectName . DS . '.bluzman');
-        $this->assertFileNotExists(PATH_TMP . DS . '.bluzman');
+        $this->assertFileExists($this->workingPath . DS . $this->projectName . DS . '.bluzman');
     }
 }
