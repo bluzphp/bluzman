@@ -113,9 +113,9 @@ class ConfigTest extends TestCase
         $mock = $this->container->mock('Bluz\Application\Application')
             ->shouldReceive('getWorkingPath')
             ->atLeast(1)
-            ->andReturn(__DIR__ . DS . 'fixtures' . DS . 'app')
+            ->andReturn(__DIR__ . DS . 'Resources' . DS . 'fixtures' . DS . 'app')
             ->shouldReceive('getBluzmanPath')
-            ->andReturn(__DIR__ . DS . 'fixtures' . DS . 'app' . DS . '.bluzman')
+            ->andReturn(__DIR__ . DS . 'Resources' . DS . 'fixtures' . DS . 'app' . DS . '.bluzman')
             ->getMock();
 
         return $mock;

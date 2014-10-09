@@ -16,7 +16,7 @@ class DirectoryEmptyTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->emptyDir = PATH_ROOT . DS . 'tests' . DS . 'fixtures' . DS . 'blank';
+        $this->emptyDir = PATH_ROOT . DS . 'tests' . DS . 'Resources' . DS . 'fixtures' . DS . 'blank';
         $this->notEmptyDir = __DIR__;
     }
 

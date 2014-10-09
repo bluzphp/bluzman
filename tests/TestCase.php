@@ -93,7 +93,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $this->setWorkingPath(PATH_TMP . DS . $this->getFaker()->uuid);
 
         $loader = new Yaml();
-        $fixture = $loader->load(__DIR__.'/fixtures/application.yml');
+        $fixture = $loader->load(__DIR__ . DS . 'Resources' . DS . 'fixtures' . DS . 'application.yml');
 
         $this->setApplication(current($fixture));
     }
