@@ -2,8 +2,12 @@
 
 namespace Bluzman\Generator;
 
+use Bluz\View\View;
+use Bluzman\Generator\Template\AbstractTemplate;
+use Bluzman\Generator\Template\DummyTemplate;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Generator
@@ -17,34 +21,94 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Generator 
 {
-    const ENTITY_TYPE_CONTROLLER = 'controller';
-    const ENTITY_TYPE_VIEW = 'view';
-    const ENTITY_TYPE_MODEL_TABLE = 'table';
-    const ENTITY_TYPE_MODEL_ROW = 'row';
+    /**
+     * @var AbstractTemplate
+     */
+    protected $template;
 
-    public function generateTemplate($name, $path, $templateType, $options = array(), $rewrite = false)
+    /**
+     * @var string
+     */
+    protected $absolutePath;
+
+    /**
+     * @var Filesystem
+     */
+    protected $fs;
+
+    /**
+     * @return AbstractTemplate
+     */
+    public function getTemplate()
     {
-        /**
-         * @todo Do this more clean.
-         */
-        switch ($templateType) {
-            case self::ENTITY_TYPE_CONTROLLER:
-                $template = new Template\ControllerTemplate($name, $path, $options);
-                break;
-            case self::ENTITY_TYPE_VIEW:
-                $template = new Template\ViewTemplate($name, $path, $options);
-                break;
-            case self::ENTITY_TYPE_MODEL_TABLE:
-                $template = new Template\TableTemplate($name, $path, $options);
-                break;
-            case self::ENTITY_TYPE_MODEL_ROW:
-                $template = new Template\RowTemplate($name, $path, $options);
-                break;
-            default:
-                throw new \RuntimeException('Unknown entity type to generate');
-                break;
-        }
+        return $this->template;
+    }
 
-        $template->generate($rewrite);
+    /**
+     * @param AbstractTemplate $template
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAbsolutePath()
+    {
+        return $this->absolutePath;
+    }
+
+    /**
+     * @param string $absolutePath
+     */
+    public function setAbsolutePath($absolutePath)
+    {
+        $this->absolutePath = $absolutePath;
+    }
+
+    /**
+     * @return Filesystem
+     */
+    public function getFs()
+    {
+        return $this->fs;
+    }
+
+    /**
+     * @param Filesystem $fs
+     */
+    public function setFs($fs)
+    {
+        $this->fs = $fs;
+    }
+
+    public function __construct(AbstractTemplate $template)
+    {
+        $this->setTemplate($template);
+        $this->setAbsolutePath(__DIR__);
+        $this->setFs(new Filesystem());
+    }
+
+    public function getCompiledTemplate()
+    {
+        $view = new View();
+        $view->setPath($this->getAbsolutePath());
+        $view->setTemplate($this->getTemplate()->getTemplatePath());
+        $view->setFromArray($this->getTemplate()->getTemplateData());
+
+        return $view->render();
+    }
+
+    /**
+     * @param $path
+     */
+    public function make()
+    {
+        $this->getFs()->dumpFile(
+            $this->getTemplate()->getFilePath(),
+            $this->getCompiledTemplate()
+        );
     }
 }

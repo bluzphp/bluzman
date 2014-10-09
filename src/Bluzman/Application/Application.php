@@ -63,7 +63,7 @@ class Application extends Console\Application
      *
      * @return string
      */
-    public function getBluzmanPath()
+        public function getBluzmanPath()
     {
         return $this->getWorkingPath() . DS . '.bluzman';
     }
@@ -112,7 +112,8 @@ class Application extends Console\Application
             new Command\PhinxCreateCommand,
             new Command\PhinxStatusCommand,
             new Command\Init\AllCommand,
-            new Command\Init\ModuleCommand
+            new Command\Init\ModuleCommand,
+            new Command\Init\ControllerCommand
         ]);
     }
 }

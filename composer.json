@@ -28,7 +28,9 @@
     "nelmio/alice": "~1.5",
     "fzaninotto/faker": "~1.4"
   },
-  "scripts": {},
+  "scripts": {
+      "test": "make test"
+  },
   "autoload": {
     "psr-0": {
       "": "vendor",

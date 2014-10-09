@@ -6,20 +6,11 @@
 
 namespace Bluzman\Tests\Application;
 
+use Bluzman\Tests\TestCase;
 use \Symfony\Component\Console\Command\Command;
 
 class ApplicationTest extends TestCase
 {
-    /**
-     * @var \Bluzman\Application\Application
-     */
-    protected $application;
-
-    public function setUp()
-    {
-        $this->application = $this->getApplicationFixture();
-    }
-
     /**
      * Verify fixture
      */

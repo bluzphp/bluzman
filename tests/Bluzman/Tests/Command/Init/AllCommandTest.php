@@ -7,23 +7,19 @@
 namespace Bluzman\Tests\Command\Init;
 
 use Bluzman\Command\Init;
-use Bluzman\Application\Application;
+use Bluzman\Tests\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 use Mockery as m;
 
-class AllCommandTest extends AbstractCommandTest
+class AllCommandTest extends TestCase
 {
-    protected $app;
-
     protected $projectName;
 
     public function setUp()
     {
         parent::setUp();
-
-        $this->app = new Application();
 
         $this->projectName = 'test';
     }
@@ -35,7 +31,7 @@ class AllCommandTest extends AbstractCommandTest
     {
         $command = new Init\AllCommand;
 
-        $this->app->addCommands([$command]);
+        $this->getApplication()->addCommands([$command]);
 
         $commandTester = new CommandTester($command);
         $commandTester->execute(
@@ -52,7 +48,7 @@ class AllCommandTest extends AbstractCommandTest
     {
         $command = new Init\AllCommand;
 
-        $this->app->addCommands([$command]);
+        $this->getApplication()->addCommands([$command]);
 
         $commandTester = new CommandTester($command);
         $commandTester->execute(
@@ -69,7 +65,7 @@ class AllCommandTest extends AbstractCommandTest
     {
         $command = new Init\AllCommand;
 
-        $this->app->addCommands([$command]);
+        $this->getApplication()->addCommands([$command]);
 
         $commandTester = new CommandTester($command);
         $commandTester->execute(
@@ -86,7 +82,7 @@ class AllCommandTest extends AbstractCommandTest
     {
         $command = new Init\AllCommand;
 
-        $this->app->addCommands([$command]);
+        $this->getApplication()->addCommands([$command]);
 
         $commandTester = new CommandTester($command);
         $commandTester->execute(
@@ -107,7 +103,7 @@ class AllCommandTest extends AbstractCommandTest
 
         $command = new Init\AllCommand;
 
-        $this->app->addCommands([$command]);
+        $this->getApplication()->addCommands([$command]);
 
         $commandTester = new CommandTester($command);
         $commandTester->execute(
@@ -132,7 +128,7 @@ class AllCommandTest extends AbstractCommandTest
             ->andReturn('mkdir %s')
             ->getMock();
 
-        $configMock = $container->mock('\Bluzman\Application\Config[putOptions]', [$this->app])
+        $configMock = $container->mock('\Bluzman\Application\Config[putOptions]', [$this->getApplication()])
             ->shouldReceive('putOptions')
             ->atLeast(1)
             ->andReturn(true)
@@ -141,8 +137,8 @@ class AllCommandTest extends AbstractCommandTest
         $this->assertInstanceOf('\Bluzman\Command\Init\AllCommand', $commandMock);
         $this->assertInstanceOf('\Bluzman\Application\Config', $configMock);
 
-        $this->app->addCommands([$commandMock]);
-        $this->app->setConfig($configMock);
+        $this->getApplication()->addCommands([$commandMock]);
+        $this->getApplication()->setConfig($configMock);
 
         $commandTester = new CommandTester($commandMock);
         $commandTester->execute([

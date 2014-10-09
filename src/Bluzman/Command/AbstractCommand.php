@@ -6,6 +6,7 @@
 
 namespace Bluzman\Command;
 
+use Bluzman\Application\Application;
 use Bluzman\Input\InputException;
 use Bluzman\Input\InputOption;
 use Bluzman\Input\InputArgument;
@@ -339,5 +340,13 @@ abstract class AbstractCommand extends Console\Command\Command
         $this->getOutput()->writeln('');
         $this->getOutput()->writeln($this->error(" This command is not implemented yet. Don't be indifferent - you can contribute! https://github.com/bashmach/bluzman. "));
         $this->getOutput()->writeln('');
+    }
+
+    /**
+     * @return Application
+     */
+    public function getApplication()
+    {
+        return parent::getApplication();
     }
 }

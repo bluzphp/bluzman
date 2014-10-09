@@ -13,129 +13,91 @@ use Bluzman\Generator\Template\Exception;
  * @author   Pavel Machekhin
  * @created  3/28/13 4:36 PM
  */
-abstract class AbstractTemplate implements TemplateInterface
+abstract class AbstractTemplate
 {
     /**
      * @var string
      */
-    protected $name;
-
-    /**
-     * @var string
-     */
-    protected $path;
+    protected $templatePath;
 
     /**
      * @var array
      */
-    protected $options = array();
+    protected $templateData = [];
 
     /**
-     * @param $name
-     * @param $path
-     * @param array $options
+     * @var string
      */
-    final public function __construct($name, $path, $options = array())
-    {
-        $this->setName($name);
-        $this->setPath($path);
-        $this->setOptions($options);
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
+    protected $filePath;
 
     /**
      * @return string
      */
-    public function getName()
+    public function getTemplatePath()
     {
-        return $this->name;
+        return $this->templatePath;
     }
 
     /**
-     * @param $path
-     * @throws \RuntimeException
+     * @param string $templatePath
      */
-    public function setPath($path)
+    public function setTemplatePath($templatePath)
     {
-        if (!is_dir($path)) {
-            throw new \RuntimeException('Directory "' . $path . '" not exists.');
-        }
-
-        if (!is_writable($path)) {
-            throw new \RuntimeException('Directory "' . $path . '" not writable.');
-        }
-
-        $this->path = $path;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    /**
-     * @param array $options
-     */
-    public function setOptions($options)
-    {
-        $this->options = $options;
+        $this->templatePath = $templatePath;
     }
 
     /**
      * @return array
      */
-    public function getOptions()
+    public function getTemplateData()
     {
-        return $this->options;
+        return array_merge($this->getDefaultTemplateData(), $this->templateData);
     }
 
     /**
-     * Checks the existence of the file and puts into a content of template.
-     * @param bool $rewrite
-     * @return mixed
-     * @throws Exception\AlreadyExistsException
+     * @param array $templateData
      */
-    public function generate($rewrite = false)
+    public function setTemplateData($templateData)
     {
-        $filepath = $this->path . DIRECTORY_SEPARATOR . $this->name;
-
-        if (is_file($filepath)) {
-            if ($rewrite) {
-                $this->clean($filepath);
-
-                return $this->generate(false);
-            }
-            throw new AlreadyExistsException($this->name);
-        } else {
-            if (!is_writable($filepath)) {
-                throw new NotWritableException($this->name);
-            }
-        }
-
-        file_put_contents($filepath, $this->getTemplate());
+        $this->templateData = $templateData;
     }
 
     /**
-     * Remove previously generated file.
+     * @return string
+     */
+    public function getFilePath()
+    {
+        return $this->filePath;
+    }
+
+    /**
+     * @param string $filePath
+     */
+    public function setFilePath($filePath)
+    {
+        $this->filePath = $filePath;
+    }
+
+    /**
+     * Get the name of current user
      *
-     * @param $filepath
-     * @throws \RuntimeException
+     * @return string
      */
-    protected function clean($filepath)
+    public function getAuthor()
     {
-        if (!is_file($filepath)) {
-            throw new \RuntimeException('Unable to remove "' . $filepath . '". File is not exist.');
-        }
-        unlink($filepath);
+        return get_current_user();
+    }
+
+    /**
+     * @return array
+     */
+    public function getDefaultTemplateData()
+    {
+        $date = new \DateTime();
+
+        return [
+            'author' => $this->getAuthor(),
+            'date' => $date->format('Y-m-d H:i:s')
+        ];
     }
 }

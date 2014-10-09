@@ -7,6 +7,7 @@
 namespace Bluzman\Tests\Application;
 
 use Bluzman\Application\Config;
+use Bluzman\Tests\TestCase;
 use \Mockery as m;
 
 class ConfigTest extends TestCase
@@ -18,33 +19,20 @@ class ConfigTest extends TestCase
 
     public function setUp()
     {
+        parent::setUp();
+
         $this->container = new \Mockery\Container;
 
-        if (!is_dir($this->getBluzmanTmpPath())) {
-            mkdir($this->getBluzmanTmpPath());
+        if (!is_dir($this->getBluzmanWorkingPath())) {
+            mkdir($this->getBluzmanWorkingPath());
         }
 
-        $this->config = $this->container->mock(
-            new \Bluzman\Application\Config($this->getApplicationFixture())
-        );
+        $this->config = new \Bluzman\Application\Config($this->getApplication());
     }
 
-    public function tearDown()
+    protected function getBluzmanWorkingPath()
     {
-        if (is_file($this->getBluzmanTmpPath() . DS . 'config.json')) {
-            unlink($this->getBluzmanTmpPath() . DS . 'config.json');
-        }
-
-        if (is_dir($this->getBluzmanTmpPath())) {
-            rmdir($this->getBluzmanTmpPath());
-        }
-
-        m::close();
-    }
-
-    protected function getBluzmanTmpPath()
-    {
-        return PATH_TMP . DS . '.bluzman';
+        return $this->getWorkingPath() . DS . '.bluzman';
     }
 
     /**
@@ -83,7 +71,7 @@ class ConfigTest extends TestCase
         $this->config->setApplication($this->getMockWithTemporaryWorkingPath());
         $this->config->putOptions(['foo' => 'bar']);
 
-        $this->assertFileExists(PATH_TMP . DS . '.bluzman' . DS . 'config.json');
+        $this->assertFileExists($this->getWorkingPath() . DS . '.bluzman' . DS . 'config.json');
     }
 
     /**
@@ -141,9 +129,9 @@ class ConfigTest extends TestCase
         $mock = $this->container->mock('Bluz\Application\Application')
             ->shouldReceive('getWorkingPath')
             ->atLeast(1)
-            ->andReturn(PATH_TMP)
+            ->andReturn($this->getWorkingPath())
             ->shouldReceive('getBluzmanPath')
-            ->andReturn($this->getBluzmanTmpPath())
+            ->andReturn($this->getBluzmanWorkingPath())
             ->getMock();
 
         return $mock;

@@ -14,12 +14,17 @@ use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
 
-class ModuleCommandTest extends AbstractCommandTest
+class ControllerCommandTest extends AbstractCommandTest
 {
     /**
      * @var string
      */
-    protected $moduleName;
+    protected $name;
+
+    /**
+     * @var string
+     */
+    protected $module;
 
     public function setUp()
     {
@@ -38,28 +43,43 @@ class ModuleCommandTest extends AbstractCommandTest
 
         $this->setApplication($app);
 
-        $this->moduleName = $this->getFaker()->lexify();
+        $this->module = $this->getFaker()->lexify();
+        $this->name = $this->getFaker()->lexify();
+        $this->modulePath = $this->workingPath
+            . DS . 'application'
+            . DS . 'modules'
+            . DS . $this->module;
+
+        $this->getFs()->mkdir(
+            $this->modulePath . DS . 'controllers'
+        );
     }
 
     public function testCorrectWorkflow()
     {
-        $command = new Init\ModuleCommand();
+        $command = new Init\ControllerCommand();
 
         $this->getApplication()->addCommands([$command]);
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            '--name' => $this->moduleName
+            '--name' => $this->name,
+            '--module' => $this->module
         ]);
 
-        // check that all needed folders were created
-        $this->assertTrue($command->verify($command->getInput(), $command->getOutput()));
+        // check that all went well
+        $this->assertTrue($command->verify());
 
         $display = $commandTester->getDisplay();
 
         // check all messages were displayed
-        $this->assertRegExp('/Running "init:module" command/', $display);
+        $this->assertRegExp('/Running "init:controller" command/', $display);
         $this->assertRegExp('/has been successfully created/', $display);
+
+        $this->assertFileExists(
+            $this->modulePath . DS . 'controllers'
+                . DS . $this->name . '.php'
+        );
     }
 } 

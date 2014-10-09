@@ -14,38 +14,5 @@ namespace Bluzman\Generator\Template;
 
 class ControllerTemplate extends AbstractTemplate
 {
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        $author = get_current_user();
-        $date = date('Y-m-d H:i:s');
-
-        return <<<EOF
-<?php
-
-/**
- *
- * @author   $author
- * @created  $date
- */
-namespace Application;
-
-use Bluz;
-
-return
-/**
- * @return \closure
- */
-function () use (\$view) {
-    /**
-     * @var \Bluz\Application \$this
-     * @var \Bluz\View\View \$view
-     */
-    \$request = \$this->getRequest();
-};
-EOF;
-
-    }
+    protected $templatePath = 'views/controller.html';
 }
