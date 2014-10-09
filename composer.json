@@ -32,10 +32,9 @@
       "test": "make test"
   },
   "autoload": {
-    "psr-0": {
-      "": "vendor",
-      "Bluzman": "src",
-      "Bluzman\\Tests": "tests"
+    "psr-4": {
+      "Bluzman\\": "src",
+      "Bluzman\\Tests\\": "tests"
     }
   }
 }
