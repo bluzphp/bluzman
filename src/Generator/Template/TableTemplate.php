@@ -21,60 +21,19 @@ namespace Bluzman\Generator\Template;
 
 class TableTemplate extends AbstractTemplate
 {
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        $name = $this->options['name'];
-        $table = $this->options['table'];
+    protected $templatePath = 'views/table.html';
 
+    public function setTemplateData($templateData)
+    {
         // Primary key can be empty in options list
-        if (!empty($this->options['primaryKey'])) {
-            $primaryKey = '\'' . join('\',\'', $this->options['primaryKey']) . '\'';
+        if (!empty($templateData['primaryKey'])) {
+            $primaryKey = '\'' . join('\',\'', $templateData['primaryKey']) . '\'';
         } else {
             $primaryKey = '';
         }
 
-
-        $author = get_current_user();
-        $date = date('Y-m-d H:i:s');
-
-        return <<<EOF
-<?php
-
-/**
- * @namespace
- */
-namespace Application\\$name;
-
-/**
- * Table
- *
- * @category Application
- * @package  $name
- *
- * @author   $author
- * @created  $date
- */
-class Table extends \Bluz\Db\Table
-{
-    /**
-     * Table
-     *
-     * @var string
-     */
-    protected \$table = '$table';
-
-    protected \$rowClass = '\Application\\$name\Row';
-
-    /**
-     * Primary key(s)
-     * @var array
-     */
-    protected \$primary = array($primaryKey);
-}
-EOF;
-
+        $templateData['primaryKey'] = $primaryKey;
+        $this->templateData = $templateData;
     }
 }
+

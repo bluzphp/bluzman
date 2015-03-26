@@ -2,163 +2,145 @@
 
 namespace Bluzman\Command\Init;
 
-use Bluzman\Command\Command;
+use Bluzman\Command;
 use Bluzman\Generator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Respect\Validation\Validator as v;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * ModelCommand
- *
- * @todo Add an ability to define a namespace of model,
- *       so it will be possible to have classes like Application/Users/Profiles/Table
  *
  * @category Command
  * @package  Bluzman
  *
  * @author   Pavel Machekhin
- * @created  3/28/13 2:00 PM
+ * @created  3/28/13 1:58 PM
  */
 
-class ModelCommand extends AbstractCommand
+class ModelCommand extends Command\AbstractCommand
 {
-    protected function configure()
+    /**
+     * @var string
+     */
+    protected $name = 'init:model';
+
+    /**
+     * @var string
+     */
+    protected $description = 'Initialize a new model';
+
+    protected function getOptions()
     {
-        $this
-            ->setName("init:model")
-            ->setDescription("Initialize a new model")
-            ->addArgument(
-                "name",
-                InputArgument::OPTIONAL,
-                "The name of model. In case of empty `table` argument it is also a name of database table."
-            )
-            ->addArgument(
-                "table",
-                InputArgument::OPTIONAL,
-                "The name of DB table."
-            );
+        return [
+            ['name', null, InputOption::VALUE_OPTIONAL, ' name of model.', null, v::alnum('-')->noWhitespace()],
+            ['table', null, InputOption::VALUE_OPTIONAL, ' name of table.', null, v::alnum('-')->noWhitespace()]
+        ];
     }
 
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @throws \RuntimeException
+     * @throws \Bluzman\Input\InputException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln("<info>Running \"init:model\" command</info>");
+        $output->writeln($this->info("Running \"init:model\" command"));
 
-        try {
-            $this->verify($input, $output);
+        $this->generate()->verify();
 
-            $name = $input->getArgument("name");
-            $table = $input->getArgument("table");
-
-            $this->generate($name, $table, $input, $output);
-
-            $output->writeln("\nModel <info>\"" . $name . "\"</info> has been successfully created</info>.");
-
-        } catch (\LogicException $e) {
-            throw new \RuntimeException($e->getMessage());
-        } catch (\RuntimeException $e) {
-            throw new \RuntimeException($e->getMessage());
-        } catch (\Exception $e) {
-            throw new \RuntimeException("Some error occurred.");
-        }
+        $output->writeln("Model \"" . $this->info($this->getOption('name')) . "\"" .
+            " has been successfully created in the model \"" . $this->info($this->getOption('name')) . "\".");
     }
 
     /**
-     * @param OutputInterface $output
-     * @return mixed
+     * @param $controllerName
+     * @param $moduleName
      */
-    protected function askModelName(InputInterface $input, OutputInterface $output)
+    protected function generate()
     {
-        $dialog = $this->getHelperSet()->get("dialog");
+        $primaryKey = $this->getPrimaryKey($this->getOption('table'));
+        $columns = $this->getColumns($this->getOption('table'));
 
-        // ask user enter a valid name of new model
-        return $dialog->askAndValidate(
-            $output,
-            "\n<question>Please enter the name of the model:</question> \n> ",
-            function ($name) use ($input, $output, $dialog) {
-                return $this->validateModelName($name, $input, $output);
-            },
-            true
-        );
+        // generate row
+        $template = new Generator\Template\TableTemplate;
+        $template->setFilePath($this->getFilePath(). DIRECTORY_SEPARATOR .'Table.php');
+        $data = [
+            'name' => $this->getOption('name'),
+            'table' => $this->getOption('table'),
+            'primaryKey' => $primaryKey
+        ];
+        $template->setTemplateData($data);
+
+        $generator = new Generator\Generator($template);
+        $generator->make();
+
+        // generate table
+        $template = new Generator\Template\RowTemplate;
+        $template->setFilePath($this->getFilePath(). DIRECTORY_SEPARATOR .'Row.php');
+        unset($data);
+        $data = [
+            'name' => $this->getOption('name'),
+            'table' => $this->getOption('table'),
+            "columns" => $columns
+        ];
+        $template->setTemplateData($data);
+
+        $generator = new Generator\Generator($template);
+        $generator->make();
+
+        return $this;
     }
 
     /**
-     * @param $name
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return mixed
+     * @return string
      */
-    protected function validateModelName($name, InputInterface $input, OutputInterface $output)
+    protected function getFilePath()
     {
-        if (empty($name)) {
-            $output->writeln("\n<error>ERROR: Please enter a correct name of the model</error>");
+        $modelPath = $this->getApplication()->getWorkingPath() . DIRECTORY_SEPARATOR
+            . "application" . DIRECTORY_SEPARATOR
+            . "models";
 
-            return $this->askModelName($input, $output);
-        }
-
-        $input->setArgument("name", $name);
-
-        return $name;
-    }
-
-    /**
-     * @param OutputInterface $output
-     * @return mixed
-     */
-    protected function askTableName(InputInterface $input, OutputInterface $output)
-    {
-        $dialog = $this->getHelperSet()->get("dialog");
-
-        // ask user enter a valid name of new model
-        return $dialog->askAndValidate(
-            $output,
-            "\n<question>Please enter correct name of the table:</question> \n> ",
-            function ($table) use ($input, $output, $dialog) {
-                return $this->validateTable($table, $input, $output);
-            },
-            true
-        );
-    }
-
-    /**
-     * @param $table
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return mixed
-     */
-    protected function validateTable($table, InputInterface $input, OutputInterface $output)
-    {
-        if (empty($table)) {
-            $output->writeln("\n<error>ERROR: Please enter a correct name of the table</error>");
-
-            return $this->askTableName($input, $output);
+        if (!is_dir($modelPath)) {
+            mkdir($modelPath, 0755);
         }
 
-        $input->setArgument("table", $table);
+        $path = $modelPath . DIRECTORY_SEPARATOR . $this->getOption('name');
 
-        return $table;
+        if (!is_dir($path)) {
+            mkdir($path, 0755);
+        }
+
+        return $path;
     }
 
     /**
-     * Get primary key of table
-     *
-     * @param $table
-     * @return array
+     * Verify command result
      */
-    protected function getPrimaryKey($table)
+    public function verify()
     {
+        $fs = new Filesystem();
+
+        if (!$fs->exists($this->getFilePath())) {
+            throw new \RuntimeException("Something is wrong. Controller was not created");
+        }
+
+        return true;
+    }
+
+    protected function getPrimaryKey()
+    {
+        $table = $this->getOption('table');
+
         $dbh = $this->getApplication()->getDbConnection();
 
         $dbh->prepare("DESCRIBE $table");
 
-        $q = $dbh->prepare('SHOW KEYS FROM $name WHERE Key_name = "PRIMARY"');
+        $q = $dbh->prepare("SHOW KEYS FROM $table WHERE Key_name = \"PRIMARY\"");
 
         $q->execute();
         $keys = $q->fetchAll(\PDO::FETCH_ASSOC);
@@ -172,16 +154,11 @@ class ModelCommand extends AbstractCommand
         return $primaryKeys;
     }
 
-    /**
-     * Get list of table columns
-     *
-     * @param $name
-     * @return array
-     */
-    protected function getColumns($name)
+    protected function getColumns()
     {
         $dbh = $this->getApplication()->getDbConnection();
         $columns = array();
+        $name = $this->getOption('name');
 
         $q = $dbh->prepare("DESCRIBE $name");
         $q->execute();
@@ -198,154 +175,4 @@ class ModelCommand extends AbstractCommand
         return $columns;
     }
 
-    /**
-     * Validate and generate a model
-     *
-     * @param $controllerName
-     * @param $moduleName
-     */
-    protected function generate($modelName, $table, InputInterface $input, OutputInterface $output)
-    {
-        $generator = new Generator\Generator();
-
-        $primaryKey = $this->getPrimaryKey($table);
-        $columns = $this->getColumns($table);
-
-        try {
-            // generate table
-            $arguments = array(
-                "Table.php",
-                $this->getPath($modelName),
-                Generator\Generator::ENTITY_TYPE_MODEL_TABLE,
-                array(
-                    "name" => $modelName,
-                    "table" => $table,
-                    "primaryKey" => $primaryKey
-                )
-            );
-
-            call_user_func_array(array($generator, "generateTemplate"), $arguments);
-
-        } catch (Generator\Template\Exception\AlreadyExistsException $e) {
-            $dialog = $this->getHelperSet()->get("dialog");
-
-            $result = $dialog->askConfirmation(
-                $output,
-                "\n<question>Model " . $e->getMessage() . " would be overwritten. y/N?:</question>\n> ",
-                false
-            );
-
-            if ($result) {
-                $arguments[] = true; // rewrite argument
-
-                call_user_func_array(array($generator, "generateTemplate"), $arguments);
-            }
-        }
-
-        try {
-            // generate row
-            $arguments = array(
-                "Row.php",
-                $this->getPath($modelName),
-                Generator\Generator::ENTITY_TYPE_MODEL_ROW,
-                array(
-                    "name" => $modelName,
-                    "table" => $table,
-                    "columns" => $columns
-                )
-            );
-
-            call_user_func_array(array($generator, "generateTemplate"), $arguments);
-
-        } catch (Generator\Template\Exception\AlreadyExistsException $e) {
-            $dialog = $this->getHelperSet()->get("dialog");
-
-            $result = $dialog->askConfirmation(
-                $output,
-                "\n<question>Model " . $e->getMessage() . " would be overwritten. y/N?:</question>\n> ",
-                false
-            );
-
-            if ($result) {
-                $arguments[] = true; // rewrite argument
-
-                call_user_func_array(array($generator, "generateTemplate"), $arguments);
-            }
-        }
-    }
-
-    /**
-     * Get full path to the model
-     *
-     * @param $modelName
-     * @return string
-     */
-    protected function getPath($modelName)
-    {
-        $modelPath = $this->getApplication()->getPath() . DIRECTORY_SEPARATOR
-            . "application" . DIRECTORY_SEPARATOR
-            . "models" . DIRECTORY_SEPARATOR
-            . "Application";
-
-        if (!is_dir($modelPath)) {
-            mkdir($modelPath, 0755);
-        }
-
-        $path = $modelPath . DIRECTORY_SEPARATOR . $modelName;
-
-        if (!is_dir($path)) {
-            mkdir($path, 0755);
-        }
-
-        return $path;
-    }
-
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @throws \RuntimeException
-     */
-    public function verify(InputInterface $input, OutputInterface $output)
-    {
-        // command should be executed only in interactive mode
-        if (!$input->isInteractive()) {
-            throw new \RuntimeException("Command should be executed in interactive mode.");
-        }
-
-        $name = $input->getArgument("name");
-
-        // `name` is required argument
-        if (empty($name)) {
-            $this->askModelName($input, $output);
-        } else {
-            $this->validateModelName($name, $input, $output);
-        }
-
-        $name = $input->getArgument("name");
-        $table = $input->getArgument("table");
-
-        if (empty($table)) {
-            $table = strtolower($name);
-            $dialog = $this->getHelperSet()->get("dialog");
-
-            $result = $dialog->askConfirmation(
-                $output,
-                "\n<question>The name of database table would be \"" . $table . "\". Y/n?:</question>\n> ",
-                true
-            );
-
-            if (!$result) {
-                $this->askTableName($input, $output);
-            } else {
-                $input->setArgument('table', $table);
-            }
-        }
-
-        $table = $input->getArgument("table");
-
-        $this->validateTable($table, $input, $output);
-
-        $input->setArgument("name", ucfirst($name));
-        $input->setArgument("table", $table);
-    }
 }

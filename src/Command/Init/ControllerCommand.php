@@ -37,14 +37,17 @@ class ControllerCommand extends Command\AbstractCommand
     protected function getOptions()
     {
         return [
-            ['module', null, InputOption::VALUE_OPTIONAL, 'The name of module.', null, v::alnum('-')->noWhitespace()],
-            ['name', null, InputOption::VALUE_OPTIONAL, 'The name of new controller.', null, v::alnum('-')->noWhitespace()]
+            ['module', null, InputOption::VALUE_OPTIONAL, ' name of module.', null, v::alnum('-')->noWhitespace()],
+            ['name', null, InputOption::VALUE_OPTIONAL, ' name of new controller.', null, v::alnum('-')->noWhitespace()]
         ];
     }
+
+//    protected function
 
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     * @throws \Bluzman\Input\InputException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -79,9 +82,9 @@ class ControllerCommand extends Command\AbstractCommand
         return $this->getApplication()->getWorkingPath()
             . DS . 'application'
             . DS . 'modules'
-            . DS . $this->getInput()->getOption('module')
+            . DS . $this->getOption('module')
             . DS . 'controllers'
-            . DS . $this->getInput()->getOption('name')
+            . DS . $this->getOption('name')
             . '.php';
     }
 

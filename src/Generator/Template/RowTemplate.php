@@ -21,64 +21,23 @@ namespace Bluzman\Generator\Template;
 
 class RowTemplate extends AbstractTemplate
 {
-    /**
-     * @return string
-     */
-    public function getTemplate()
+    protected $templatePath = 'views/row.html';
+
+    public function setTemplateData($templateData)
     {
-        $name = $this->options['name'];
-        $author = get_current_user();
-        $date = date('Y-m-d H:i:s');
-        $properties = '';
+        if (array_key_exists('columns', $templateData)) {
+            $properties = '';
+            $columns = $templateData['columns'];
+            foreach ($columns as $column) {
+                // all properties will be `string` except `bigint`, `int`, etc. columns
+                $columnType = preg_match('/^int/', $column['type']) ? 'integer' : 'string';
 
-        // set property type
-        foreach ($this->options['columns'] as $column) {
-            // all properties will be `string` except `bigint`, `int`, etc. columns
-            $columnType = preg_match('/^int/', $column['type']) ? 'integer' : 'string';
-
-            $properties .= " * @property " . $columnType . " $" . $column['name'] . "\r\n";
+                $properties .= " * @property " . $columnType . " $" . $column['name'] . "\r\n";
+            }
+            unset($templateData['columns']);
+            $templateData['properties'] = $properties;
         }
-
-        return <<<EOF
-<?php
-
-/**
- * @namespace
- */
-namespace Application\\$name;
-
-/**
- *
- *
- * @category Application
- * @package  $name
- *
-$properties *
- * @author   $author
- * @created  $date
- */
-class Row extends \Bluz\Db\Row
-{
-    /**
-     * __insert
-     *
-     * @return void
-     */
-    public function beforeInsert()
-    {
-
-    }
-
-    /**
-     * __update
-     *
-     * @return void
-     */
-    public function beforeUpdate()
-    {
-
+        $this->templateData = $templateData;
     }
 }
-EOF;
-    }
-}
+

@@ -113,7 +113,18 @@ class Application extends Console\Application
             new Command\PhinxStatusCommand,
             new Command\Init\AllCommand,
             new Command\Init\ModuleCommand,
-            new Command\Init\ControllerCommand
+            new Command\Init\ControllerCommand,
+            new Command\Init\ModelCommand
         ]);
     }
+
+    public function getDbConnection()
+    {
+        $conf = $this->getConfig()->getBluzConfig('default')->getData('db')['connect'];
+        $dsn = "$conf[type]:host=$conf[host];dbname=$conf[name]";
+        $connect = new \PDO($dsn, $conf['user'], $conf['pass']);
+
+        return $connect;
+    }
+
 }
