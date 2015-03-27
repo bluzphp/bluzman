@@ -12,6 +12,7 @@ $root = realpath(dirname(dirname(__FILE__)));
 define('PATH_ROOT', $root);
 define('PATH_VENDOR', $root . '/vendor');
 define('DS', DIRECTORY_SEPARATOR);
+define('BLUZ_ENV', 'dev');
 
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);

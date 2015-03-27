@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Respect\Validation\Validator as v;
 use Symfony\Component\Filesystem\Filesystem;
+use Bluzman\Input\InputException;
 
 /**
  * ModelCommand
@@ -45,18 +46,31 @@ class ModelCommand extends Command\AbstractCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @throws \Bluzman\Input\InputException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
             $output->writeln($this->info("Running \"init:model\" command"));
 
+            $modelName = ucfirst($this->getOption('name'));
+            if ($this->getApplication()->isModelExists($modelName)) {
+                $dialog = $this->getHelperSet()->get("dialog");
+
+                $result = $dialog->askConfirmation(
+                    $output,
+                    "\n<question>Model " . $modelName . " would be overwritten. y/N?:</question>\n> ",
+                    false
+                );
+
+                if (!$result) {
+                    return;
+                }
+            }
             $this->generate()->verify();
 
             $output->writeln("Model \"" . $this->info($this->getOption('name')) . "\"" .
                 " has been successfully created in the model \"" . $this->info($this->getOption('name')) . "\".");
-        } catch (\Bluzman\Input\InputException $e) {
+        } catch (InputException $e) {
             $output->writeln("<error>ERROR: {$e->getMessage()}</error>\n");
             $this->execute($input, $output);
         }
@@ -64,7 +78,7 @@ class ModelCommand extends Command\AbstractCommand
 
     /**
      * @return $this
-     * @throws \Bluzman\Input\InputException
+     * @throws InputException
      */
     protected function generate()
     {

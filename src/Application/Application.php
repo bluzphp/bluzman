@@ -118,21 +118,39 @@ class Application extends Console\Application
         ]);
     }
 
+    /**
+     * @return \PDO
+     * @throws \Bluz\Config\ConfigException
+     */
     public function getDbConnection()
     {
-        $conf = $this->getConfig()->getBluzConfig('default')->getData('db')['connect'];
+        $conf = $this->getConfig()->getBluzConfig(BLUZ_ENV)->getData('db')['connect'];
         $dsn = "$conf[type]:host=$conf[host];dbname=$conf[name]";
         $connect = new \PDO($dsn, $conf['user'], $conf['pass']);
 
         return $connect;
     }
 
-    public function isModuleExists($moduleName) {
+    /**
+     * @param $moduleName
+     * @return bool
+     */
+    public function isModuleExists($moduleName)
+    {
         $pathDir = $this->getWorkingPath() . DIRECTORY_SEPARATOR
             . 'application' . DIRECTORY_SEPARATOR
             . 'modules' . DIRECTORY_SEPARATOR
             . $moduleName;
 
+        return is_dir($pathDir);
+    }
+
+    public function isModelExists($modelName)
+    {
+        $pathDir = $this->getWorkingPath() . DIRECTORY_SEPARATOR
+            . 'application' . DIRECTORY_SEPARATOR
+            . 'models' . DIRECTORY_SEPARATOR
+            . $modelName;
         return is_dir($pathDir);
     }
 }
