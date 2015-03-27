@@ -58,19 +58,19 @@ class ModelCommand extends Command\AbstractCommand
     }
 
     /**
-     * @param $controllerName
-     * @param $moduleName
+     * @return $this
+     * @throws \Bluzman\Input\InputException
      */
     protected function generate()
     {
         $primaryKey = $this->getPrimaryKey($this->getOption('table'));
         $columns = $this->getColumns($this->getOption('table'));
 
-        // generate row
+        // generate table
         $template = new Generator\Template\TableTemplate;
-        $template->setFilePath($this->getFilePath(). DIRECTORY_SEPARATOR .'Table.php');
+        $template->setFilePath($this->getFilePath() .'Table.php');
         $data = [
-            'name' => $this->getOption('name'),
+            'name' => ucfirst($this->getOption('name')),
             'table' => $this->getOption('table'),
             'primaryKey' => $primaryKey
         ];
@@ -79,12 +79,12 @@ class ModelCommand extends Command\AbstractCommand
         $generator = new Generator\Generator($template);
         $generator->make();
 
-        // generate table
+        // generate row
         $template = new Generator\Template\RowTemplate;
-        $template->setFilePath($this->getFilePath(). DIRECTORY_SEPARATOR .'Row.php');
+        $template->setFilePath($this->getFilePath() .'Row.php');
         unset($data);
         $data = [
-            'name' => $this->getOption('name'),
+            'name' => ucfirst($this->getOption('name')),
             'table' => $this->getOption('table'),
             "columns" => $columns
         ];
@@ -103,19 +103,10 @@ class ModelCommand extends Command\AbstractCommand
     {
         $modelPath = $this->getApplication()->getWorkingPath() . DIRECTORY_SEPARATOR
             . "application" . DIRECTORY_SEPARATOR
-            . "models";
+            . "models" . DIRECTORY_SEPARATOR
+            . ucfirst(strtolower($this->getOption('name'))) . DIRECTORY_SEPARATOR;
 
-        if (!is_dir($modelPath)) {
-            mkdir($modelPath, 0755);
-        }
-
-        $path = $modelPath . DIRECTORY_SEPARATOR . $this->getOption('name');
-
-        if (!is_dir($path)) {
-            mkdir($path, 0755);
-        }
-
-        return $path;
+        return $modelPath;
     }
 
     /**
@@ -163,7 +154,7 @@ class ModelCommand extends Command\AbstractCommand
         $q = $dbh->prepare("DESCRIBE $name");
         $q->execute();
 
-        foreach($q->fetchAll(\PDO::FETCH_ASSOC) as $column) {
+        foreach ($q->fetchAll(\PDO::FETCH_ASSOC) as $column) {
             $type = preg_replace("/\(.*/s", "", $column["Type"]);
 
             $columns[] = array(
@@ -174,5 +165,4 @@ class ModelCommand extends Command\AbstractCommand
 
         return $columns;
     }
-
 }

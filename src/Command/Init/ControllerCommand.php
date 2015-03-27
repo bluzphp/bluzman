@@ -42,8 +42,6 @@ class ControllerCommand extends Command\AbstractCommand
         ];
     }
 
-//    protected function
-
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
