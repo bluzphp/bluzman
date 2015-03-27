@@ -49,12 +49,17 @@ class ModelCommand extends Command\AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln($this->info("Running \"init:model\" command"));
+        try {
+            $output->writeln($this->info("Running \"init:model\" command"));
 
-        $this->generate()->verify();
+            $this->generate()->verify();
 
-        $output->writeln("Model \"" . $this->info($this->getOption('name')) . "\"" .
-            " has been successfully created in the model \"" . $this->info($this->getOption('name')) . "\".");
+            $output->writeln("Model \"" . $this->info($this->getOption('name')) . "\"" .
+                " has been successfully created in the model \"" . $this->info($this->getOption('name')) . "\".");
+        } catch (\Bluzman\Input\InputException $e) {
+            $output->writeln("<error>ERROR: {$e->getMessage()}</error>\n");
+            $this->execute($input, $output);
+        }
     }
 
     /**

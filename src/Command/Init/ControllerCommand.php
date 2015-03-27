@@ -49,12 +49,24 @@ class ControllerCommand extends Command\AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln($this->info("Running \"init:controller\" command"));
+        try {
+            $output->writeln($this->info("Running \"init:controller\" command"));
 
-        $this->generate()->verify();
+            $moduleName = strtolower($this->getOption('module'));
 
-        $output->writeln("Controller \"" . $this->info($this->getOption('name')) . "\"" .
-                " has been successfully created in the module \"" . $this->info($this->getOption('module')) . "\".");
+            if (!$this->getApplication()->isModuleExists($moduleName)) {
+                $output->writeln("<error>ERROR: Module " . $moduleName . " is not exist</error>\n");
+            } else {
+
+                $this->generate()->verify();
+
+                $output->writeln("Controller \"" . $this->info($this->getOption('name')) . "\"" .
+                    " has been successfully created in the module \"" . $this->info($this->getOption('module')) . "\".");
+            }
+        } catch (\Bluzman\Input\InputException $e) {
+            $output->writeln("<error>ERROR: {$e->getMessage()}</error>\n");
+            $this->execute($input, $output);
+        }
     }
 
     /**

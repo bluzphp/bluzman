@@ -127,4 +127,12 @@ class Application extends Console\Application
         return $connect;
     }
 
+    public function isModuleExists($moduleName) {
+        $pathDir = $this->getWorkingPath() . DIRECTORY_SEPARATOR
+            . 'application' . DIRECTORY_SEPARATOR
+            . 'modules' . DIRECTORY_SEPARATOR
+            . $moduleName;
+
+        return is_dir($pathDir);
+    }
 }
