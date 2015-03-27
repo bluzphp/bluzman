@@ -21,8 +21,14 @@ namespace Bluzman\Generator\Template;
 
 class TableTemplate extends AbstractTemplate
 {
+    /**
+     * @var string
+     */
     protected $templatePath = 'views/table.html';
 
+    /**
+     * @param array $templateData
+     */
     public function setTemplateData($templateData)
     {
         // Primary key can be empty in options list
@@ -36,4 +42,3 @@ class TableTemplate extends AbstractTemplate
         $this->templateData = $templateData;
     }
 }
-

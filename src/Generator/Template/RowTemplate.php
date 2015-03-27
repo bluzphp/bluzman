@@ -21,8 +21,14 @@ namespace Bluzman\Generator\Template;
 
 class RowTemplate extends AbstractTemplate
 {
+    /**
+     * @var string
+     */
     protected $templatePath = 'views/row.html';
 
+    /**
+     * @param array $templateData
+     */
     public function setTemplateData($templateData)
     {
         if (array_key_exists('columns', $templateData)) {
@@ -31,7 +37,6 @@ class RowTemplate extends AbstractTemplate
             foreach ($columns as $column) {
                 // all properties will be `string` except `bigint`, `int`, etc. columns
                 $columnType = preg_match('/^int/', $column['type']) ? 'integer' : 'string';
-
                 $properties .= " * @property " . $columnType . " $" . $column['name'] . "\r\n";
             }
             unset($templateData['columns']);
@@ -40,4 +45,3 @@ class RowTemplate extends AbstractTemplate
         $this->templateData = $templateData;
     }
 }
-

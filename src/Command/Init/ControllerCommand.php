@@ -58,8 +58,7 @@ class ControllerCommand extends Command\AbstractCommand
     }
 
     /**
-     * @param $controllerName
-     * @param $moduleName
+     * @return $this
      */
     protected function generate()
     {
@@ -69,11 +68,19 @@ class ControllerCommand extends Command\AbstractCommand
         $generator = new Generator\Generator($template);
         $generator->make();
 
+        $template = new Generator\Template\ViewTemplate;
+        $template->setFilePath($this->getViewPath());
+        $template->setTemplateData(['name' => $this->getOption('name')]);
+
+        $generator = new Generator\Generator($template);
+        $generator->make();
+
         return $this;
     }
 
     /**
      * @return string
+     * @throws \Bluzman\Input\InputException
      */
     protected function getFilePath()
     {
@@ -84,6 +91,21 @@ class ControllerCommand extends Command\AbstractCommand
             . DS . 'controllers'
             . DS . $this->getOption('name')
             . '.php';
+    }
+
+    /**
+     * @return string
+     * @throws \Bluzman\Input\InputException
+     */
+    protected function getViewPath()
+    {
+        return $this->getApplication()->getWorkingPath()
+        . DS . 'application'
+        . DS . 'modules'
+        . DS . $this->getOption('module')
+        . DS . 'views'
+        . DS . $this->getOption('name')
+        . '.phtml';
     }
 
     /**

@@ -117,12 +117,16 @@ class ModelCommand extends Command\AbstractCommand
         $fs = new Filesystem();
 
         if (!$fs->exists($this->getFilePath())) {
-            throw new \RuntimeException("Something is wrong. Controller was not created");
+            throw new \RuntimeException("Something is wrong. Model was not created");
         }
 
         return true;
     }
 
+    /**
+     * @return array
+     * @throws \Bluzman\Input\InputException
+     */
     protected function getPrimaryKey()
     {
         $table = $this->getOption('table');
@@ -145,6 +149,10 @@ class ModelCommand extends Command\AbstractCommand
         return $primaryKeys;
     }
 
+    /**
+     * @return array
+     * @throws \Bluzman\Input\InputException
+     */
     protected function getColumns()
     {
         $dbh = $this->getApplication()->getDbConnection();
