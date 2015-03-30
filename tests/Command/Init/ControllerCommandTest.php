@@ -82,4 +82,4 @@ class ControllerCommandTest extends AbstractCommandTest
                 . DS . $this->name . '.php'
         );
     }
-} 
+}

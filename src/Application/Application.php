@@ -148,6 +148,10 @@ class Application extends Console\Application
         return is_dir($pathDir);
     }
 
+    /**
+     * @param $modelName
+     * @return bool
+     */
     public function isModelExists($modelName)
     {
         $pathDir = $this->getWorkingPath() . DIRECTORY_SEPARATOR

@@ -53,6 +53,9 @@ class ModelCommandTest extends AbstractCommandTest
             . DS . $this->name;
     }
 
+    /**
+     * Testing correct create models
+     */
     public function testCorrectWorkflow()
     {
         $command = new Init\ModelCommand();
@@ -61,7 +64,6 @@ class ModelCommandTest extends AbstractCommandTest
 
         $commandTester = new CommandTester($command);
 
-//        var_dump($this->table);die;
         $commandTester->execute([
             'command' => $command->getName(),
             '--name' => $this->name,
