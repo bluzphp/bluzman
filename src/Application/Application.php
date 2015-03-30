@@ -20,6 +20,8 @@ class Application extends Console\Application
      */
     protected $config;
 
+    protected $conn = null;
+
     /**
      * @param \Bluzman\Application\Config $config
      */
@@ -124,11 +126,12 @@ class Application extends Console\Application
      */
     public function getDbConnection()
     {
-        $conf = $this->getConfig()->getBluzConfig(BLUZ_ENV)->getData('db')['connect'];
-        $dsn = "$conf[type]:host=$conf[host];dbname=$conf[name]";
-        $connect = new \PDO($dsn, $conf['user'], $conf['pass']);
-
-        return $connect;
+        if ($this->conn === null) {
+            $conf = $this->getConfig()->getBluzConfig(BLUZ_ENV)->getData('db')['connect'];
+            $dsn = "$conf[type]:host=$conf[host];dbname=$conf[name]";
+            $this->conn = new \PDO($dsn, $conf['user'], $conf['pass']);
+        }
+        return $this->conn;
     }
 
     /**

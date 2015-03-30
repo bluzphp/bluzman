@@ -1,7 +1,9 @@
 <?php
 /**
- * @author bashmach
- * @created 10/7/14 3:04 PM
+ * Created by PhpStorm.
+ * User: kvasenko
+ * Date: 30.03.15
+ * Time: 13:33
  */
 
 namespace Bluzman\Tests\Command\Init;
@@ -14,12 +16,17 @@ use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
 
-class ModuleCommandTest extends AbstractCommandTest
+class ModelCommandTest extends AbstractCommandTest
 {
     /**
      * @var string
      */
-    protected $moduleName;
+    protected $name;
+
+    /**
+     * @var string
+     */
+    protected $table;
 
     public function setUp()
     {
@@ -38,28 +45,41 @@ class ModuleCommandTest extends AbstractCommandTest
 
         $this->setApplication($app);
 
-        $this->moduleName = $this->getFaker()->lexify();
+        $this->table = 'users';
+        $this->name = 'Users';
+        $this->modelPath = $this->workingPath
+            . DS . 'application'
+            . DS . 'models'
+            . DS . $this->name;
     }
 
     public function testCorrectWorkflow()
     {
-        $command = new Init\ModuleCommand();
+        $command = new Init\ModelCommand();
 
         $this->getApplication()->addCommands([$command]);
 
         $commandTester = new CommandTester($command);
+
+//        var_dump($this->table);die;
         $commandTester->execute([
             'command' => $command->getName(),
-            '--name' => $this->moduleName
+            '--name' => $this->name,
+            '--table' => $this->table
         ]);
 
-        // check that all needed folders were created
-        $this->assertTrue($command->verify($command->getInput(), $command->getOutput()));
+        // check that all went well
+        $this->assertTrue($command->verify());
 
         $display = $commandTester->getDisplay();
 
         // check all messages were displayed
-        $this->assertRegExp('/Running "init:module" command/', $display);
+        $this->assertRegExp('/Running "init:model" command/', $display);
         $this->assertRegExp('/has been successfully created/', $display);
+
+        $this->assertFileExists(
+            $this->modelPath
+            . DS . 'Table' . '.php'
+        );
     }
 }

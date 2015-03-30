@@ -55,7 +55,6 @@ class ModelCommand extends Command\AbstractCommand
             $modelName = ucfirst($this->getOption('name'));
             if ($this->getApplication()->isModelExists($modelName)) {
                 $dialog = $this->getHelperSet()->get("dialog");
-
                 $result = $dialog->askConfirmation(
                     $output,
                     "\n<question>Model " . $modelName . " would be overwritten. y/N?:</question>\n> ",
@@ -93,6 +92,7 @@ class ModelCommand extends Command\AbstractCommand
             'table' => $this->getOption('table'),
             'primaryKey' => $primaryKey
         ];
+
         $template->setTemplateData($data);
 
         $generator = new Generator\Generator($template);
