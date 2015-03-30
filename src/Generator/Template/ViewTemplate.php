@@ -14,16 +14,5 @@ namespace Bluzman\Generator\Template;
 
 class ViewTemplate extends AbstractTemplate
 {
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        $name = $this->options['name'];
-
-        return <<<EOF
-<p>This is the $name view</p>
-EOF;
-
-    }
+    protected $templatePath = 'views/view.html';
 }

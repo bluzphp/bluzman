@@ -113,7 +113,44 @@ class Application extends Console\Application
             new Command\PhinxStatusCommand,
             new Command\Init\AllCommand,
             new Command\Init\ModuleCommand,
-            new Command\Init\ControllerCommand
+            new Command\Init\ControllerCommand,
+            new Command\Init\ModelCommand
         ]);
+    }
+
+    /**
+     * @return \PDO
+     * @throws \Bluz\Config\ConfigException
+     */
+    public function getDbConnection()
+    {
+        $conf = $this->getConfig()->getBluzConfig(BLUZ_ENV)->getData('db')['connect'];
+        $dsn = "$conf[type]:host=$conf[host];dbname=$conf[name]";
+        $connect = new \PDO($dsn, $conf['user'], $conf['pass']);
+
+        return $connect;
+    }
+
+    /**
+     * @param $moduleName
+     * @return bool
+     */
+    public function isModuleExists($moduleName)
+    {
+        $pathDir = $this->getWorkingPath() . DIRECTORY_SEPARATOR
+            . 'application' . DIRECTORY_SEPARATOR
+            . 'modules' . DIRECTORY_SEPARATOR
+            . $moduleName;
+
+        return is_dir($pathDir);
+    }
+
+    public function isModelExists($modelName)
+    {
+        $pathDir = $this->getWorkingPath() . DIRECTORY_SEPARATOR
+            . 'application' . DIRECTORY_SEPARATOR
+            . 'models' . DIRECTORY_SEPARATOR
+            . $modelName;
+        return is_dir($pathDir);
     }
 }

@@ -13,6 +13,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\ProgressHelper;
+use Symfony\Component\Process\Process;
 
 /**
  * AllCommand
@@ -118,7 +119,9 @@ class AllCommand extends Command\AbstractCommand
 
         //@todo Use symfony process
         // create skeleton project
-        shell_exec(sprintf($this->getCmdPattern(), $name));
+        $process = new Process(sprintf($this->getCmdPattern(), $name));
+        $process->run();
+//        shell_exec(sprintf($this->getCmdPattern(), $name));
 
         chdir($projectPath);
 
