@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Respect\Validation\Validator as v;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Filesystem\Filesystem;
 use Bluzman\Input\InputException;
 
@@ -54,14 +55,12 @@ class ModelCommand extends Command\AbstractCommand
 
             $modelName = ucfirst($this->getOption('name'));
             if ($this->getApplication()->isModelExists($modelName)) {
-                $dialog = $this->getHelperSet()->get("dialog");
-                $result = $dialog->askConfirmation(
-                    $output,
+                $helper = $this->getHelperSet()->get("question");
+                $question = new ConfirmationQuestion(
                     "\n<question>Model " . $modelName . " would be overwritten. y/N?:</question>\n> ",
-                    false
-                );
+                    false);
 
-                if (!$result) {
+                if (!$helper->ask($input, $output, $question)) {
                     return;
                 }
             }
@@ -176,7 +175,7 @@ class ModelCommand extends Command\AbstractCommand
     {
         $dbh = $this->getApplication()->getDbConnection();
         $columns = array();
-        $name = $this->getOption('name');
+        $name = $this->getOption('table');
 
         $q = $dbh->prepare("DESCRIBE $name");
         $q->execute();
