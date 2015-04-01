@@ -31,7 +31,7 @@ class RowTemplate extends AbstractTemplate
      */
     public function setTemplateData($templateData)
     {
-        if (array_key_exists('columns', $templateData)) {
+        if ($templateData['columns']) {
             $properties = '';
             $columns = $templateData['columns'];
             foreach ($columns as $column) {

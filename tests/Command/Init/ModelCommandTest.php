@@ -27,6 +27,7 @@ class ModelCommandTest extends AbstractCommandTest
      * @var string
      */
     protected $table;
+    protected $modelPath;
 
     public function setUp()
     {
@@ -92,9 +93,14 @@ class ModelCommandTest extends AbstractCommandTest
         $this->assertRegExp('/Running "init:model" command/', $display);
         $this->assertRegExp('/has been successfully created/', $display);
 
+        $table = $this->modelPath . DS . 'Table.php';
+        $row = $this->modelPath . DS . 'Row.php';
+
         $this->assertFileExists(
-            $this->modelPath
-            . DS . 'Table' . '.php'
+            $table
+        );
+        $this->assertFileExists(
+            $row
         );
     }
 
@@ -102,13 +108,16 @@ class ModelCommandTest extends AbstractCommandTest
     {
         return [
             [
-                [['name' => 'id', 'type' => 'int']], ['id']
+                'columns' => [['name' => 'id', 'type' => 'int']],
+                'primaryKey' =>  ['id']
             ],
             [
-                [['name' => 'name', 'type' => 'string']], ['id']
+                'columns' => [['name' => 'name', 'type' => 'string']],
+                'primaryKey' =>  ['id']
             ],
             [
-                [['name' => 'title', 'type' => 'string']], ['id']
+                'columns' => [['name' => 'alias', 'type' => 'string']],
+                'primaryKey' =>  ['id']
             ]
         ];
     }
