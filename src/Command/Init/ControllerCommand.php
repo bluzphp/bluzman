@@ -30,9 +30,34 @@ class ControllerCommand extends Command\AbstractCommand
     protected $name = 'init:controller';
 
     /**
+     * @var Filesystem
+     */
+    protected $fs;
+
+    /**
      * @var string
      */
     protected $description = 'Initialize a new controller';
+
+    public function __construct($name = null)
+    {
+        parent::__construct($name);
+
+        $this->setFs(new Filesystem);
+    }
+
+    public function setFs($fs)
+    {
+        $this->fs = $fs;
+    }
+
+    /**
+     * @return \Symfony\Component\Filesystem\Filesystem
+     */
+    public function getFs()
+    {
+        return $this->fs;
+    }
 
     protected function getOptions()
     {
@@ -125,10 +150,22 @@ class ControllerCommand extends Command\AbstractCommand
      */
     public function verify()
     {
-        $fs = new Filesystem();
+        $modulePath = $this->getApplication()->getWorkingPath()
+            . DS . 'application'
+            . DS . 'modules'
+            . DS . $this->getOption('module');
+        $paths = [
+            $modulePath,
+            $modulePath . DS . 'controllers',
+            $modulePath . DS . 'controllers' . DS . $this->getOption('name') . '.php',
+            $modulePath . DS . 'views',
+            $modulePath . DS . 'views' . DS . $this->getOption('name') . '.phtml',
 
-        if (!$fs->exists($this->getFilePath())) {
-            throw new \RuntimeException("Something is wrong. Controller was not created");
+        ];
+        foreach ($paths as $path) {
+            if (!$this->getFs()->exists($path)) {
+                return false;
+            }
         }
 
         return true;

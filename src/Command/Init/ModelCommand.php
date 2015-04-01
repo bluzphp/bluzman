@@ -36,6 +36,34 @@ class ModelCommand extends Command\AbstractCommand
      */
     protected $description = 'Initialize a new model';
 
+    /**
+     * @var Filesystem
+     */
+    protected $fs;
+
+    /**
+     * @param \Symfony\Component\Filesystem\Filesystem $fs
+     */
+    public function setFs($fs)
+    {
+        $this->fs = $fs;
+    }
+
+    /**
+     * @return \Symfony\Component\Filesystem\Filesystem
+     */
+    public function getFs()
+    {
+        return $this->fs;
+    }
+
+    public function __construct($name = null)
+    {
+        parent::__construct($name);
+
+        $this->setFs(new Filesystem);
+    }
+
     protected function getOptions()
     {
         return [
@@ -132,10 +160,19 @@ class ModelCommand extends Command\AbstractCommand
      */
     public function verify()
     {
-        $fs = new Filesystem();
+        $modelPath = $this->getApplication()->getWorkingPath() . DS . 'application' . DS . 'models';
 
-        if (!$fs->exists($this->getFilePath())) {
-            throw new \RuntimeException("Something is wrong. Model was not created");
+        $paths = [
+            $modelPath,
+            $modelPath . DS . $this->getOption('name'),
+            $modelPath . DS . $this->getOption('name') .  DS . 'Table.php',
+            $modelPath . DS . $this->getOption('name') .  DS . 'Row.php'
+        ];
+
+        foreach ($paths as $path) {
+            if (!$this->getFs()->exists($path)) {
+                return false;
+            }
         }
 
         return true;
