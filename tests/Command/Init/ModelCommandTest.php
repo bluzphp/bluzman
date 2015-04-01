@@ -54,11 +54,24 @@ class ModelCommandTest extends AbstractCommandTest
     }
 
     /**
+     * @dataProvider getData
      * Testing correct create models
      */
-    public function testCorrectWorkflow()
+    public function testCorrectWorkflow($columns, $primaryKey)
     {
-        $command = new Init\ModelCommand();
+        $container = new \Mockery\Container;
+        $command = $container->mock('\Bluzman\Command\Init\ModelCommand[getPrimaryKey, getColumns]')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
+        $command->shouldReceive('getPrimaryKey')
+            ->atLeast(1)
+            ->andReturn($primaryKey)
+            ->getMock();
+        $command->shouldReceive('getColumns')
+            ->atLeast(1)
+            ->andReturn($columns)
+            ->getMock();
+
 
         $this->getApplication()->addCommands([$command]);
 
@@ -83,5 +96,20 @@ class ModelCommandTest extends AbstractCommandTest
             $this->modelPath
             . DS . 'Table' . '.php'
         );
+    }
+
+    public function getData()
+    {
+        return [
+            [
+                [['name' => 'id', 'type' => 'int']], ['id']
+            ],
+            [
+                [['name' => 'name', 'type' => 'string']], ['id']
+            ],
+            [
+                [['name' => 'title', 'type' => 'string']], ['id']
+            ]
+        ];
     }
 }
