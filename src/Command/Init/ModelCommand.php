@@ -82,27 +82,16 @@ class ModelCommand extends Command\AbstractCommand
         try {
             $output->writeln($this->info("Running \"init:model\" command"));
 
-            $modelName = ucfirst($this->getOption('name'));
-            if ($this->getApplication()->isModelExists($modelName)) {
-                $helper = $this->getHelperSet()->get("question");
-                $question = new ConfirmationQuestion(
-                    "\n<question>Model " . $modelName . " would be overwritten. y/N?:</question>\n> ",
-                    false);
-
-                if (!$helper->ask($input, $output, $question)) {
-                    return;
-                }
-            }
             $this->generate()->verify();
 
             $output->writeln("Model \"" . $this->info($this->getOption('name')) . "\"" .
                 " has been successfully created in the model \"" . $this->info($this->getOption('name')) . "\".");
         } catch (InputException $e) {
             $output->writeln("<error>ERROR: {$e->getMessage()}</error>\n");
-            $this->execute($input, $output);
-        } catch (\Exception $e) {
-            throw new \RuntimeException("Some error occurred.");
-}
+            $this->generate()->verify();
+            $output->writeln("Model \"" . $this->info($this->getOption('name')) . "\"" .
+                " has been successfully created in the model \"" . $this->info($this->getOption('name')) . "\".");
+        }
     }
 
     /**
@@ -111,6 +100,20 @@ class ModelCommand extends Command\AbstractCommand
      */
     protected function generate()
     {
+        $modelName = ucfirst($this->getOption('name'));
+        $input = $this->getInput();
+        $output = $this->getOutput();
+        if ($this->getApplication()->isModelExists($modelName)) {
+            $helper = $this->getHelperSet()->get("question");
+            $question = new ConfirmationQuestion(
+                "\n<question>Model " . $modelName . " would be overwritten. y/N?:</question>\n> ",
+                false);
+
+            if (!$helper->ask($input, $output, $question)) {
+                return;
+            }
+        }
+
         $primaryKey = $this->getPrimaryKey($this->getOption('table'));
         $columns = $this->getColumns($this->getOption('table'));
 

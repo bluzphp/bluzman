@@ -121,4 +121,35 @@ class ModelCommandTest extends AbstractCommandTest
             ]
         ];
     }
+
+    /**
+     * Testing exception create models
+     * @dataProvider getData
+     * @expectedException \Bluzman\Input\InputException
+     */
+    public function testValidateOptionException($columns, $primaryKey)
+    {
+        $container = new \Mockery\Container;
+        $command = $container->mock('\Bluzman\Command\Init\ModelCommand[getPrimaryKey, getColumns]')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
+        $command->shouldReceive('getPrimaryKey')
+            ->atLeast(1)
+            ->andReturn($primaryKey)
+            ->getMock();
+        $command->shouldReceive('getColumns')
+            ->atLeast(1)
+            ->andReturn($columns)
+            ->getMock();
+
+
+        $this->getApplication()->addCommands([$command]);
+
+        $commandTester = new CommandTester($command);
+
+        $commandTester->execute(
+            ['command' => $command->getName(), '--name' => 'd d', '--table' => $this->table],
+            ['interactive' => false]);
+        $this->assertEquals($this->getExpectedException(), 'InputException');
+    }
 }
