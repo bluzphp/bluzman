@@ -8,7 +8,7 @@ EXTEND_PATH="PATH=$ROOT_DIR:\$PATH";
 
 chmod +x $ROOT_DIR/bluzman
 
-if [[ -f "${HOME}/.bashrc" ]]
+if [ -f "${HOME}/.bashrc" ]
 then
     echo "$EXTEND_PATH" >> ~/.bashrc
     echo -e "\n" >> ~/.bashrc

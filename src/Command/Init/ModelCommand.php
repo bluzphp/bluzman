@@ -13,6 +13,7 @@ use Respect\Validation\Validator as v;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Filesystem\Filesystem;
 use Bluzman\Input\InputException;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * ModelCommand
@@ -99,7 +100,9 @@ class ModelCommand extends Command\AbstractCommand
         } catch (InputException $e) {
             $output->writeln("<error>ERROR: {$e->getMessage()}</error>\n");
             $this->execute($input, $output);
-        }
+        } catch (\Exception $e) {
+            throw new \RuntimeException("Some error occurred.");
+}
     }
 
     /**
