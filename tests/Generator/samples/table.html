@@ -1,0 +1,33 @@
+<?php
+/**
+ * @namespace
+ */
+namespace Application\Users
+;
+
+/**
+ * Table
+ *
+ * @category Application
+ * @package  Users
+ *
+ * @author   test
+ * @created  00-00-00 00:00:00
+ */
+class Table extends \Bluz\Db\Table
+{
+    /**
+     * Table
+     *
+     * @var string
+     */
+    protected $table = 'users';
+
+    protected $rowClass = '\Application\Users\Row';
+
+    /**
+     * Primary key(s)
+     * @var array
+     */
+    protected $primary = array('id');
+}

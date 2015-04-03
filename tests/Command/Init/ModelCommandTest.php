@@ -21,13 +21,19 @@ class ModelCommandTest extends AbstractCommandTest
     /**
      * @var string
      */
-    protected $name;
+    protected $name = 'Users';
 
     /**
      * @var string
      */
-    protected $table;
+    protected $table = 'users';
+
+    /**
+     * @var string
+     */
     protected $modelPath;
+
+    protected $dataForTemplate = ['author' => 'test', 'date' => '00-00-00 00:00:00'];
 
     public function setUp()
     {
@@ -46,8 +52,6 @@ class ModelCommandTest extends AbstractCommandTest
 
         $this->setApplication($app);
 
-        $this->table = 'users';
-        $this->name = 'Users';
         $this->modelPath = $this->workingPath
             . DS . 'application'
             . DS . 'models'
@@ -55,13 +59,29 @@ class ModelCommandTest extends AbstractCommandTest
     }
 
     /**
-     * @dataProvider getData
+     * @dataProvider dataProviderForCorrectWorkflow
      * Testing correct create models
      */
-    public function testCorrectWorkflow($columns, $primaryKey)
+    public function testCorrectWorkflow($columns, $primaryKey, $rowTemplatePath, $tableTemplatePath)
     {
         $container = new \Mockery\Container;
-        $command = $container->mock('\Bluzman\Command\Init\ModelCommand[getPrimaryKey, getColumns]')
+        $templateRow =$container->mock('\Bluzman\Generator\Template\RowTemplate')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
+        $templateRow->shouldReceive('getDefaultTemplateData')
+            ->atLeast(1)
+            ->andReturn($this->dataForTemplate)
+            ->getMock();
+
+        $templateTable =$container->mock('\Bluzman\Generator\Template\TableTemplate')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
+        $templateTable->shouldReceive('getDefaultTemplateData')
+            ->atLeast(1)
+            ->andReturn($this->dataForTemplate)
+            ->getMock();
+
+        $command = $container->mock('\Bluzman\Command\Init\ModelCommand[getPrimaryKey, getColumns, getObjTemplate]')
             ->shouldDeferMissing()
             ->shouldAllowMockingProtectedMethods();
         $command->shouldReceive('getPrimaryKey')
@@ -72,7 +92,14 @@ class ModelCommandTest extends AbstractCommandTest
             ->atLeast(1)
             ->andReturn($columns)
             ->getMock();
-
+        $command->shouldReceive('getObjTemplate')
+            ->withArgs(['RowTemplate'])
+            ->andReturn($templateRow)
+            ->getMock();
+        $command->shouldReceive('getObjTemplate')
+            ->withArgs(['TableTemplate'])
+            ->andReturn($templateTable)
+            ->getMock();
 
         $this->getApplication()->addCommands([$command]);
 
@@ -96,38 +123,43 @@ class ModelCommandTest extends AbstractCommandTest
         $table = $this->modelPath . DS . 'Table.php';
         $row = $this->modelPath . DS . 'Row.php';
 
-        $this->assertFileExists(
-            $table
-        );
-        $this->assertFileExists(
-            $row
-        );
+        $this->assertFileExists($table);
+        $this->assertEquals(md5_file($table), md5_file($tableTemplatePath));
+
+        $this->assertFileExists($row);
+        $this->assertEquals(md5_file($row), md5_file($rowTemplatePath));
     }
 
-    public function getData()
+    public function dataProviderForCorrectWorkflow()
     {
         return [
             [
-                'columns' => [['name' => 'id', 'type' => 'int']],
-                'primaryKey' =>  ['id']
-            ],
-            [
-                'columns' => [['name' => 'name', 'type' => 'string']],
-                'primaryKey' =>  ['id']
-            ],
-            [
-                'columns' => [['name' => 'alias', 'type' => 'string']],
-                'primaryKey' =>  ['id']
+                'columns' => [
+                    ['name' => 'id', 'type' => 'int'],
+                    ['name' => 'name', 'type' => 'string'],
+                    ['name' => 'desc', 'type' => 'string'],
+                ],
+                'primaryKey' =>  ['id'],
+                'result-row-template-path' => __DIR__ . DS
+                    . '..' . DS . '..' . DS
+                    . 'Generator' . DS
+                    . 'samples' . DS
+                    . 'row.html',
+                'result-table-template-path' => __DIR__ . DS
+                    . '..' . DS . '..' . DS
+                    . 'Generator' . DS
+                    . 'samples' . DS
+                    . 'table.html'
+
             ]
         ];
     }
 
     /**
      * Testing exception create models
-     * @dataProvider getData
      * @expectedException \Bluzman\Input\InputException
      */
-    public function testValidateOptionException($columns, $primaryKey)
+    public function testValidateOptionException()
     {
         $container = new \Mockery\Container;
         $command = $container->mock('\Bluzman\Command\Init\ModelCommand[getPrimaryKey, getColumns]')
@@ -135,20 +167,19 @@ class ModelCommandTest extends AbstractCommandTest
             ->shouldAllowMockingProtectedMethods();
         $command->shouldReceive('getPrimaryKey')
             ->atLeast(1)
-            ->andReturn($primaryKey)
+            ->andReturn(null)
             ->getMock();
         $command->shouldReceive('getColumns')
             ->atLeast(1)
-            ->andReturn($columns)
+            ->andReturn(null)
             ->getMock();
-
 
         $this->getApplication()->addCommands([$command]);
 
         $commandTester = new CommandTester($command);
 
         $commandTester->execute(
-            ['command' => $command->getName(), '--name' => 'd d', '--table' => $this->table],
+            ['command' => $command->getName(), '--name' => 'tes t', '--table' => $this->table],
             ['interactive' => false]);
         $this->assertEquals($this->getExpectedException(), 'InputException');
     }

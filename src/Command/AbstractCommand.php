@@ -361,4 +361,10 @@ abstract class AbstractCommand extends Console\Command\Command
     {
         return parent::getApplication();
     }
+
+    protected function getObjTemplate($classname)
+    {
+        $class = '\Bluzman\Generator\Template\\' . $classname;
+        return new $class;
+    }
 }

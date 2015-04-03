@@ -13,6 +13,9 @@ then
     echo "$EXTEND_PATH" >> ~/.bashrc
     echo -e "\n" >> ~/.bashrc
 
+    touch /etc/profile.d/install.sh
+    echo "export PATH=\$PATH:/var/www/bluzman/bin" >> /etc/profile.d/install.sh
+
     echo -e "\nSUCCESS\n";
     echo "Bluzman has been successfully installed.";
 

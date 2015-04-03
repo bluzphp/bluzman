@@ -110,7 +110,7 @@ class ModelCommand extends Command\AbstractCommand
                 false);
 
             if (!$helper->ask($input, $output, $question)) {
-                return;
+                return $this;
             }
         }
 
@@ -118,7 +118,7 @@ class ModelCommand extends Command\AbstractCommand
         $columns = $this->getColumns($this->getOption('table'));
 
         // generate table
-        $template = new Generator\Template\TableTemplate;
+        $template = $this->getObjTemplate('TableTemplate');
         $template->setFilePath($this->getFilePath() .'Table.php');
         $data = [
             'name' => ucfirst($this->getOption('name')),
@@ -132,7 +132,7 @@ class ModelCommand extends Command\AbstractCommand
         $generator->make();
 
         // generate row
-        $template = new Generator\Template\RowTemplate;
+        $template = $this->getObjTemplate('RowTemplate');
         $template->setFilePath($this->getFilePath() .'Row.php');
         unset($data);
         $data = [
