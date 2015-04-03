@@ -1,0 +1,99 @@
+<?php
+/**
+ * @author bashmach
+ * @created 10/8/14 1:36 PM
+ */
+
+namespace Bluzman\Tests\Generator;
+
+use Bluzman\Generator\Generator;
+use Bluzman\Generator\Template\AbstractTemplate;
+use Bluzman\Tests\Generator\DummyTemplate;
+use Bluzman\Tests\TestCase;
+use Faker\Factory;
+use Mockery as m;
+
+class GeneratorTest extends TestCase
+{
+    public function testGetTemplateData()
+    {
+        $template = new DummyTemplate();
+        $template->setTemplateData([
+            'variable' => 'bar'
+        ]);
+
+        $generator = new Generator($template);
+        $generator->setAbsolutePath(__DIR__ . DS . 'fixtures');
+
+        $this->assertEmpty($generator->getTemplate()->getDefaultTemplateData());
+        $this->assertNotEmpty($generator->getTemplate()->getTemplateData());
+    }
+
+    /**
+     * @dataProvider templateOptions
+     */
+    public function testCompiledTemplate($templateOptions)
+    {
+        $container = new \Mockery\Container;
+        $faker = \Faker\Factory::create();
+        $filePath = $this->workingPath . DS . $faker->lexify . '.' . $faker->fileExtension;
+
+        /**
+         * @var $template AbstractTemplate
+         */
+        $template = $container->mock($templateOptions['template'])
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
+
+        $template->shouldReceive('getDefaultTemplateData')
+            ->atLeast(1)
+            ->andReturn($templateOptions['defaultTemplateData']);
+
+        $template->setTemplateData($templateOptions['templateData']);
+        $template->setFilePath($filePath);
+
+        $generator = new Generator($template);
+        $generator->setAbsolutePath(__DIR__ . DS . 'fixtures');
+
+        $this->assertEquals(
+            $templateOptions['stub'],
+            $generator->getCompiledTemplate()
+        );
+
+        $generator->make();
+
+        $this->assertFileExists($filePath);
+    }
+
+    /**
+     * @return array
+     */
+    public function templateOptions()
+    {
+        return [
+            [
+                [
+                    'template' => '\Bluzman\Tests\Generator\DummyTemplate',
+                    'defaultTemplateData' => [
+
+                    ],
+                    'templateData' => [
+                        'variable' => 'bar'
+                    ],
+                    'stub' => 'foo=bar'
+                ],
+                [
+                    'template' => '\Bluzman\Generator\Template\ControllerTemplate',
+                    'defaultTemplateData' => [
+                        'author' => 'test',
+                        'date' => '2000-01-01 23:59:59'
+                    ],
+                    'templateData' => [
+
+                    ],
+                    'stub' => file_get_contents(__DIR__ . DS . 'samples' . DS . 'controller.html')
+                ]
+            ]
+        ];
+    }
+} 
