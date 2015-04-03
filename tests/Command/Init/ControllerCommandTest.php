@@ -76,10 +76,10 @@ class ControllerCommandTest extends AbstractCommandTest
         // check all messages were displayed
         $this->assertRegExp('/Running "init:controller" command/', $display);
         $this->assertRegExp('/has been successfully created/', $display);
-
+//        $this->assertFileEquals()
         $this->assertFileExists(
             $this->modulePath . DS . 'controllers'
                 . DS . $this->name . '.php'
         );
     }
-} 
+}

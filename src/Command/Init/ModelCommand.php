@@ -10,8 +10,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Respect\Validation\Validator as v;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Filesystem\Filesystem;
 use Bluzman\Input\InputException;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * ModelCommand
@@ -35,6 +37,34 @@ class ModelCommand extends Command\AbstractCommand
      */
     protected $description = 'Initialize a new model';
 
+    /**
+     * @var Filesystem
+     */
+    protected $fs;
+
+    /**
+     * @param \Symfony\Component\Filesystem\Filesystem $fs
+     */
+    public function setFs($fs)
+    {
+        $this->fs = $fs;
+    }
+
+    /**
+     * @return \Symfony\Component\Filesystem\Filesystem
+     */
+    public function getFs()
+    {
+        return $this->fs;
+    }
+
+    public function __construct($name = null)
+    {
+        parent::__construct($name);
+
+        $this->setFs(new Filesystem);
+    }
+
     protected function getOptions()
     {
         return [
@@ -52,27 +82,15 @@ class ModelCommand extends Command\AbstractCommand
         try {
             $output->writeln($this->info("Running \"init:model\" command"));
 
-            $modelName = ucfirst($this->getOption('name'));
-            if ($this->getApplication()->isModelExists($modelName)) {
-                $dialog = $this->getHelperSet()->get("dialog");
-
-                $result = $dialog->askConfirmation(
-                    $output,
-                    "\n<question>Model " . $modelName . " would be overwritten. y/N?:</question>\n> ",
-                    false
-                );
-
-                if (!$result) {
-                    return;
-                }
-            }
             $this->generate()->verify();
 
             $output->writeln("Model \"" . $this->info($this->getOption('name')) . "\"" .
                 " has been successfully created in the model \"" . $this->info($this->getOption('name')) . "\".");
         } catch (InputException $e) {
             $output->writeln("<error>ERROR: {$e->getMessage()}</error>\n");
-            $this->execute($input, $output);
+            $this->generate()->verify();
+            $output->writeln("Model \"" . $this->info($this->getOption('name')) . "\"" .
+                " has been successfully created in the model \"" . $this->info($this->getOption('name')) . "\".");
         }
     }
 
@@ -82,24 +100,39 @@ class ModelCommand extends Command\AbstractCommand
      */
     protected function generate()
     {
+        $modelName = ucfirst($this->getOption('name'));
+        $input = $this->getInput();
+        $output = $this->getOutput();
+        if ($this->getApplication()->isModelExists($modelName)) {
+            $helper = $this->getHelperSet()->get("question");
+            $question = new ConfirmationQuestion(
+                "\n<question>Model " . $modelName . " would be overwritten. y/N?:</question>\n> ",
+                false);
+
+            if (!$helper->ask($input, $output, $question)) {
+                return $this;
+            }
+        }
+
         $primaryKey = $this->getPrimaryKey($this->getOption('table'));
         $columns = $this->getColumns($this->getOption('table'));
 
         // generate table
-        $template = new Generator\Template\TableTemplate;
+        $template = $this->getObjTemplate('TableTemplate');
         $template->setFilePath($this->getFilePath() .'Table.php');
         $data = [
             'name' => ucfirst($this->getOption('name')),
             'table' => $this->getOption('table'),
             'primaryKey' => $primaryKey
         ];
+
         $template->setTemplateData($data);
 
         $generator = new Generator\Generator($template);
         $generator->make();
 
         // generate row
-        $template = new Generator\Template\RowTemplate;
+        $template = $this->getObjTemplate('RowTemplate');
         $template->setFilePath($this->getFilePath() .'Row.php');
         unset($data);
         $data = [
@@ -133,10 +166,19 @@ class ModelCommand extends Command\AbstractCommand
      */
     public function verify()
     {
-        $fs = new Filesystem();
+        $modelPath = $this->getApplication()->getWorkingPath() . DS . 'application' . DS . 'models';
 
-        if (!$fs->exists($this->getFilePath())) {
-            throw new \RuntimeException("Something is wrong. Model was not created");
+        $paths = [
+            $modelPath,
+            $modelPath . DS . $this->getOption('name'),
+            $modelPath . DS . $this->getOption('name') .  DS . 'Table.php',
+            $modelPath . DS . $this->getOption('name') .  DS . 'Row.php'
+        ];
+
+        foreach ($paths as $path) {
+            if (!$this->getFs()->exists($path)) {
+                return false;
+            }
         }
 
         return true;
@@ -176,7 +218,7 @@ class ModelCommand extends Command\AbstractCommand
     {
         $dbh = $this->getApplication()->getDbConnection();
         $columns = array();
-        $name = $this->getOption('name');
+        $name = $this->getOption('table');
 
         $q = $dbh->prepare("DESCRIBE $name");
         $q->execute();

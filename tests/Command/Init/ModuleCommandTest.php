@@ -62,4 +62,4 @@ class ModuleCommandTest extends AbstractCommandTest
         $this->assertRegExp('/Running "init:module" command/', $display);
         $this->assertRegExp('/has been successfully created/', $display);
     }
-} 
+}

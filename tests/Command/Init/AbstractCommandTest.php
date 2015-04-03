@@ -12,4 +12,4 @@ use Bluzman\Tests\TestCase;
 abstract class AbstractCommandTest extends TestCase
 {
 
-} 
+}

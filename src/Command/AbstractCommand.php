@@ -14,6 +14,7 @@ use Symfony\Component\Console;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 use Respect;
 
 /**
@@ -205,20 +206,25 @@ abstract class AbstractCommand extends Console\Command\Command
             /**
              * @var Console\Helper\DialogHelper $dialog
              */
-            $dialog = $this->getHelperSet()->get('dialog');
+            $helper = $this->getHelperSet()->get('question');
 
             // ask user enter a valid option value
-            return $dialog->askAndValidate(
-                $output,
-                $this->question("Please enter the " . trim(strtolower($defOption->getDescription()), ' .')),
-                function ($value) use ($name, $output, $dialog, $defOption) {
+            $input = $this->getInput();
+            $question = new Question($this->question("Please enter the " . trim(strtolower($defOption->getDescription()), ' .')));
+            $question->setValidator(
+                function ($value) use ($name, $output, $helper, $defOption) {
                     $defOption->validate($value);
 
                     $this->getInput()->setOption($name, $value);
 
                     return $value;
-                },
-                1
+                }
+            );
+
+            return $helper->ask(
+                $input,
+                $output,
+                $question
             );
         } else {
             return $optionValue;
@@ -251,20 +257,26 @@ abstract class AbstractCommand extends Console\Command\Command
             /**
              * @var Console\Helper\DialogHelper $dialog
              */
-            $dialog = $this->getHelperSet()->get('dialog');
+            $helper = $this->getHelperSet()->get('question');
 
             // ask user enter a valid option value
-            return $dialog->askAndValidate(
-                $output,
-                $this->question("Please enter the " . trim(strtolower($defArgument->getDescription()), ' .')),
-                function ($value) use ($name, $output, $dialog, $defArgument) {
+            $input = $this->getInput();
+            $question = new Question($this->question("Please enter the " . trim(strtolower($defArgument->getDescription()), ' .')));
+            $question->setValidator(
+                function ($value) use ($name, $output, $helper, $defArgument) {
                     $defArgument->validate($value);
 
                     $this->getInput()->setArgument($name, $value);
 
                     return $value;
-                },
-                self::MAX_ATTEMPTS
+                }
+            );
+            $question->setMaxAttempts(self::MAX_ATTEMPTS);
+
+            return $helper->ask(
+                $input,
+                $output,
+                $question
             );
         } else {
             return $argumentValue;
@@ -348,5 +360,11 @@ abstract class AbstractCommand extends Console\Command\Command
     public function getApplication()
     {
         return parent::getApplication();
+    }
+
+    protected function getObjTemplate($classname)
+    {
+        $class = '\Bluzman\Generator\Template\\' . $classname;
+        return new $class;
     }
 }
