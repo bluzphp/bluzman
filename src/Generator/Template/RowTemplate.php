@@ -31,8 +31,8 @@ class RowTemplate extends AbstractTemplate
      */
     public function setTemplateData($templateData)
     {
+        $properties = '';
         if ($templateData['columns']) {
-            $properties = '';
             $columns = $templateData['columns'];
             foreach ($columns as $column) {
                 // all properties will be `string` except `bigint`, `int`, etc. columns
@@ -40,8 +40,8 @@ class RowTemplate extends AbstractTemplate
                 $properties .= " * @property " . $columnType . " $" . $column['name'] . "\r\n";
             }
             unset($templateData['columns']);
-            $templateData['properties'] = $properties;
         }
+        $templateData['properties'] = $properties;
         $this->templateData = $templateData;
     }
 }
