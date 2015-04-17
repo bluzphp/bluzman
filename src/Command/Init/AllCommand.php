@@ -120,7 +120,7 @@ class AllCommand extends Command\AbstractCommand
         //@todo Use symfony process
         // create skeleton project
         $process = new Process(sprintf($this->getCmdPattern(), $name));
-        $process->setTimeout(600);
+        $process->setTimeout(1600);
         $process->run();
         chdir($projectPath);
 
