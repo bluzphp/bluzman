@@ -72,7 +72,7 @@ Or run command in interactively mode:
 
  "table_name" - the name of databases table for pattern formation properties object model.
 
-At the completion message is displayed:
+After completion you will see a message::
 ```
     Model "model_name" has been successfully created in the model "model_name"
 ```
@@ -97,13 +97,28 @@ For create new controller you must run the command in terminal:
 ```
     $ bluzman init:controller --module module_name --name controller_name
 ```
-At the completion message is displayed:
+After completion you will see a message::
 ```
     Controller "controller_name" has been successfully created in the module "module_name".
 ```
 
 ### Start server
 
+For start built-in PHP server you must run the command in terminal:
 ```
-    $ bluzman server
+    $ bluzman server:start [--host[="..."]] [--port=["..."]]
 ```
+
+### Stop server
+
+For stop build-in PHP server you must run the command in terminal:
+```
+    $ bluzman server:stop
+```
+### Status server
+
+If you want know the status of the server you must run the command in terminal:
+```
+    $ bluzman server:status
+```
+
