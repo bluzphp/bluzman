@@ -95,7 +95,7 @@ class Application extends Console\Application
     {
         $helperSet = parent::getDefaultHelperSet();
 
-//        $helperSet->set(new Composer\Command\Helper\DialogHelper());
+        // register helpers
 
         return $helperSet;
     }
@@ -110,9 +110,6 @@ class Application extends Console\Application
             new Command\Server\StopCommand,
             new Command\Server\StatusCommand,
             new Command\TestCommand,
-            new Command\PhinxInitCommand,
-            new Command\PhinxCreateCommand,
-            new Command\PhinxStatusCommand,
             new Command\Init\AllCommand,
             new Command\Init\ModuleCommand,
             new Command\Init\ControllerCommand,
