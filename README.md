@@ -41,6 +41,7 @@ Start new session in your terminal or run this command in current session:
     ```
     $ export PATH=$PATH:/%path_to_bluzman_directory%/bin
     ```
+
 Usage
 -------------------------
 List of available commands
@@ -102,22 +103,28 @@ After completion you will see a message::
     Controller "controller_name" has been successfully created in the module "module_name".
 ```
 
-### Start server
+### Server
 
-For start built-in PHP server you must run the command in terminal:
+Bluzman provides a commands list to operate with built-in PHP server.
+
+To launch built-in PHP server you must run the command in terminal:
 ```
     $ bluzman server:start [--host[="..."]] [--port=["..."]]
 ```
+By default server will be available by the address **127.0.0.1:1337** and you will see all logs in the terminal.
 
-### Stop server
+But there is an option to run server in the background, this requires an option **-b**:
 
-For stop build-in PHP server you must run the command in terminal:
+```
+    $ bluzman server:start ... -b
+```
+
+And if server launched in the background, it can be stopped with following command:
 ```
     $ bluzman server:stop
 ```
-### Status server
 
-If you want know the status of the server you must run the command in terminal:
+If you want to know the status of the server you must run the command in terminal:
 ```
     $ bluzman server:status
 ```
