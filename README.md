@@ -1,98 +1,131 @@
-  Bluzman - Simple workflow with Bluz framework
+  Bluzman - Simple workflow manager for Bluz Framework
 ======================================
 
 Bluzman is a set of command-line tools which provides a simple workflow with an application based and mantained by Bluz framework.
 
-## Features
+Features
+-------------------------
+* Application scaffolding
+* Code-generator of application components
 
- * Application scaffolding
- * Code-generator of application components
+Requirements
+-------------------------
+* OS: Linux
+* PHP: 5.4 (or later)
 
-## Requirements
+Installation
+-------------------------
+It is recommended to add bluzman to your PATH variable, which specifies where executable files are located. This will provide an ability to use one bluzman installation with many applications.
 
- * OS: Linux
- * PHP: 5.4 (or later)
-
-## Installation
-
-It is recommended to add bluzman to your PATH variable, which specifies where executable files are located.
-This will provide an ability to use one bluzman installation with many applications.
-
-**Steps to install**
-
+##### Steps to install: #####
 1. Clone from repository
 
-    ```bash
+    ```
     $ git clone git://github.com/bashmach/bluzman.git
     $ cd bluzman
     ```
+2. Install dependencies with composer
 
-2.  Install dependencies with composer
-
-    ```bash
+    ```
     $ composer install
     ```
+3. Finish install - add bluzman to PATH variable.
 
-3.  Finish install - add bluzman to PATH variable.
+    You can skip this, however you will need to use a fullpath to bluzman script from bin directory.
 
-    You can skip this, however you will need to use a fullpath to bluzman script from ``` bin ``` directory.
-
-    ```bash
+    ```
     $ sh ./bin/install.sh
     ```
+Start new session in your terminal or run this command in current session:
 
-    Start new session in your terminal or run this command in current session:
-    ```bash
+    ```
     $ export PATH=$PATH:/%path_to_bluzman_directory%/bin
     ```
 
-## Usage
-
+Usage
+-------------------------
 List of available commands
-
-```bash
-$ bluzman list
 ```
-
+    $ bluzman list
+```
 ### Scaffold application
 
 Create new project from bluzphp/skeleton by composer.
-
-```bash
-$ bluzman init:all
 ```
-
+    $ bluzman init:all
+```
 ### Model generator
 
-```bash
-$ bluzman init:model
+Create new model or overwrite the old.
+For create new model you must run the command in terminal:
+```
+    $ bluzman init:model --name model_name --table table_name
+```
+
+Or run command in interactively mode:
+```
+    $ bluzman init:model
+    Enter the name of model: model_name
+    Enter the name of table: table_name
+```
+
+ "model_name" - the name of model. With this name will be created folder module.
+
+ "table_name" - the name of databases table for pattern formation properties object model.
+
+After completion you will see a message::
+```
+    Model "model_name" has been successfully created in the model "model_name"
 ```
 
 ### Module generator
 
-```bash
-$ bluzman init:module
+For create new module you must run the command in terminal
+```
+    $ bluzman init:module --name module_name
+```
+Or run command in interactively mode:
+```
+    $ bluzman init:module
+    Enter the name of module: module_name
 ```
 
 ### Controller generator
 
-```bash
-$ bluzman init:controller
+
+Create new controller or overwrite the old.
+For create new controller you must run the command in terminal:
+```
+    $ bluzman init:controller --module module_name --name controller_name
+```
+After completion you will see a message::
+```
+    Controller "controller_name" has been successfully created in the module "module_name".
 ```
 
-### Start server
+### Server
 
-```bash
-$ bluzman server
+Bluzman provides a commands list to operate with built-in PHP server.
+
+To launch built-in PHP server you must run the command in terminal:
+```
+    $ bluzman server:start [--host[="..."]] [--port=["..."]]
+```
+By default server will be available by the address **127.0.0.1:1337** and you will see all logs in the terminal.
+
+But there is an option to run server in the background, this requires an option **-b**:
+
+```
+    $ bluzman server:start ... -b
 ```
 
-## TODO
+And if server launched in the background, it can be stopped with following command:
+```
+    $ bluzman server:stop
+```
 
- * Install Bluz modules (which are not created yet =))
- * Tests launcher
- * Deploying (tool to use?)
-
-
-
-
+If you want to know the status of the server you must run the command in terminal:
+```
+    $ bluzman server:status
+```
 

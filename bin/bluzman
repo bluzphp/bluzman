@@ -1,5 +1,9 @@
 #!/usr/bin/env php
 <?php
+/**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
 
 if (php_sapi_name() != 'cli') {
     die('Must run from command line');
@@ -12,6 +16,7 @@ $root = realpath(dirname(dirname(__FILE__)));
 define('PATH_ROOT', $root);
 define('PATH_VENDOR', $root . '/vendor');
 define('DS', DIRECTORY_SEPARATOR);
+define('BLUZ_ENV', 'dev');
 
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
@@ -19,6 +24,7 @@ ini_set('log_errors', 0);
 ini_set('html_errors', 0);
 
 if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+    // sorry windows lovers
     throw new \Exception();
 }
 
