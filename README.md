@@ -1,7 +1,15 @@
-  Bluzman - Simple workflow manager for Bluz Framework
+Bluzman - Simple workflow manager for Bluz Framework
 ======================================
-
 Bluzman is a set of command-line tools which provides a simple workflow with an application based and mantained by Bluz framework.
+
+## Achievements
+
+[![Dependency Status](https://www.versioneye.com/user/projects/5534cbe6050e7cc57c000002/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5534cbe6050e7cc57c000002)
+
+[![Latest Stable Version](https://poser.pugx.org/bluzphp/bluzman/v/stable.png)](https://packagist.org/packages/bluzphp/bluzman)
+[![Total Downloads](https://poser.pugx.org/bluzphp/bluzman/downloads.png)](https://packagist.org/packages/bluzphp/bluzman)
+
+[![License](https://poser.pugx.org/bluzphp/bluzman/license.svg)](https://packagist.org/packages/bluzphp/bluzman)
 
 Features
 -------------------------
