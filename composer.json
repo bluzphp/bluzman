@@ -1,7 +1,8 @@
 {
   "name": "bluzphp/bluzman",
   "description": "Bluzman - Simple workflow manager for Bluz Framework",
-  "version": "0.2.0",
+  "type": "library",
+  "minimum-stability": "dev",
   "license": "MIT",
   "authors": [
     {
