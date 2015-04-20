@@ -1,6 +1,7 @@
 {
   "name": "bluzphp/bluzman",
   "description": "Bluzman - Simple workflow manager for Bluz Framework",
+  "version": "0.2.2",
   "type": "library",
   "minimum-stability": "dev",
   "license": "MIT",
@@ -13,7 +14,7 @@
   "require": {
     "php": ">=5.4",
     "composer/composer": "dev-master",
-    "symfony/console": "~2.5",
+    "symfony/console": "~2.6.6",
     "symfony/event-dispatcher": "~2.5",
     "symfony/filesystem": "~2.5",
     "symfony/finder": "~2.5",
