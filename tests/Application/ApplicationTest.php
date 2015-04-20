@@ -1,13 +1,19 @@
 <?php
 /**
- * @author bashmach
- * @created 2013-12-07 01:21
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
  */
+
 
 namespace Bluzman\Tests\Application;
 
 use Bluzman\Tests\TestCase;
 use \Symfony\Component\Console\Command\Command;
+
+/**
+ * @author Pavel Machekhin
+ * @created 2013-12-07 01:21
+ */
 
 class ApplicationTest extends TestCase
 {

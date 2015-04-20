@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
 
 namespace Bluzman\Command\Server;
 
@@ -18,7 +22,7 @@ use Symfony\Component\Process\Process;
  * @package  Bluzman
  *
  * @author   Pavel Machekhin
- * @created  5/24/13 9:23 PM
+ * @created  2013-05-24 19:23
  */
 
 class StartCommand extends AbstractCommand

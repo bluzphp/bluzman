@@ -1,5 +1,9 @@
 #!/usr/bin/env php
 <?php
+/**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
 
 if (php_sapi_name() != 'cli') {
     die('Must run from command line');

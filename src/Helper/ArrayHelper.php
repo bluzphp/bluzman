@@ -1,11 +1,17 @@
 <?php
 /**
- * @created 18/06/14 6:01PM
- * @author Pavel Machekhin <pavel.machekhin@gmail.com>
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
  */
 
 namespace Bluzman\Helper;
 
+/**
+ * ArrayHelper
+ *
+ * @author Pavel Machekhin
+ * @created 2014-06-18 18:01
+ */
 class ArrayHelper
 {
     /**

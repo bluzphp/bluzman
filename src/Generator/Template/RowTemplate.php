@@ -1,10 +1,7 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
- * User: bashmach
- * Date: 4/16/13
- * Time: 3:34 PM
- * To change this template use File | Settings | File Templates.
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
  */
 
 namespace Bluzman\Generator\Template;
@@ -16,7 +13,7 @@ namespace Bluzman\Generator\Template;
  * @package  Bluzman
  *
  * @author   Pavel Machekhin
- * @created  04/16/13 3:35 PM
+ * @created  2013-04-16 15:35
  */
 
 class RowTemplate extends AbstractTemplate

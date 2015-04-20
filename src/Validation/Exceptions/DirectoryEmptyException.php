@@ -1,12 +1,17 @@
 <?php
 /**
- * @author bashmach
- * @created 2014-01-04 00:35
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
  */
 
 namespace Bluzman\Validation\Exceptions;
 
 use Respect\Validation\Exceptions\ValidationException;
+
+/**
+ * @author  Pavel Machekhin
+ * @created 2014-01-04 00:35
+ */
 
 class DirectoryEmptyException extends ValidationException
 {

@@ -1,12 +1,17 @@
 <?php
 /**
- * @author bashmach
- * @created 2014-01-04 00:52
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
  */
 
 namespace Bluzman\Tests\Validation\Rules;
 
 use Bluzman\Validation\Rules\DirectoryEmpty;
+
+/**
+ * @author Pavel Machekhin
+ * @created 2014-01-04 00:52
+ */
 
 class DirectoryEmptyTest extends \PHPUnit_Framework_TestCase
 {

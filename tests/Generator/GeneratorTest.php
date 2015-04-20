@@ -1,7 +1,7 @@
 <?php
 /**
- * @author bashmach
- * @created 10/8/14 1:36 PM
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
  */
 
 namespace Bluzman\Tests\Generator;
@@ -12,6 +12,12 @@ use Bluzman\Tests\Generator\DummyTemplate;
 use Bluzman\Tests\TestCase;
 use Faker\Factory;
 use Mockery as m;
+
+
+/**
+ * @author Pavel Machekhin
+ * @created 2014-08-10 13:36
+ */
 
 class GeneratorTest extends TestCase
 {

@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
 
 namespace Bluzman\Generator\Template;
 
@@ -9,7 +13,7 @@ namespace Bluzman\Generator\Template;
  * @package  Bluzman
  *
  * @author   Pavel Machekhin
- * @created  4/06/13 12:48 AM
+ * @created  2013-04-06 12:48
  */
 
 class ViewTemplate extends AbstractTemplate

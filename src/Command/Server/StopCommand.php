@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
 
 namespace Bluzman\Command\Server;
 
@@ -18,7 +22,7 @@ use Symfony\Component\Process\Process;
  * @package  Bluzman
  *
  * @author   Pavel Machekhin
- * @created  6/17/14 2:47 PM
+ * @created  2013-06-17 14:47
  */
 
 class StopCommand extends AbstractCommand

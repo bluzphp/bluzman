@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
 
 define('DS', DIRECTORY_SEPARATOR);
 

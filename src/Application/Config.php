@@ -1,15 +1,20 @@
 <?php
 /**
- * @created 2013-11-28 12:26
- * @author Pavel Machekhin <pavel.machekhin@gmail.com>
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
  */
 
 namespace Bluzman\Application;
 
 /**
- * Class Config
+ * Config
+ *
  * @package Bluzman\Application
+ *
+ * @author Pavel Machekhin
+ * @created 2013-11-28 12:26
  */
+
 class Config
 {
     /**

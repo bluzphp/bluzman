@@ -1,7 +1,7 @@
 <?php
 /**
- * @author bashmach
- * @created 2013-12-15 01:34
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
  */
 
 namespace Bluzman\Tests;
@@ -10,6 +10,12 @@ use Nelmio\Alice\Loader\Yaml;
 use Mockery as m;
 use Faker;
 use Symfony\Component\Filesystem\Filesystem;
+
+
+/**
+ * @author Pavel Machekhin
+ * @created 2013-12-15 01:34
+ */
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {

@@ -1,10 +1,14 @@
 <?php
 /**
- * @author bashmach
- * @created 2014-01-04 00:40
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
  */
 
 namespace Bluzman\Input;
+
+/**
+ * @package Bluzman\Input
+ */
 
 class InputException extends \Exception
 {

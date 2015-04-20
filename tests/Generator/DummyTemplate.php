@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
 
 namespace Bluzman\Tests\Generator;
 use Bluzman\Generator\Template\AbstractTemplate;
@@ -10,7 +14,7 @@ use Bluzman\Generator\Template\AbstractTemplate;
  * @package  Bluzman
  *
  * @author   Pavel Machekhin
- * @created  10/8/14 1:40 PM
+ * @created  2014-08-10 13:40
  */
 
 class DummyTemplate extends AbstractTemplate

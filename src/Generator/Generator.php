@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
 
 namespace Bluzman\Generator;
 
@@ -16,7 +20,7 @@ use Symfony\Component\Filesystem\Filesystem;
  * @package  Bluzman
  *
  * @author   Pavel Machekhin
- * @created  3/28/13 4:24 PM
+ * @created  2013-03-28 16:24
  */
 
 class Generator 

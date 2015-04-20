@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
 
 namespace Bluzman\Command\Init;
 
@@ -22,7 +26,8 @@ use Symfony\Component\Console\Question\Question;
  * @package  Bluzman
  *
  * @author   Pavel Machekhin
- * @created  3/28/13 1:58 PM
+ * @author   Alexandr Kvasenko
+ * @created  2013-03-28 13:59
  */
 
 class ModelCommand extends Command\AbstractCommand

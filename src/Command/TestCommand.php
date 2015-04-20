@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
 
 namespace Bluzman\Command;
 
@@ -17,7 +21,7 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  * @package Bluzman\Command
  *
  * @author   Pavel Machekhin
- * @created  3/28/13 2:03 PM
+ * @created  2013-03-28 14:03
  */
 
 class TestCommand extends AbstractCommand

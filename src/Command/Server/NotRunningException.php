@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
 
 /**
  * NotRunningException
@@ -7,7 +11,7 @@
  * @package  Bluzman
  *
  * @author   Pavel Machekhin
- * @created  5/24/13 7:23 PM
+ * @created  2013-06-17 15:11
  */
 
 namespace Bluzman\Command\Server;

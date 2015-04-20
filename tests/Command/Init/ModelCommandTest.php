@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: kvasenko
- * Date: 30.03.15
- * Time: 13:33
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
  */
 
 namespace Bluzman\Tests\Command\Init;
@@ -15,6 +13,11 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
+
+/**
+ * @author Alexandr Kvasenko
+ * @created 2015-03-30 13:33
+ */
 
 class ModelCommandTest extends AbstractCommandTest
 {
@@ -59,8 +62,9 @@ class ModelCommandTest extends AbstractCommandTest
     }
 
     /**
-     * @dataProvider dataProviderForCorrectWorkflow
      * Testing correct create models
+     *
+     * @dataProvider dataProviderForCorrectWorkflow
      */
     public function testCorrectWorkflow($columns, $primaryKey, $rowTemplatePath, $tableTemplatePath)
     {
@@ -157,6 +161,7 @@ class ModelCommandTest extends AbstractCommandTest
 
     /**
      * Testing exception create models
+     *
      * @expectedException \Bluzman\Input\InputException
      */
     public function testValidateOptionException()

@@ -1,7 +1,7 @@
 <?php
 /**
- * @author bashmach
- * @created 2013-12-07 01:56
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
  */
 
 namespace Bluzman\Tests\Application;
@@ -9,6 +9,11 @@ namespace Bluzman\Tests\Application;
 use Bluzman\Application\Config;
 use Bluzman\Tests\TestCase;
 use \Mockery as m;
+
+/**
+ * @author Pavel Machekhin
+ * @created 2013-12-07 01:56
+ */
 
 class ConfigTest extends TestCase
 {

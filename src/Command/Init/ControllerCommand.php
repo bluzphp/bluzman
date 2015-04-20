@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
 
 namespace Bluzman\Command\Init;
 
@@ -19,7 +23,7 @@ use Symfony\Component\Filesystem\Filesystem;
  * @package  Bluzman
  *
  * @author   Pavel Machekhin
- * @created  3/28/13 1:58 PM
+ * @created  2013-03-28 13:58
  */
 
 class ControllerCommand extends Command\AbstractCommand
@@ -46,6 +50,9 @@ class ControllerCommand extends Command\AbstractCommand
         $this->setFs(new Filesystem);
     }
 
+    /**
+     * @param $fs
+     */
     public function setFs($fs)
     {
         $this->fs = $fs;
@@ -122,12 +129,12 @@ class ControllerCommand extends Command\AbstractCommand
     protected function getFilePath()
     {
         return $this->getApplication()->getWorkingPath()
-            . DS . 'application'
-            . DS . 'modules'
-            . DS . $this->getOption('module')
-            . DS . 'controllers'
-            . DS . $this->getOption('name')
-            . '.php';
+        . DS . 'application'
+        . DS . 'modules'
+        . DS . $this->getOption('module')
+        . DS . 'controllers'
+        . DS . $this->getOption('name')
+        . '.php';
     }
 
     /**

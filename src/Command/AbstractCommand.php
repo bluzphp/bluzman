@@ -1,7 +1,11 @@
 <?php
 /**
- * @created 2013-11-28 15:47
- * @author Pavel Machekhin <pavel.machekhin@gmail.com>
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
+
+/**
+
  */
 
 namespace Bluzman\Command;
@@ -20,6 +24,9 @@ use Respect;
 /**
  * Class AbstractCommand
  * @package Bluzman\Command
+ *
+ * @author Pavel Machekhin
+ * @created 2013-11-28 15:47
  */
 abstract class AbstractCommand extends Console\Command\Command
 {

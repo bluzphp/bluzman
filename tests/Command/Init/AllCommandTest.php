@@ -1,7 +1,7 @@
 <?php
 /**
- * @author bashmach
- * @created 2014-01-05 00:10
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
  */
 
 namespace Bluzman\Tests\Command\Init;
@@ -12,6 +12,11 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 use Mockery as m;
+
+/**
+ * @author Pavel Machekhin
+ * @created 2014-01-05 00:10
+ */
 
 class AllCommandTest extends TestCase
 {

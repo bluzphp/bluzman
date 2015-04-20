@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
 
 namespace Bluzman\Command\Init;
 
@@ -10,13 +14,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
 /**
- * Command
+ * AbstractCommand
  *
  * @category Command
  * @package  Bluzman
  *
  * @author   Pavel Machekhin
- * @created  3/20/13 6:05 PM
+ * @created  2013-03-20 18:05
  */
 
 abstract class AbstractCommand extends Console\Command\Command

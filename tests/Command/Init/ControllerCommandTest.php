@@ -1,7 +1,7 @@
 <?php
 /**
- * @author bashmach
- * @created 10/7/14 3:04 PM
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
  */
 
 namespace Bluzman\Tests\Command\Init;
@@ -13,6 +13,11 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
+
+/**
+ * @author Pavel Machekhin
+ * @created 2014-07-10 15:04
+ */
 
 class ControllerCommandTest extends AbstractCommandTest
 {

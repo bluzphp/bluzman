@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
 
 namespace Bluzman\Command\Init;
 
@@ -22,7 +26,7 @@ use Symfony\Component\Process\Process;
  * @package  Bluzman
  *
  * @author   Pavel Machekhin
- * @created  3/20/13 5:45 PM
+ * @created  2013-03-20 17:45
  */
 
 class AllCommand extends Command\AbstractCommand

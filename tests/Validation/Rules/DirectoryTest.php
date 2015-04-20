@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
+
 namespace Respect\Validation\Rules;
 
 class DirectoryTest extends \PHPUnit_Framework_TestCase

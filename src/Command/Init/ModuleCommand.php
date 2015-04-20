@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
 
 namespace Bluzman\Command\Init;
 
@@ -20,7 +24,7 @@ use Symfony\Component\Filesystem\Filesystem;
  * @package  Bluzman
  *
  * @author   Pavel Machekhin
- * @created  4/05/13 09:57 PM
+ * @created  2013-04-05 21:57
  */
 
 class ModuleCommand extends Command\AbstractCommand

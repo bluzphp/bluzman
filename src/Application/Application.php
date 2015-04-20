@@ -1,7 +1,7 @@
 <?php
 /**
- * @created 2013-11-28 12:31
- * @author Pavel Machekhin <pavel.machekhin@gmail.com>
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
  */
 
 namespace Bluzman\Application;
@@ -13,6 +13,12 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Composer;
 
+/**
+ * @package Bluzman\Application
+ *
+ * @author Pavel Machekhin
+ * @created 2013-11-28 12:31
+ */
 class Application extends Console\Application
 {
     /**
@@ -20,6 +26,11 @@ class Application extends Console\Application
      */
     protected $config;
 
+    /**
+     * Connection to
+     *
+     * @var \PDO
+     */
     protected $conn = null;
 
     /**
@@ -65,7 +76,7 @@ class Application extends Console\Application
      *
      * @return string
      */
-        public function getBluzmanPath()
+    public function getBluzmanPath()
     {
         return $this->getWorkingPath() . DS . '.bluzman';
     }
@@ -80,9 +91,9 @@ class Application extends Console\Application
         return new InputDefinition(array(
             new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
 
-            new InputOption('--env',     '-e', InputOption::VALUE_REQUIRED, 'The environment to be used.', 'dev'),
-            new InputOption('--help',    '-h', InputOption::VALUE_NONE, 'Display this help message.'),
-            new InputOption('--quiet',   '-q', InputOption::VALUE_NONE, 'Do not output any message.'),
+            new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The environment to be used.', 'dev'),
+            new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'),
+            new InputOption('--quiet', '-q', InputOption::VALUE_NONE, 'Do not output any message.'),
             new InputOption('--verbose', '-v', InputOption::VALUE_NONE, 'Increase verbosity of messages.'),
             new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this application version.')
         ));
@@ -101,7 +112,9 @@ class Application extends Console\Application
     }
 
     /**
-     * @todo
+     * Register Bluzman commands
+     *
+     * @todo Find a way to do this automatically
      */
     protected function registerCommands()
     {
@@ -118,8 +131,11 @@ class Application extends Console\Application
     }
 
     /**
+     * Returns a \PDO connection of actual Bluz Skeleton application.
+     *
      * @return \PDO
      * @throws \Bluz\Config\ConfigException
+     * @todo Should we move it to Generator Model?
      */
     public function getDbConnection()
     {

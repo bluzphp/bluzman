@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
 
 namespace Bluzman\Generator\Template;
 
@@ -9,7 +13,7 @@ namespace Bluzman\Generator\Template;
  * @package  Bluzman
  *
  * @author   Pavel Machekhin
- * @created  3/28/13 4:33 PM
+ * @created  2013-03-28 16:33
  */
 
 class ControllerTemplate extends AbstractTemplate

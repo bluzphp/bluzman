@@ -1,7 +1,17 @@
 <?php
 /**
+ * @copyright Bluz PHP Team
+ * @link https://github.com/bluzphp/bluzman
+ */
+
+/**
+ * TemplateInterface
+ *
+ * @category Generator
+ * @package  Bluzman
+ *
  * @author   Pavel Machekhin
- * @created 10/29/13 6:36 PM
+ * @created 2013-10-29 18:36
  */
 
 namespace Bluzman\Generator\Template;
