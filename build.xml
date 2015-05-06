@@ -20,18 +20,15 @@
         </exec>
     </target>
 
-    <target name="phpunit" description="PHPUnit">
-        <mkdir dir="${logsDir}/coverage"/>
-        <property name="junit" value="${logsDir}/tests-report.xml"/>
-
-        <exec executable="${vendorDir}/phpunit" dir="${appDir}" failonerror="true" osfamily="unix"
-              output="${logsDir}/phpunit.log">
-            <env key="BLUZ_ENV" value="dev"/>
+    <target name="phpunit" description="Run unit tests with PHPUnit">
+        <exec dir="${basedir}" executable="${vendorDir}/phpunit" output="${logsDir}/phpunit.log">
+            <arg line="--verbose"/>
             <arg line="-c ${appDir}/phpunit.xml"/>
-            <arg line="--coverage-clover '${logsDir}/phpunit.clover.xml'"/>
+            <arg line="--log-junit '${logsDir}/junit.xml'"/>
+            <arg line="--coverage-clover '${logsDir}/clover.xml'"/>
             <arg line="--coverage-html '${logsDir}/coverage'"/>
+            <arg line="./tests"/>
         </exec>
-
         <zip destfile="${logsDir}/coverage.zip" basedir="${logsDir}/coverage"/>
     </target>
 
