@@ -1,4 +1,4 @@
-<project name="bluz" default="build">
+<project name="bluzman" default="build">
 
     <property name="appDir" value="."/>
     <property name="moduleDir" value="${basedir}/src/"/>
