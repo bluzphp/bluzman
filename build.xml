@@ -1,0 +1,41 @@
+<project name="bluz" default="build">
+
+    <property name="appDir" value="."/>
+    <property name="moduleDir" value="${basedir}/src/"/>
+    <property name="logsDir" value="${basedir}/logs"/>
+    <property name="vendorDir" value="${basedir}/vendor/bin"/>
+
+    <property environment="env"/>
+    <property environment="BLUZ_ENV"/>
+
+    <target name="prepare">
+        <mkdir dir="${appDir}/logs"/>
+        <mkdir dir="${logsDir}"/>
+    </target>
+
+    <target name="install" description="Run install.sh" depends="prepare">
+        <exec executable="${appDir}/install.sh" output="${logsDir}/install.log">
+            <arg value="-c"/>
+            <arg value="sh ./install.sh"/>
+        </exec>
+    </target>
+
+    <target name="phpunit" description="PHPUnit">
+        <mkdir dir="${logsDir}/coverage"/>
+        <property name="junit" value="${logsDir}/tests-report.xml"/>
+
+        <exec executable="${vendorDir}/phpunit" dir="${appDir}" failonerror="true" osfamily="unix"
+              output="${logsDir}/phpunit.log">
+            <env key="BLUZ_ENV" value="dev"/>
+            <arg line="-c ${appDir}/phpunit.xml"/>
+            <arg line="--coverage-clover '${logsDir}/phpunit.clover.xml'"/>
+            <arg line="--coverage-html '${logsDir}/coverage'"/>
+        </exec>
+
+        <zip destfile="${logsDir}/coverage.zip" basedir="${logsDir}/coverage"/>
+    </target>
+
+    <target name="build" depends="install, phpunit">
+    </target>
+
+</project>
