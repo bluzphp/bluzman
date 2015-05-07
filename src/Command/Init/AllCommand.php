@@ -152,7 +152,6 @@ class AllCommand extends Command\AbstractCommand
     protected function generateConfig()
     {
         $name = $this->getOption('name');
-        $path = $this->getOption('path');
 
         $bluzmanDirectory = $this->getApplication()->getBluzmanPath();
 
@@ -177,7 +176,7 @@ class AllCommand extends Command\AbstractCommand
      * @return bool
      * @throws \RuntimeException
      */
-    public function verify(InputInterface $input, OutputInterface $output)
+    public function verify()
     {
         if (!$this->getApplication()->getConfig()) {
             throw new \RuntimeException('Something is wrong with project path. Unable to verify config.');

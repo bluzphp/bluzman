@@ -45,14 +45,14 @@ class ModelCommand extends Command\AbstractCommand
     /**
      * @var Filesystem
      */
-    protected $fs;
+    protected $fileSystem;
 
     /**
-     * @param \Symfony\Component\Filesystem\Filesystem $fs
+     * @param $fileSystem
      */
-    public function setFs($fs)
+    public function setFs($fileSystem)
     {
-        $this->fs = $fs;
+        $this->fileSystem = $fileSystem;
     }
 
     /**
@@ -60,7 +60,7 @@ class ModelCommand extends Command\AbstractCommand
      */
     public function getFs()
     {
-        return $this->fs;
+        return $this->fileSystem;
     }
 
     public function __construct($name = null)
@@ -81,6 +81,7 @@ class ModelCommand extends Command\AbstractCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     * @throws InputException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -112,7 +113,8 @@ class ModelCommand extends Command\AbstractCommand
             $helper = $this->getHelperSet()->get("question");
             $question = new ConfirmationQuestion(
                 "\n<question>Model " . $modelName . " would be overwritten. y/N?:</question>\n> ",
-                false);
+                false
+            );
 
             if (!$helper->ask($input, $output, $question)) {
                 return $this;

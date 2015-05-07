@@ -24,10 +24,14 @@ class ArrayHelper
      * @param  mixed   $default
      * @return mixed
      */
-    static public function get($array, $key, $default = null)
+    public static function get($array, $key, $default = null)
     {
-        if (is_null($key)) return $array;
-        if (isset($array[$key])) return $array[$key];
+        if (is_null($key)) {
+            return $array;
+        }
+        if (isset($array[$key])) {
+            return $array[$key];
+        }
 
         foreach (explode('.', $key) as $segment) {
             if (!is_array($array) or !array_key_exists($segment, $array)) {
@@ -36,8 +40,6 @@ class ArrayHelper
 
             $array = $array[$segment];
         }
-
         return $array;
     }
-
 }

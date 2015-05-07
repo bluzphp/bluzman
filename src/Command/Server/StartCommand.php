@@ -85,14 +85,13 @@ class StartCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        //get application config
-        $config = $this->getApplication()->getConfig();
-
         $this->setHost($this->getInput()->getOption('host'));
         $this->setPort($this->getInput()->getOption('port'));
         $this->setEnvironment($this->getInput()->getOption('env'));
 
-        $this->getOutput()->writeln($this->info('Running "server:start" command ... [' . $this->getEnvironment() . ']'));
+        $this->getOutput()->writeln(
+            $this->info('Running "server:start" command ... [' . $this->getEnvironment() . ']')
+        );
 
         $this->startServer();
     }
@@ -194,8 +193,7 @@ class StartCommand extends AbstractCommand
 
             $this->getOutput()->writeln($this->info('Server has been started at ' . $address));
         } else {
-
-            while($process instanceof Process) {
+            while ($process instanceof Process) {
                 if (!$process->isStarted()) {
                     $process->start();
 
