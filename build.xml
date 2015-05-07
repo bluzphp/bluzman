@@ -58,14 +58,13 @@
     </target>
 
     <target name="phpmd" description="PHP Mess Detector" >
-        <mkdir dir="${logsDir}/phpmd"/>
         <exec executable="${vendorDir}/../phpmd/phpmd/src/bin/phpmd" failonerror="false" osfamily="unix">
             <arg line="${moduleDir}" />
             <arg line="xml" />
             <arg line="naming,unusedcode,codesize" />
-            <arg line="--reportfile '${logsDir}/phpmd/phpmd.xml'" />
+            <arg line="--reportfile '${logsDir}/phpmd.xml'" />
         </exec>
-        <echo message="##teamcity[importData type='pmd' path='${logsDir}/phpmd/phpmd.xml']"/>
+        <echo message="##teamcity[importData type='pmd' path='${logsDir}/phpmd.xml']"/>
     </target>
 
     <target name="build" depends="install, phpunit, phpcs, phpcb, phpmd">
