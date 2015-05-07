@@ -16,7 +16,6 @@
 
 namespace Bluzman\Generator\Template;
 
-
 interface TemplateInterface
 {
     public function make();

@@ -42,14 +42,14 @@ class ModuleCommand extends Command\AbstractCommand
     /**
      * @var Filesystem
      */
-    protected $fs;
+    protected $fileSystem;
 
     /**
-     * @param \Symfony\Component\Filesystem\Filesystem $fs
+     * @param $fileSystem
      */
-    public function setFs($fs)
+    public function setFs($fileSystem)
     {
-        $this->fs = $fs;
+        $this->fileSystem = $fileSystem;
     }
 
     /**
@@ -57,7 +57,7 @@ class ModuleCommand extends Command\AbstractCommand
      */
     public function getFs()
     {
-        return $this->fs;
+        return $this->fileSystem;
     }
 
     public function __construct($name = null)

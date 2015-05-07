@@ -36,7 +36,7 @@ class ControllerCommand extends Command\AbstractCommand
     /**
      * @var Filesystem
      */
-    protected $fs;
+    protected $fileSystem;
 
     /**
      * @var string
@@ -51,11 +51,11 @@ class ControllerCommand extends Command\AbstractCommand
     }
 
     /**
-     * @param $fs
+     * @param $fileSystem
      */
-    public function setFs($fs)
+    public function setFs($fileSystem)
     {
-        $this->fs = $fs;
+        $this->fileSystem = $fileSystem;
     }
 
     /**
@@ -63,7 +63,7 @@ class ControllerCommand extends Command\AbstractCommand
      */
     public function getFs()
     {
-        return $this->fs;
+        return $this->fileSystem;
     }
 
     protected function getOptions()
@@ -89,11 +89,11 @@ class ControllerCommand extends Command\AbstractCommand
             if (!$this->getApplication()->isModuleExists($moduleName)) {
                 $output->writeln("<error>ERROR: Module " . $moduleName . " is not exist</error>\n");
             } else {
-
                 $this->generate()->verify();
 
-                $output->writeln("Controller \"" . $this->info($this->getOption('name')) . "\"" .
-                    " has been successfully created in the module \"" . $this->info($this->getOption('module')) . "\".");
+                $output->writeln("Controller \"" . $this->info($this->getOption('name')) . "\""
+                    . " has been successfully created in the module \""
+                    . $this->info($this->getOption('module')) . "\".");
             }
         } catch (\Bluzman\Input\InputException $e) {
             $output->writeln("<error>ERROR: {$e->getMessage()}</error>\n");

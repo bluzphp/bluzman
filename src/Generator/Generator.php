@@ -23,7 +23,7 @@ use Symfony\Component\Filesystem\Filesystem;
  * @created  2013-03-28 16:24
  */
 
-class Generator 
+class Generator
 {
     /**
      * @var AbstractTemplate
@@ -38,7 +38,7 @@ class Generator
     /**
      * @var Filesystem
      */
-    protected $fs;
+    protected $fileSystem;
 
     /**
      * @return AbstractTemplate
@@ -77,15 +77,15 @@ class Generator
      */
     public function getFs()
     {
-        return $this->fs;
+        return $this->fileSystem;
     }
 
     /**
-     * @param Filesystem $fs
+     * @param $fileSystem
      */
-    public function setFs($fs)
+    public function setFs($fileSystem)
     {
-        $this->fs = $fs;
+        $this->fileSystem = $fileSystem;
     }
 
     public function __construct(AbstractTemplate $template)

@@ -28,4 +28,3 @@ class DirectoryEmpty extends \Respect\Validation\Rules\AbstractRule
         return $itemsCount < 1;
     }
 }
-
