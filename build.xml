@@ -12,10 +12,11 @@
         <mkdir dir="${logsDir}"/>
     </target>
 
-    <target name="install" description="Run install.sh" depends="prepare">
-        <exec executable="${appDir}/install.sh" output="${logsDir}/install.log">
-            <arg value="-c"/>
-            <arg value="sh ./install.sh"/>
+    <target name="composer" description="Install dependencies with Composer">
+        <get src="https://getcomposer.org/composer.phar" dest="${basedir}/composer.phar" skipexisting="true"/>
+        <exec executable="php">
+            <arg value="composer.phar"/>
+            <arg value="install"/>
         </exec>
     </target>
 
@@ -67,7 +68,7 @@
         <echo message="##teamcity[importData type='pmd' path='${logsDir}/phpmd.xml']"/>
     </target>
 
-    <target name="build" depends="install, phpunit, phpcs, phpcb, phpmd">
+    <target name="build" depends="composer, phpunit, phpcs, phpcb, phpmd">
     </target>
 
 </project>
