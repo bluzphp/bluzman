@@ -9,7 +9,6 @@
     <property environment="BLUZ_ENV"/>
 
     <target name="prepare">
-        <mkdir dir="${appDir}/logs"/>
         <mkdir dir="${logsDir}"/>
     </target>
 
@@ -19,6 +18,31 @@
             <arg value="sh ./install.sh"/>
         </exec>
     </target>
+
+    <target name="phpcs" description="PHP_CodeSniffer">
+        <exec dir="${moduleDir}/../" executable="${vendorDir}/../squizlabs/php_codesniffer/scripts/phpcs" failonerror="false" osfamily="unix"
+              output="${logsDir}/phpcs.log">
+            <arg line="--tab-width=4"/>
+            <arg line="--report=checkstyle"/>
+            <arg line="--standard=PSR2"/>
+            <arg line="--extensions=php"/>
+            <arg line="--ignore=js"/>
+            <arg line="--report-file=${logsDir}/phpcs.xml"/>
+            <arg line="${moduleDir}"/>
+        </exec>
+        <echo message="##teamcity[importData type='checkstyle' path='${logsDir}/phpcs.xml']"/>
+    </target>
+
+    <target name="phpcb" description="PHP_CodeBrowser">
+        <mkdir dir="${logsDir}/phpcb"/>
+        <exec dir="${basedir}" executable="${vendorDir}/../mayflower/php-codebrowser/bin/phpcb" failonerror="false" osfamily="unix">
+            <arg line="--log ${logsDir}"/>
+            <arg line="--source ${moduleDir}"/>
+            <arg line="--output ${logsDir}/phpcb"/>
+        </exec>
+        <zip destfile="${logsDir}/phpcb.zip" basedir="${logsDir}/phpcb"/>
+    </target>
+
 
     <target name="phpunit" description="Run unit tests with PHPUnit">
         <exec dir="${basedir}" executable="${vendorDir}/phpunit" output="${logsDir}/phpunit.log">
@@ -32,7 +56,17 @@
         <zip destfile="${logsDir}/coverage.zip" basedir="${logsDir}/coverage"/>
     </target>
 
-    <target name="build" depends="install, phpunit">
+    <target name="phpmd" description="PHP Mess Detector" >
+        <exec executable="${vendorDir}/../phpmd/phpmd/src/bin/phpmd" failonerror="false" osfamily="unix">
+            <arg line="${moduleDir}" />
+            <arg line="xml" />
+            <arg line="naming,unusedcode,codesize" />
+            <arg line="--reportfile '${logsDir}/phpmd.xml'" />
+        </exec>
+        <echo message="##teamcity[importData type='pmd' path='${logsDir}/phpmd.xml']"/>
+    </target>
+
+    <target name="build" depends="install, phpunit, phpcs, phpcb, phpmd">
     </target>
 
 </project>
