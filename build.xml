@@ -20,17 +20,18 @@
     </target>
 
     <target name="phpcs" description="PHP_CodeSniffer">
+        <mkdir dir="${logsDir}/phpcs"/>
         <exec dir="${moduleDir}/../" executable="${vendorDir}/../squizlabs/php_codesniffer/scripts/phpcs" failonerror="false" osfamily="unix"
-              output="${logsDir}/phpcs.log">
+              output="${logsDir}/phpcs/phpcs.log">
             <arg line="--tab-width=4"/>
             <arg line="--report=checkstyle"/>
             <arg line="--standard=PSR2"/>
             <arg line="--extensions=php"/>
             <arg line="--ignore=js"/>
-            <arg line="--report-file=${logsDir}/phpcs.xml"/>
+            <arg line="--report-file=${logsDir}/phpcs/phpcs.xml"/>
             <arg line="${moduleDir}"/>
         </exec>
-        <echo message="##teamcity[importData type='checkstyle' path='${logsDir}/phpcs.xml']"/>
+        <echo message="##teamcity[importData type='checkstyle' path='${logsDir}/phpcs/phpcs.xml']"/>
     </target>
 
     <target name="phpcb" description="PHP_CodeBrowser">
@@ -57,13 +58,14 @@
     </target>
 
     <target name="phpmd" description="PHP Mess Detector" >
+        <mkdir dir="${logsDir}/phpmd"/>
         <exec executable="${vendorDir}/../phpmd/phpmd/src/bin/phpmd" failonerror="false" osfamily="unix">
             <arg line="${moduleDir}" />
             <arg line="xml" />
             <arg line="naming,unusedcode,codesize" />
-            <arg line="--reportfile '${logsDir}/phpmd.xml'" />
+            <arg line="--reportfile '${logsDir}/phpmd/phpmd.xml'" />
         </exec>
-        <echo message="##teamcity[importData type='pmd' path='${logsDir}/phpmd.xml']"/>
+        <echo message="##teamcity[importData type='pmd' path='${logsDir}/phpmd/phpmd.xml']"/>
     </target>
 
     <target name="build" depends="install, phpunit, phpcs, phpcb, phpmd">
