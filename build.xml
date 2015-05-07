@@ -1,0 +1,73 @@
+<project name="bluzman" default="build">
+
+    <property name="appDir" value="."/>
+    <property name="moduleDir" value="${basedir}/src/"/>
+    <property name="logsDir" value="${basedir}/logs"/>
+    <property name="vendorDir" value="${basedir}/vendor/bin"/>
+
+    <property environment="env"/>
+    <property environment="BLUZ_ENV"/>
+
+    <target name="prepare">
+        <mkdir dir="${logsDir}"/>
+    </target>
+
+    <target name="install" description="Run install.sh" depends="prepare">
+        <exec executable="${appDir}/install.sh" output="${logsDir}/install.log">
+            <arg value="-c"/>
+            <arg value="sh ./install.sh"/>
+        </exec>
+    </target>
+
+    <target name="phpcs" description="PHP_CodeSniffer">
+        <mkdir dir="${logsDir}/phpcs"/>
+        <exec dir="${moduleDir}/../" executable="${vendorDir}/../squizlabs/php_codesniffer/scripts/phpcs" failonerror="false" osfamily="unix"
+              output="${logsDir}/phpcs/phpcs.log">
+            <arg line="--tab-width=4"/>
+            <arg line="--report=checkstyle"/>
+            <arg line="--standard=PSR2"/>
+            <arg line="--extensions=php"/>
+            <arg line="--ignore=js"/>
+            <arg line="--report-file=${logsDir}/phpcs/phpcs.xml"/>
+            <arg line="${moduleDir}"/>
+        </exec>
+        <echo message="##teamcity[importData type='checkstyle' path='${logsDir}/phpcs/phpcs.xml']"/>
+    </target>
+
+    <target name="phpcb" description="PHP_CodeBrowser">
+        <mkdir dir="${logsDir}/phpcb"/>
+        <exec dir="${basedir}" executable="${vendorDir}/../mayflower/php-codebrowser/bin/phpcb" failonerror="false" osfamily="unix">
+            <arg line="--log ${logsDir}"/>
+            <arg line="--source ${moduleDir}"/>
+            <arg line="--output ${logsDir}/phpcb"/>
+        </exec>
+        <zip destfile="${logsDir}/phpcb.zip" basedir="${logsDir}/phpcb"/>
+    </target>
+
+
+    <target name="phpunit" description="Run unit tests with PHPUnit">
+        <exec dir="${basedir}" executable="${vendorDir}/phpunit" output="${logsDir}/phpunit.log">
+            <arg line="--verbose"/>
+            <arg line="-c ${appDir}/phpunit.xml"/>
+            <arg line="--log-junit '${logsDir}/junit.xml'"/>
+            <arg line="--coverage-clover '${logsDir}/clover.xml'"/>
+            <arg line="--coverage-html '${logsDir}/coverage'"/>
+            <arg line="./tests"/>
+        </exec>
+        <zip destfile="${logsDir}/coverage.zip" basedir="${logsDir}/coverage"/>
+    </target>
+
+    <target name="phpmd" description="PHP Mess Detector" >
+        <exec executable="${vendorDir}/../phpmd/phpmd/src/bin/phpmd" failonerror="false" osfamily="unix">
+            <arg line="${moduleDir}" />
+            <arg line="xml" />
+            <arg line="naming,unusedcode,codesize" />
+            <arg line="--reportfile '${logsDir}/phpmd.xml'" />
+        </exec>
+        <echo message="##teamcity[importData type='pmd' path='${logsDir}/phpmd.xml']"/>
+    </target>
+
+    <target name="build" depends="install, phpunit, phpcs, phpcb, phpmd">
+    </target>
+
+</project>
