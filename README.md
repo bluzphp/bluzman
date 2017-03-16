@@ -21,7 +21,7 @@ Features
 Requirements
 -------------------------
 * OS: Linux
-* PHP: 5.4 (or later)
+* PHP: 7.0 (or later)
 
 Installation
 -------------------------
