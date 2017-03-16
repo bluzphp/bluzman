@@ -29,6 +29,7 @@
     "nelmio/alice": "~1.5",
     "fzaninotto/faker": "~1.4"
   },
+  "bin": ["bin/bluzman"],
   "scripts": {
       "test": "make test"
   },
