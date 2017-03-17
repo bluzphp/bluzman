@@ -61,18 +61,15 @@ class StatusCommand extends AbstractCommand
 
         try {
             $this->checkIsRunning();
-
             $this->getOutput()->writeln($this->info('Server is running at ' . $config['address']));
-
         } catch (NotRunningException $e) {
             $this->getOutput()->writeln($this->info('Server is not running.'));
         }
-
     }
 
     /**
      * @return bool
-     * @throws \Bluz\Application\Exception\NotFoundException
+     * @throws NotRunningException
      */
     public function checkIsRunning()
     {

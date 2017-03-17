@@ -89,12 +89,10 @@ class ControllerCommand extends Command\AbstractCommand
             if (!$this->getApplication()->isModuleExists($moduleName)) {
                 $output->writeln("<error>ERROR: Module " . $moduleName . " is not exist</error>\n");
             } else {
-
                 $this->generate()->verify();
-
                 $output->writeln(
-                    "Controller \"" . $this->info($this->getOption('name')) . "\"" .
-                    " has been successfully created in the module \"" . $this->info($this->getOption('module')) . "\"."
+                    "Controller `" . $this->info($this->getOption('name')) . "` has been successfully created " .
+                    " in the module `" . $this->info($this->getOption('module')) . "`."
                 );
             }
         } catch (InputException $e) {

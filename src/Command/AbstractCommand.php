@@ -373,7 +373,8 @@ abstract class AbstractCommand extends Console\Command\Command
         $this->getOutput()->writeln('');
         $this->getOutput()->writeln(
             $this->error(
-                " This command is not implemented yet. Don't be indifferent - you can contribute! https://github.com/bashmach/bluzman. "
+                " This command is not implemented yet. Don't be indifferent - you can contribute!" .
+                " https://github.com/bluzphp/bluzman. "
             )
         );
         $this->getOutput()->writeln('');
