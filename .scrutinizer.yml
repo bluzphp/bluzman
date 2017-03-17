@@ -1,0 +1,21 @@
+build:
+  environment:
+    php:
+      version: '7.0'
+checks:
+  php: true
+filter:
+  excluded_paths:
+    - bin/
+    - tests/
+tools:
+  php_code_sniffer: true
+  php_mess_detector: true
+  php_loc:
+    enabled: true
+    excluded_dirs: [vendor, tests]
+  php_pdepend: true
+  php_cpd:
+    enabled: true
+    excluded_dirs: [vendor, tests]
+  sensiolabs_security_checker: true

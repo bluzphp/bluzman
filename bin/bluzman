@@ -10,7 +10,8 @@ if (php_sapi_name() != 'cli') {
 }
 
 // Root path, double level up
-$root = realpath(dirname(dirname(__FILE__)));
+// UP to root from "/application/vendor/bluzphp/bluzman/bin"
+$root = realpath(dirname(dirname(dirname(dirname(__DIR__)))));
 
 // Definitions
 define('PATH_ROOT', $root);
@@ -36,7 +37,6 @@ $composerConfig = json_decode(
     file_get_contents(PATH_ROOT . DIRECTORY_SEPARATOR . 'composer.json'),
     true
 );
-
 require_once PATH_VENDOR . '/autoload.php';
 
 $application = new Bluzman\Application\Application(

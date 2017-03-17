@@ -5,8 +5,10 @@ Bluzman is a set of command-line tools which provides a simple workflow with an 
 ## Achievements
 
 [![Build Status](https://secure.travis-ci.org/bluzphp/bluzman.png?branch=master)](https://travis-ci.org/bluzphp/bluzman)
-
 [![Dependency Status](https://www.versioneye.com/user/projects/5534cbe6050e7cc57c000002/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5534cbe6050e7cc57c000002)
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bluzphp/bluzman/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/bluzphp/bluzman/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/bluzphp/bluzman/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/bluzphp/bluzman/?branch=master)
 
 [![Latest Stable Version](https://poser.pugx.org/bluzphp/bluzman/v/stable.png)](https://packagist.org/packages/bluzphp/bluzman)
 [![Total Downloads](https://poser.pugx.org/bluzphp/bluzman/downloads.png)](https://packagist.org/packages/bluzphp/bluzman)
