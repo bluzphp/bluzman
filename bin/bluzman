@@ -19,7 +19,7 @@ define('PATH_VENDOR', $root . '/vendor');
 define('DS', DIRECTORY_SEPARATOR);
 
 // Environment
-$env = getenv('BLUZ_ENV') ?: 'production';
+$env = getenv('BLUZ_ENV') ?: 'dev';
 define('BLUZ_ENV', $env);
 
 error_reporting(E_ALL | E_STRICT);

@@ -1,40 +1,33 @@
 <?="<?php"?>
 
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Application\<?=$name?>;
 
 /**
-*
-*
-* @category Application
-* @package  <?=$name . "\n"?>
-*
-<?=$properties?>
-*
-* @author   <?=$author . "\n"?>
-* @created  <?=$date . "\n"?>
-*/
+ * Class Row for `<?=$table?>`
+ *
+ * @package  Application\<?=$name?>
+ *
+ <?=$properties?>
+ *
+ * @author   <?=$author?>
+ * @created  <?=$date?>
+ */
 class Row extends \Bluz\Db\Row
 {
-/**
-* __insert
-*
-* @return void
-*/
-public function beforeInsert()
-{
+    /**
+     * @return void
+     */
+     public function beforeInsert()
+     {
+     }
 
-}
-
-/**
-* __update
-*
-* @return void
-*/
-public function beforeUpdate()
-{
-
-}
+    /**
+     * @return void
+     */
+    public function beforeUpdate()
+    {
+    }
 }

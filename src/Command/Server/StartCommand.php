@@ -81,8 +81,8 @@ class StartCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        //get application config
-        $config = $this->getApplication()->getConfig();
+        // init application config
+        $this->getApplication()->getConfig();
 
         $this->setHost($this->getInput()->getOption('host'));
         $this->setPort($this->getInput()->getOption('port'));
