@@ -105,7 +105,7 @@ class Generator
     }
 
     /**
-     * @param $path
+     * @internal param $path
      */
     public function make()
     {

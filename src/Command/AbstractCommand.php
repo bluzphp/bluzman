@@ -13,6 +13,7 @@ use Bluzman\Application\Application;
 use Bluzman\Input\InputException;
 use Bluzman\Input\InputOption;
 use Bluzman\Input\InputArgument;
+use Respect\Validation\Validator;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -124,6 +125,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * @param string $description A description text
      * @param mixed $default The default value (must be null for InputOption::VALUE_REQUIRED or InputOption::VALUE_NONE)
      *
+     * @param null $validator
      * @return Command The current instance
      *
      * @api
@@ -138,7 +140,7 @@ abstract class AbstractCommand extends Console\Command\Command
     ) {
         $option = new InputOption($name, $shortcut, $mode, $description, $default);
 
-        if ($validator instanceof \Respect\Validation\Validator) {
+        if ($validator instanceof Validator) {
             $option->setValidator($validator);
         }
 
@@ -155,6 +157,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * @param string $description A description text
      * @param mixed $default The default value (for InputArgument::OPTIONAL mode only)
      *
+     * @param null $validator
      * @return Command The current instance
      *
      * @api
@@ -163,7 +166,7 @@ abstract class AbstractCommand extends Console\Command\Command
     {
         $argument = new InputArgument($name, $mode, $description, $default);
 
-        if ($validator instanceof \Respect\Validation\Validator) {
+        if ($validator instanceof Validator) {
             $argument->setValidator($validator);
         }
 
@@ -195,6 +198,7 @@ abstract class AbstractCommand extends Console\Command\Command
     /**
      * @param $name
      * @return mixed
+     * @throws InputException
      */
     final public function getOption($name)
     {
@@ -248,6 +252,7 @@ abstract class AbstractCommand extends Console\Command\Command
     /**
      * @param $name
      * @return mixed
+     * @throws InputException
      */
     final public function getArgument($name)
     {
@@ -361,7 +366,7 @@ abstract class AbstractCommand extends Console\Command\Command
     }
 
     /**
-     * @param $output
+     * @internal param $output
      */
     public function callForContribute()
     {

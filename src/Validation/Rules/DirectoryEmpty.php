@@ -6,12 +6,13 @@
 
 namespace Bluzman\Validation\Rules;
 
+use Respect\Validation\Rules\AbstractRule;
 use Symfony\Component\Finder\Finder;
 
 /**
  * @package Bluzman\Validation\Rules
  */
-class DirectoryEmpty extends \Respect\Validation\Rules\AbstractRule
+class DirectoryEmpty extends AbstractRule
 {
     public function directoryEmpty($input)
     {

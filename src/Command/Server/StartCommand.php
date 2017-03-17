@@ -174,8 +174,8 @@ class StartCommand extends AbstractCommand
     }
 
     /**
-     * @param $address
-     * @param $environment
+     * @internal param $address
+     * @internal param $environment
      */
     protected function startServer()
     {

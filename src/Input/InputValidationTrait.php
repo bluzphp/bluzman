@@ -7,6 +7,7 @@
 namespace Bluzman\Input;
 
 use Respect\Validation;
+use Respect\Validation\Exceptions\ValidationException;
 
 /**
  * @package Bluzman\Input
@@ -52,7 +53,7 @@ trait InputValidationTrait
             }
 
             return true;
-        } catch (\Respect\Validation\Exceptions\ValidationException $e) {
+        } catch (ValidationException $e) {
             throw new InputException($e->getMainMessage());
         }
 

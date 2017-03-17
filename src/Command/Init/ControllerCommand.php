@@ -8,6 +8,7 @@ namespace Bluzman\Command\Init;
 
 use Bluzman\Command;
 use Bluzman\Generator;
+use Bluzman\Input\InputException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -76,7 +77,7 @@ class ControllerCommand extends Command\AbstractCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @throws \Bluzman\Input\InputException
+     * @throws InputException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -96,7 +97,7 @@ class ControllerCommand extends Command\AbstractCommand
                     " has been successfully created in the module \"" . $this->info($this->getOption('module')) . "\"."
                 );
             }
-        } catch (\Bluzman\Input\InputException $e) {
+        } catch (InputException $e) {
             $output->writeln("<error>ERROR: {$e->getMessage()}</error>\n");
             $this->execute($input, $output);
         }
@@ -125,7 +126,7 @@ class ControllerCommand extends Command\AbstractCommand
 
     /**
      * @return string
-     * @throws \Bluzman\Input\InputException
+     * @throws InputException
      */
     protected function getFilePath()
     {
@@ -140,7 +141,7 @@ class ControllerCommand extends Command\AbstractCommand
 
     /**
      * @return string
-     * @throws \Bluzman\Input\InputException
+     * @throws InputException
      */
     protected function getViewPath()
     {

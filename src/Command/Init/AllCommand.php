@@ -175,8 +175,9 @@ class AllCommand extends Command\AbstractCommand
     }
 
     /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
      * @return bool
-     * @throws \RuntimeException
      */
     public function verify(InputInterface $input, OutputInterface $output)
     {

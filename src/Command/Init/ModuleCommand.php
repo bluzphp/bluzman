@@ -140,6 +140,8 @@ class ModuleCommand extends Command\AbstractCommand
     /**
      * @todo Revert if not verified
      *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      * @return bool
      */
     public function verify(InputInterface $input, OutputInterface $output)

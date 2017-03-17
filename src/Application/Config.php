@@ -6,6 +6,8 @@
 
 namespace Bluzman\Application;
 
+use Composer\Json\JsonFile;
+
 /**
  * Config
  *
@@ -18,7 +20,7 @@ namespace Bluzman\Application;
 class Config
 {
     /**
-     * @var \Composer\Json\JsonFile
+     * @var JsonFile
      */
     protected $configFile;
 
@@ -33,7 +35,7 @@ class Config
     protected $application;
 
     /**
-     * @param \Composer\Json\JsonFile $configFile
+     * @param JsonFile $configFile
      */
     public function setConfigFile($configFile)
     {
@@ -41,14 +43,14 @@ class Config
     }
 
     /**
-     * @return \Composer\Json\JsonFile
+     * @return JsonFile
      */
     public function getConfigFile()
     {
         if (!$this->configFile) {
             $configPath = $this->getConfigPath();
 
-            $this->setConfigFile(new \Composer\Json\JsonFile($configPath));
+            $this->setConfigFile(new JsonFile($configPath));
         }
 
         return $this->configFile;
@@ -184,6 +186,7 @@ class Config
     /**
      * Get config of the application
      *
+     * @param $env
      * @return \Bluz\Config\Config
      */
     public function getBluzConfig($env)
