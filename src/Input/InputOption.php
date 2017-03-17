@@ -6,8 +6,6 @@
 
 namespace Bluzman\Input;
 
-use Respect\Validation;
-
 /**
  * @package Bluzman\Input
  */

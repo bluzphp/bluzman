@@ -9,7 +9,6 @@ namespace Bluzman\Input;
 /**
  * @package Bluzman\Input
  */
-
 class InputException extends \Exception
 {
     protected $message = 'Command must be runned in interactive mode';

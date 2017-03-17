@@ -23,4 +23,3 @@ class DirectoryEmptyException extends ValidationException
         ]
     ];
 }
-

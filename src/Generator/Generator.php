@@ -9,8 +9,6 @@ namespace Bluzman\Generator;
 use Bluz\View\View;
 use Bluzman\Generator\Template\AbstractTemplate;
 use Bluzman\Generator\Template\DummyTemplate;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

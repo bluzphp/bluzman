@@ -6,10 +6,6 @@
 
 namespace Bluzman\Generator\Template;
 
-use Bluz\Proxy\Session;
-use Bluzman\Generator\Template\Exception;
-use Bluzman\Generator\Template\Exception\AlreadyExistsException;
-
 /**
  * AbstractTemplate
  *

@@ -4,6 +4,8 @@
  * @link https://github.com/bluzphp/bluzman
  */
 
+namespace Bluzman\Command\Server;
+
 /**
  * NotRunningException
  *
@@ -13,9 +15,6 @@
  * @author   Pavel Machekhin
  * @created  2013-06-17 15:11
  */
-
-namespace Bluzman\Command\Server;
-
 class NotRunningException extends \Exception
 {
     protected $message = 'Server is not running';

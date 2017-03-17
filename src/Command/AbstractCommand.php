@@ -4,9 +4,6 @@
  * @link https://github.com/bluzphp/bluzman
  */
 
-/**
- */
-
 namespace Bluzman\Command;
 
 use Bluzman\Application\Application;

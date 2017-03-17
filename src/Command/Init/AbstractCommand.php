@@ -7,11 +7,8 @@
 namespace Bluzman\Command\Init;
 
 use Symfony\Component\Console;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
 /**
  * AbstractCommand
@@ -25,6 +22,13 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 abstract class AbstractCommand extends Console\Command\Command
 {
     /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return mixed
+     */
+    abstract public function verify(InputInterface $input, OutputInterface $output);
+
+    /**
      * @return mixed
      * @throws \RuntimeException
      */
@@ -37,13 +41,10 @@ abstract class AbstractCommand extends Console\Command\Command
         return $this->getApplication()->getConfig();
     }
 
-    abstract public function verify(InputInterface $input, OutputInterface $output);
-
     /**
      * @todo
      */
     protected function revert()
     {
-
     }
 }

@@ -8,16 +8,13 @@ namespace Bluzman\Command\Init;
 
 use Bluzman\Command;
 use Bluzman\Generator;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Respect\Validation\Validator as v;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Filesystem\Filesystem;
 use Bluzman\Input\InputException;
-use Symfony\Component\Console\Question\Question;
 
 /**
  * ModelCommand

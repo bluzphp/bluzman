@@ -4,6 +4,8 @@
  * @link https://github.com/bluzphp/bluzman
  */
 
+namespace Bluzman\Generator\Template;
+
 /**
  * TemplateInterface
  *
@@ -11,12 +13,8 @@
  * @package  Bluzman
  *
  * @author   Pavel Machekhin
- * @created 2013-10-29 18:36
+ * @created  2013-10-29 18:36
  */
-
-namespace Bluzman\Generator\Template;
-
-
 interface TemplateInterface
 {
     public function make();

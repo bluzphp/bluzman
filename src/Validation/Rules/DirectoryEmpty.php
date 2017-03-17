@@ -28,4 +28,3 @@ class DirectoryEmpty extends AbstractRule
         return $itemsCount < 1;
     }
 }
-

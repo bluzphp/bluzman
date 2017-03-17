@@ -24,7 +24,7 @@ class ArrayHelper
      * @param  mixed $default
      * @return mixed
      */
-    static public function get($array, $key, $default = null)
+    public static function get($array, $key, $default = null)
     {
         if (is_null($key)) {
             return $array;
@@ -37,11 +37,9 @@ class ArrayHelper
             if (!is_array($array) or !array_key_exists($segment, $array)) {
                 return $default instanceof \Closure ? $default() : $default;
             }
-
             $array = $array[$segment];
         }
 
         return $array;
     }
-
 }

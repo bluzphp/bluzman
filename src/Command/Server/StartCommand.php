@@ -7,12 +7,9 @@
 namespace Bluzman\Command\Server;
 
 use Bluzman\Command\AbstractCommand;
-use Symfony\Component\Console;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Process\Process;
 
 /**
@@ -200,7 +197,6 @@ class StartCommand extends AbstractCommand
 
             $this->getOutput()->writeln($this->info('Server has been started at ' . $address));
         } else {
-
             while ($process instanceof Process) {
                 if (!$process->isStarted()) {
                     $process->start();
