@@ -160,6 +160,7 @@ class Config
 
     /**
      * @param $name
+     * @return mixed
      */
     public function __get($name)
     {
@@ -172,7 +173,7 @@ class Config
      */
     public function __set($name, $value)
     {
-        return $this->setOption($name, $value);
+        $this->setOption($name, $value);
     }
 
     public function getConfigPath()

@@ -178,7 +178,7 @@ abstract class AbstractCommand extends Console\Command\Command
     final protected function registerArguments()
     {
         foreach ($this->getArguments() as $argumentParams) {
-            call_user_func_array(array($this, 'addArgument'), $argumentParams);
+            call_user_func_array([$this, 'addArgument'], $argumentParams);
         }
     }
 
@@ -188,7 +188,7 @@ abstract class AbstractCommand extends Console\Command\Command
     final protected function registerOptions()
     {
         foreach ($this->getOptions() as $optionParams) {
-            call_user_func_array(array($this, 'addOption'), $optionParams);
+            call_user_func_array([$this, 'addOption'], $optionParams);
         }
     }
 

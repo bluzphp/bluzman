@@ -89,15 +89,14 @@ class Application extends Console\Application
     protected function getDefaultInputDefinition()
     {
         return new InputDefinition(
-            array(
+            [
                 new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
-
                 new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The environment to be used.', 'dev'),
                 new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'),
                 new InputOption('--quiet', '-q', InputOption::VALUE_NONE, 'Do not output any message.'),
                 new InputOption('--verbose', '-v', InputOption::VALUE_NONE, 'Increase verbosity of messages.'),
                 new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this application version.')
-            )
+            ]
         );
     }
 

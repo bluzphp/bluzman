@@ -210,7 +210,7 @@ class ModelCommand extends Command\AbstractCommand
         $q->execute();
         $keys = $q->fetchAll(\PDO::FETCH_ASSOC);
 
-        $primaryKeys = array();
+        $primaryKeys = [];
 
         foreach ($keys as $key) {
             $primaryKeys[] = $key["Column_name"];
@@ -226,7 +226,7 @@ class ModelCommand extends Command\AbstractCommand
     protected function getColumns()
     {
         $dbh = $this->getApplication()->getDbConnection();
-        $columns = array();
+        $columns = [];
         $name = $this->getOption('table');
 
         $q = $dbh->prepare("DESCRIBE $name");
@@ -235,10 +235,10 @@ class ModelCommand extends Command\AbstractCommand
         foreach ($q->fetchAll(\PDO::FETCH_ASSOC) as $column) {
             $type = preg_replace("/\(.*/s", "", $column["Type"]);
 
-            $columns[] = array(
+            $columns[] = [
                 "name" => $column["Field"],
                 "type" => $type
-            );
+            ];
         };
 
         return $columns;

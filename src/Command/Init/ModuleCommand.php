@@ -111,7 +111,7 @@ class ModuleCommand extends Command\AbstractCommand
      * @param $path
      * @param array $subfolders
      */
-    protected function addSubFolders($path, array $subfolders = array())
+    protected function addSubFolders($path, array $subfolders = [])
     {
         if (!$this->getFs()->exists($path)) {
             $this->getFs()->mkdir($path);
