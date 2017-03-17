@@ -14,7 +14,6 @@ use \Symfony\Component\Console\Command\Command;
  * @author Pavel Machekhin
  * @created 2013-12-07 01:21
  */
-
 class ApplicationTest extends TestCase
 {
     /**

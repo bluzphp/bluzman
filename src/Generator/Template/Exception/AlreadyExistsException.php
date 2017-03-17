@@ -12,4 +12,6 @@ namespace Bluzman\Generator\Template\Exception;
  * @created  4/06/13 01:21 AM
  */
 
-class AlreadyExistsException extends \RuntimeException {}
+class AlreadyExistsException extends \RuntimeException
+{
+}

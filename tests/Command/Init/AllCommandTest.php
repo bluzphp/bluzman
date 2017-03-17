@@ -17,7 +17,6 @@ use Mockery as m;
  * @author Pavel Machekhin
  * @created 2014-01-05 00:10
  */
-
 class AllCommandTest extends TestCase
 {
     protected $projectName;
@@ -146,11 +145,13 @@ class AllCommandTest extends TestCase
         $this->getApplication()->setConfig($configMock);
 
         $commandTester = new CommandTester($commandMock);
-        $commandTester->execute([
-            'command' => $commandMock->getName(),
-            '--name' => $this->projectName,
-            '--path' => $this->workingPath
-        ]);
+        $commandTester->execute(
+            [
+                'command' => $commandMock->getName(),
+                '--name' => $this->projectName,
+                '--path' => $this->workingPath
+            ]
+        );
 
         $display = $commandTester->getDisplay();
 

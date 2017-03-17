@@ -14,7 +14,6 @@ use \Mockery as m;
  * @author Pavel Machekhin
  * @created 2013-12-07 01:56
  */
-
 class ConfigTest extends TestCase
 {
     /**
@@ -80,7 +79,7 @@ class ConfigTest extends TestCase
     }
 
     /**
-     * @depends testConfigCreate
+     * @depends      testConfigCreate
      * @dataProvider foobarOptions
      */
     public function testConfigRead($data)

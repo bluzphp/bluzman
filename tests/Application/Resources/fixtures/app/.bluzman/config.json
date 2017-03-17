@@ -1,5 +1,5 @@
 {
-    "foo": "bar",
-    "environment": "dev",
-    "bar": "foo"
+  "foo": "bar",
+  "environment": "dev",
+  "bar": "foo"
 }

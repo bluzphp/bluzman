@@ -18,7 +18,6 @@ use Symfony\Component\Filesystem\Filesystem;
  * @author Pavel Machekhin
  * @created 2014-07-10 15:04
  */
-
 class ControllerCommandTest extends AbstractCommandTest
 {
     /**
@@ -67,11 +66,13 @@ class ControllerCommandTest extends AbstractCommandTest
         $this->getApplication()->addCommands([$command]);
 
         $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'command' => $command->getName(),
-            '--name' => $this->name,
-            '--module' => $this->module
-        ]);
+        $commandTester->execute(
+            [
+                'command' => $command->getName(),
+                '--name' => $this->name,
+                '--module' => $this->module
+            ]
+        );
 
         // check that all went well
         $this->assertTrue($command->verify());
@@ -84,7 +85,7 @@ class ControllerCommandTest extends AbstractCommandTest
 //        $this->assertFileEquals()
         $this->assertFileExists(
             $this->modulePath . DS . 'controllers'
-                . DS . $this->name . '.php'
+            . DS . $this->name . '.php'
         );
     }
 }

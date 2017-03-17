@@ -18,7 +18,6 @@ use Symfony\Component\Filesystem\Filesystem;
  * @author Alexandr Kvasenko
  * @created 2015-03-30 13:33
  */
-
 class ModelCommandTest extends AbstractCommandTest
 {
     /**
@@ -69,7 +68,7 @@ class ModelCommandTest extends AbstractCommandTest
     public function testCorrectWorkflow($columns, $primaryKey, $rowTemplatePath, $tableTemplatePath)
     {
         $container = new \Mockery\Container;
-        $templateRow =$container->mock('\Bluzman\Generator\Template\RowTemplate')
+        $templateRow = $container->mock('\Bluzman\Generator\Template\RowTemplate')
             ->shouldDeferMissing()
             ->shouldAllowMockingProtectedMethods();
         $templateRow->shouldReceive('getDefaultTemplateData')
@@ -77,7 +76,7 @@ class ModelCommandTest extends AbstractCommandTest
             ->andReturn($this->dataForTemplate)
             ->getMock();
 
-        $templateTable =$container->mock('\Bluzman\Generator\Template\TableTemplate')
+        $templateTable = $container->mock('\Bluzman\Generator\Template\TableTemplate')
             ->shouldDeferMissing()
             ->shouldAllowMockingProtectedMethods();
         $templateTable->shouldReceive('getDefaultTemplateData')
@@ -109,11 +108,13 @@ class ModelCommandTest extends AbstractCommandTest
 
         $commandTester = new CommandTester($command);
 
-        $commandTester->execute([
-            'command' => $command->getName(),
-            '--name' => $this->name,
-            '--table' => $this->table
-        ]);
+        $commandTester->execute(
+            [
+                'command' => $command->getName(),
+                '--name' => $this->name,
+                '--table' => $this->table
+            ]
+        );
 
         // check that all went well
         $this->assertTrue($command->verify());
@@ -143,7 +144,7 @@ class ModelCommandTest extends AbstractCommandTest
                     ['name' => 'name', 'type' => 'string'],
                     ['name' => 'desc', 'type' => 'string'],
                 ],
-                'primaryKey' =>  ['id'],
+                'primaryKey' => ['id'],
                 'result-row-template-path' => __DIR__ . DS
                     . '..' . DS . '..' . DS
                     . 'Generator' . DS
@@ -185,7 +186,8 @@ class ModelCommandTest extends AbstractCommandTest
 
         $commandTester->execute(
             ['command' => $command->getName(), '--name' => 'tes t', '--table' => $this->table],
-            ['interactive' => false]);
+            ['interactive' => false]
+        );
         $this->assertEquals($this->getExpectedException(), 'InputException');
     }
 }

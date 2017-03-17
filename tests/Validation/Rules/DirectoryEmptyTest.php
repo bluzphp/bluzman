@@ -12,7 +12,6 @@ use Bluzman\Validation\Rules\DirectoryEmpty;
  * @author Pavel Machekhin
  * @created 2014-01-04 00:52
  */
-
 class DirectoryEmptyTest extends \PHPUnit_Framework_TestCase
 {
     protected $emptyDir;

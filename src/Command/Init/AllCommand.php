@@ -28,7 +28,6 @@ use Symfony\Component\Process\Process;
  * @author   Pavel Machekhin
  * @created  2013-03-20 17:45
  */
-
 class AllCommand extends Command\AbstractCommand
 {
     /**
@@ -165,10 +164,12 @@ class AllCommand extends Command\AbstractCommand
         chdir($bluzmanDirectory . DS . '..');
 
         // generate bluzman config
-        $this->getApplication()->getConfig()->putOptions([
-            'name' => $name,
-            'version' => $this->getApplication()->getVersion()
-        ]);
+        $this->getApplication()->getConfig()->putOptions(
+            [
+                'name' => $name,
+                'version' => $this->getApplication()->getVersion()
+            ]
+        );
 
         return $this;
     }

@@ -5,7 +5,6 @@
  */
 
 /**
-
  */
 
 namespace Bluzman\Command;
@@ -119,18 +118,24 @@ abstract class AbstractCommand extends Console\Command\Command
     /**
      * Adds an option.
      *
-     * @param string  $name        The option name
-     * @param string  $shortcut    The shortcut (can be null)
-     * @param integer $mode        The option mode: One of the InputOption::VALUE_* constants
-     * @param string  $description A description text
-     * @param mixed   $default     The default value (must be null for InputOption::VALUE_REQUIRED or InputOption::VALUE_NONE)
+     * @param string $name The option name
+     * @param string $shortcut The shortcut (can be null)
+     * @param integer $mode The option mode: One of the InputOption::VALUE_* constants
+     * @param string $description A description text
+     * @param mixed $default The default value (must be null for InputOption::VALUE_REQUIRED or InputOption::VALUE_NONE)
      *
      * @return Command The current instance
      *
      * @api
      */
-    public function addOption($name, $shortcut = null, $mode = null, $description = '', $default = null, $validator = null)
-    {
+    public function addOption(
+        $name,
+        $shortcut = null,
+        $mode = null,
+        $description = '',
+        $default = null,
+        $validator = null
+    ) {
         $option = new InputOption($name, $shortcut, $mode, $description, $default);
 
         if ($validator instanceof \Respect\Validation\Validator) {
@@ -145,10 +150,10 @@ abstract class AbstractCommand extends Console\Command\Command
     /**
      * Adds an argument.
      *
-     * @param string  $name        The argument name
-     * @param int     $mode        The argument mode: InputArgument::REQUIRED or InputArgument::OPTIONAL
-     * @param string  $description A description text
-     * @param mixed   $default     The default value (for InputArgument::OPTIONAL mode only)
+     * @param string $name The argument name
+     * @param int $mode The argument mode: InputArgument::REQUIRED or InputArgument::OPTIONAL
+     * @param string $description A description text
+     * @param mixed $default The default value (for InputArgument::OPTIONAL mode only)
      *
      * @return Command The current instance
      *
@@ -217,7 +222,9 @@ abstract class AbstractCommand extends Console\Command\Command
 
             // ask user enter a valid option value
             $input = $this->getInput();
-            $question = new Question($this->question("Please enter the " . trim(strtolower($defOption->getDescription()), ' .')));
+            $question = new Question(
+                $this->question("Please enter the " . trim(strtolower($defOption->getDescription()), ' .'))
+            );
             $question->setValidator(
                 function ($value) use ($name, $output, $helper, $defOption) {
                     $defOption->validate($value);
@@ -268,7 +275,9 @@ abstract class AbstractCommand extends Console\Command\Command
 
             // ask user enter a valid option value
             $input = $this->getInput();
-            $question = new Question($this->question("Please enter the " . trim(strtolower($defArgument->getDescription()), ' .')));
+            $question = new Question(
+                $this->question("Please enter the " . trim(strtolower($defArgument->getDescription()), ' .'))
+            );
             $question->setValidator(
                 function ($value) use ($name, $output, $helper, $defArgument) {
                     $defArgument->validate($value);
@@ -291,8 +300,8 @@ abstract class AbstractCommand extends Console\Command\Command
     }
 
     /**
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
+     * @param  \Symfony\Component\Console\Input\InputInterface $input
+     * @param  \Symfony\Component\Console\Output\OutputInterface $output
      * @return integer
      */
     final public function run(InputInterface $input, OutputInterface $output)
@@ -357,7 +366,11 @@ abstract class AbstractCommand extends Console\Command\Command
     public function callForContribute()
     {
         $this->getOutput()->writeln('');
-        $this->getOutput()->writeln($this->error(" This command is not implemented yet. Don't be indifferent - you can contribute! https://github.com/bashmach/bluzman. "));
+        $this->getOutput()->writeln(
+            $this->error(
+                " This command is not implemented yet. Don't be indifferent - you can contribute! https://github.com/bashmach/bluzman. "
+            )
+        );
         $this->getOutput()->writeln('');
     }
 

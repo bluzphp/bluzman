@@ -24,7 +24,6 @@ use Symfony\Component\Process\Process;
  * @author   Pavel Machekhin
  * @created  2013-05-24 19:23
  */
-
 class StartCommand extends AbstractCommand
 {
     /**
@@ -92,7 +91,9 @@ class StartCommand extends AbstractCommand
         $this->setPort($this->getInput()->getOption('port'));
         $this->setEnvironment($this->getInput()->getOption('env'));
 
-        $this->getOutput()->writeln($this->info('Running "server:start" command ... [' . $this->getEnvironment() . ']'));
+        $this->getOutput()->writeln(
+            $this->info('Running "server:start" command ... [' . $this->getEnvironment() . ']')
+        );
 
         $this->startServer();
     }
@@ -167,7 +168,9 @@ class StartCommand extends AbstractCommand
 
         $pattern = 'php -S ' . $this->getAddress();
 
-        return trim(shell_exec('ps aux | grep "'.$pattern.'" | grep -v grep  | grep -v BLUZ_ENV | awk \'{print $2}\''));
+        return trim(
+            shell_exec('ps aux | grep "' . $pattern . '" | grep -v grep  | grep -v BLUZ_ENV | awk \'{print $2}\'')
+        );
     }
 
     /**
@@ -187,15 +190,18 @@ class StartCommand extends AbstractCommand
 
             $processId = $this->getProcessId();
 
-            $this->getApplication()->getConfig()->setOption('server', [
-                'pid' => $processId,
-                'address' => $address = 'http://' . $this->getAddress()
-            ]);
+            $this->getApplication()->getConfig()->setOption(
+                'server',
+                [
+                    'pid' => $processId,
+                    'address' => $address = 'http://' . $this->getAddress()
+                ]
+            );
 
             $this->getOutput()->writeln($this->info('Server has been started at ' . $address));
         } else {
 
-            while($process instanceof Process) {
+            while ($process instanceof Process) {
                 if (!$process->isStarted()) {
                     $process->start();
 

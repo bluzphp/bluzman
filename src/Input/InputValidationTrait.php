@@ -11,11 +11,10 @@ use Respect\Validation;
 /**
  * @package Bluzman\Input
  */
-
 trait InputValidationTrait
 {
     protected $messages = [
-        'alnum'        => '{{name}} must contain only letters and digits',
+        'alnum' => '{{name}} must contain only letters and digits',
         'noWhitespace' => '{{name}} cannot contain spaces'
     ];
 

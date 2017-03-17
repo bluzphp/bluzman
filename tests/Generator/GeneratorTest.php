@@ -18,15 +18,16 @@ use Mockery as m;
  * @author Pavel Machekhin
  * @created 2014-08-10 13:36
  */
-
 class GeneratorTest extends TestCase
 {
     public function testGetTemplateData()
     {
         $template = new DummyTemplate();
-        $template->setTemplateData([
-            'variable' => 'bar'
-        ]);
+        $template->setTemplateData(
+            [
+                'variable' => 'bar'
+            ]
+        );
 
         $generator = new Generator($template);
         $generator->setAbsolutePath(__DIR__ . DS . 'fixtures');

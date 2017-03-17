@@ -19,7 +19,6 @@ use Symfony\Component\Filesystem\Filesystem;
  * @author Pavel Machekhin
  * @created 2014-07-10 15:04
  */
-
 class ModuleCommandTest extends AbstractCommandTest
 {
     /**
@@ -54,10 +53,12 @@ class ModuleCommandTest extends AbstractCommandTest
         $this->getApplication()->addCommands([$command]);
 
         $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'command' => $command->getName(),
-            '--name' => $this->moduleName
-        ]);
+        $commandTester->execute(
+            [
+                'command' => $command->getName(),
+                '--name' => $this->moduleName
+            ]
+        );
 
         // check that all needed folders were created
         $this->assertTrue($command->verify($command->getInput(), $command->getOutput()));

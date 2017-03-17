@@ -5,6 +5,7 @@
  */
 
 namespace Bluzman\Tests\Generator;
+
 use Bluzman\Generator\Template\AbstractTemplate;
 
 /**
@@ -16,7 +17,6 @@ use Bluzman\Generator\Template\AbstractTemplate;
  * @author   Pavel Machekhin
  * @created  2014-08-10 13:40
  */
-
 class DummyTemplate extends AbstractTemplate
 {
     protected $templatePath = 'views/dummy.html';

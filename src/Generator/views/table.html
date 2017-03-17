@@ -1,33 +1,33 @@
 <?="<?php"?>
 
 /**
- * @namespace
- */
+* @namespace
+*/
 namespace Application\<?=$name . "\n"?>;
 
 /**
- * Table
- *
- * @category Application
- * @package  <?=$name . "\n"?>
- *
- * @author   <?=$author . "\n"?>
- * @created  <?=$date . "\n"?>
- */
+* Table
+*
+* @category Application
+* @package  <?=$name . "\n"?>
+*
+* @author   <?=$author . "\n"?>
+* @created  <?=$date . "\n"?>
+*/
 class Table extends \Bluz\Db\Table
 {
-    /**
-     * Table
-     *
-     * @var string
-     */
-    protected $table = '<?=$table?>';
+/**
+* Table
+*
+* @var string
+*/
+protected $table = '<?=$table?>';
 
-    protected $rowClass = '\Application\<?=$name?>\Row';
+protected $rowClass = '\Application\<?=$name?>\Row';
 
-    /**
-     * Primary key(s)
-     * @var array
-     */
-    protected $primary = array(<?=$primaryKey?>);
+/**
+* Primary key(s)
+* @var array
+*/
+protected $primary = array(<?=$primaryKey?>);
 }

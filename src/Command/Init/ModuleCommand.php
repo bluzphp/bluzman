@@ -26,7 +26,6 @@ use Symfony\Component\Filesystem\Filesystem;
  * @author   Pavel Machekhin
  * @created  2013-04-05 21:57
  */
-
 class ModuleCommand extends Command\AbstractCommand
 {
     /**
@@ -150,8 +149,8 @@ class ModuleCommand extends Command\AbstractCommand
         $paths = [
             $modulesPath,
             $modulesPath . DS . $input->getOption('name'),
-            $modulesPath . DS . $input->getOption('name') .  DS . 'controllers',
-            $modulesPath . DS . $input->getOption('name') .  DS . 'views'
+            $modulesPath . DS . $input->getOption('name') . DS . 'controllers',
+            $modulesPath . DS . $input->getOption('name') . DS . 'views'
         ];
 
         foreach ($paths as $path) {

@@ -11,7 +11,6 @@ use Symfony\Component\Finder\Finder;
 /**
  * @package Bluzman\Validation\Rules
  */
-
 class DirectoryEmpty extends \Respect\Validation\Rules\AbstractRule
 {
     public function directoryEmpty($input)

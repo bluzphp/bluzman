@@ -64,15 +64,15 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
         );
 
         return array(array('')) + array_map(
-            function ($directory) {
-                if (!is_dir($directory)) {
-                    mkdir($directory, 0766, true);
-                }
+                function ($directory) {
+                    if (!is_dir($directory)) {
+                        mkdir($directory, 0766, true);
+                    }
 
-                return array(realpath($directory));
-            },
-            $directories
-        );
+                    return array(realpath($directory));
+                },
+                $directories
+            );
     }
 
     public function providerForInvalidDirectory()

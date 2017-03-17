@@ -190,10 +190,10 @@ class Config
         $path = $this->getApplication()->getWorkingPath();
 
         //Init Bluz config
-        defined('DEBUG') ? : define('DEBUG', true);
-        defined('PATH_APPLICATION') ? : define('PATH_APPLICATION', $path . DS . 'application');
-        defined('PATH_PUBLIC') ? : define('PATH_PUBLIC', $path . DS . 'public');
-        defined('PATH_DATA') ? : define('PATH_DATA', $path . DS . 'data');
+        defined('DEBUG') ?: define('DEBUG', true);
+        defined('PATH_APPLICATION') ?: define('PATH_APPLICATION', $path . DS . 'application');
+        defined('PATH_PUBLIC') ?: define('PATH_PUBLIC', $path . DS . 'public');
+        defined('PATH_DATA') ?: define('PATH_DATA', $path . DS . 'data');
 
         $config = new \Bluz\Config\Config();
         $config->setPath(PATH_APPLICATION);

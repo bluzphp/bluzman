@@ -22,8 +22,7 @@ use Symfony\Component\Filesystem\Filesystem;
  * @author   Pavel Machekhin
  * @created  2013-03-28 16:24
  */
-
-class Generator 
+class Generator
 {
     /**
      * @var AbstractTemplate

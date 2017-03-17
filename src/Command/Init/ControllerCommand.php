@@ -25,7 +25,6 @@ use Symfony\Component\Filesystem\Filesystem;
  * @author   Pavel Machekhin
  * @created  2013-03-28 13:58
  */
-
 class ControllerCommand extends Command\AbstractCommand
 {
     /**
@@ -92,8 +91,10 @@ class ControllerCommand extends Command\AbstractCommand
 
                 $this->generate()->verify();
 
-                $output->writeln("Controller \"" . $this->info($this->getOption('name')) . "\"" .
-                    " has been successfully created in the module \"" . $this->info($this->getOption('module')) . "\".");
+                $output->writeln(
+                    "Controller \"" . $this->info($this->getOption('name')) . "\"" .
+                    " has been successfully created in the module \"" . $this->info($this->getOption('module')) . "\"."
+                );
             }
         } catch (\Bluzman\Input\InputException $e) {
             $output->writeln("<error>ERROR: {$e->getMessage()}</error>\n");
@@ -129,12 +130,12 @@ class ControllerCommand extends Command\AbstractCommand
     protected function getFilePath()
     {
         return $this->getApplication()->getWorkingPath()
-        . DS . 'application'
-        . DS . 'modules'
-        . DS . $this->getOption('module')
-        . DS . 'controllers'
-        . DS . $this->getOption('name')
-        . '.php';
+            . DS . 'application'
+            . DS . 'modules'
+            . DS . $this->getOption('module')
+            . DS . 'controllers'
+            . DS . $this->getOption('name')
+            . '.php';
     }
 
     /**
@@ -144,12 +145,12 @@ class ControllerCommand extends Command\AbstractCommand
     protected function getViewPath()
     {
         return $this->getApplication()->getWorkingPath()
-        . DS . 'application'
-        . DS . 'modules'
-        . DS . $this->getOption('module')
-        . DS . 'views'
-        . DS . $this->getOption('name')
-        . '.phtml';
+            . DS . 'application'
+            . DS . 'modules'
+            . DS . $this->getOption('module')
+            . DS . 'views'
+            . DS . $this->getOption('name')
+            . '.phtml';
     }
 
     /**

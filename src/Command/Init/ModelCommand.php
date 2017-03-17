@@ -29,7 +29,6 @@ use Symfony\Component\Console\Question\Question;
  * @author   Alexandr Kvasenko
  * @created  2013-03-28 13:59
  */
-
 class ModelCommand extends Command\AbstractCommand
 {
     /**
@@ -89,13 +88,17 @@ class ModelCommand extends Command\AbstractCommand
 
             $this->generate()->verify();
 
-            $output->writeln("Model \"" . $this->info($this->getOption('name')) . "\"" .
-                " has been successfully created in the model \"" . $this->info($this->getOption('name')) . "\".");
+            $output->writeln(
+                "Model \"" . $this->info($this->getOption('name')) . "\"" .
+                " has been successfully created in the model \"" . $this->info($this->getOption('name')) . "\"."
+            );
         } catch (InputException $e) {
             $output->writeln("<error>ERROR: {$e->getMessage()}</error>\n");
             $this->generate()->verify();
-            $output->writeln("Model \"" . $this->info($this->getOption('name')) . "\"" .
-                " has been successfully created in the model \"" . $this->info($this->getOption('name')) . "\".");
+            $output->writeln(
+                "Model \"" . $this->info($this->getOption('name')) . "\"" .
+                " has been successfully created in the model \"" . $this->info($this->getOption('name')) . "\"."
+            );
         }
     }
 
@@ -112,7 +115,8 @@ class ModelCommand extends Command\AbstractCommand
             $helper = $this->getHelperSet()->get("question");
             $question = new ConfirmationQuestion(
                 "\n<question>Model " . $modelName . " would be overwritten. y/N?:</question>\n> ",
-                false);
+                false
+            );
 
             if (!$helper->ask($input, $output, $question)) {
                 return $this;
@@ -124,7 +128,7 @@ class ModelCommand extends Command\AbstractCommand
 
         // generate table
         $template = $this->getObjTemplate('TableTemplate');
-        $template->setFilePath($this->getFilePath() .'Table.php');
+        $template->setFilePath($this->getFilePath() . 'Table.php');
         $data = [
             'name' => ucfirst($this->getOption('name')),
             'table' => $this->getOption('table'),
@@ -138,7 +142,7 @@ class ModelCommand extends Command\AbstractCommand
 
         // generate row
         $template = $this->getObjTemplate('RowTemplate');
-        $template->setFilePath($this->getFilePath() .'Row.php');
+        $template->setFilePath($this->getFilePath() . 'Row.php');
         unset($data);
         $data = [
             'name' => ucfirst($this->getOption('name')),
@@ -176,8 +180,8 @@ class ModelCommand extends Command\AbstractCommand
         $paths = [
             $modelPath,
             $modelPath . DS . $this->getOption('name'),
-            $modelPath . DS . $this->getOption('name') .  DS . 'Table.php',
-            $modelPath . DS . $this->getOption('name') .  DS . 'Row.php'
+            $modelPath . DS . $this->getOption('name') . DS . 'Table.php',
+            $modelPath . DS . $this->getOption('name') . DS . 'Row.php'
         ];
 
         foreach ($paths as $path) {

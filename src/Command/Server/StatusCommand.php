@@ -25,7 +25,6 @@ use Symfony\Component\Process\Process;
  * @author   Pavel Machekhin
  * @created  2013-06-17 14:52
  */
-
 class StatusCommand extends AbstractCommand
 {
     /**

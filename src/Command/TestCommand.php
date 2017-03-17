@@ -23,7 +23,6 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  * @author   Pavel Machekhin
  * @created  2013-03-28 14:03
  */
-
 class TestCommand extends AbstractCommand
 {
     /**

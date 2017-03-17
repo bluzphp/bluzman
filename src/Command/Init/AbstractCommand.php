@@ -22,7 +22,6 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  * @author   Pavel Machekhin
  * @created  2013-03-20 18:05
  */
-
 abstract class AbstractCommand extends Console\Command\Command
 {
     /**

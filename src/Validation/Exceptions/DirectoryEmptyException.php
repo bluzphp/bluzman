@@ -12,7 +12,6 @@ use Respect\Validation\Exceptions\ValidationException;
  * @author  Pavel Machekhin
  * @created 2014-01-04 00:35
  */
-
 class DirectoryEmptyException extends ValidationException
 {
     public static $defaultTemplates = array(
