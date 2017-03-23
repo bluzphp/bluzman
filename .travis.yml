@@ -9,6 +9,8 @@ install:
 script:
   # Code style
   - php vendor/bin/phpcs ./src --standard=PSR1,PSR2 --encoding=utf-8
+  # PHPUnit
+  - php vendor/bin/phpunit
 notifications:
   email: false
   webhooks:
