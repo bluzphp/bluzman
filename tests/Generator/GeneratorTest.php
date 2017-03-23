@@ -32,8 +32,8 @@ class GeneratorTest extends TestCase
         $generator = new Generator($template);
         $generator->setAbsolutePath(__DIR__ . DS . 'fixtures');
 
-        $this->assertEmpty($generator->getTemplate()->getDefaultTemplateData());
-        $this->assertNotEmpty($generator->getTemplate()->getTemplateData());
+        self::assertEmpty($generator->getTemplate()->getDefaultTemplateData());
+        self::assertNotEmpty($generator->getTemplate()->getTemplateData());
     }
 
     /**
@@ -62,14 +62,14 @@ class GeneratorTest extends TestCase
         $generator = new Generator($template);
         $generator->setAbsolutePath(__DIR__ . DS . 'fixtures');
 
-        $this->assertEquals(
+        self::assertEquals(
             $templateOptions['stub'],
             $generator->getCompiledTemplate()
         );
 
         $generator->make();
 
-        $this->assertFileExists($filePath);
+        self::assertFileExists($filePath);
     }
 
     /**

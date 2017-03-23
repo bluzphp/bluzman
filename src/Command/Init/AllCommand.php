@@ -6,11 +6,12 @@
 
 namespace Bluzman\Command\Init;
 
+use Bluz\Validator\Validator as v;
 use Bluzman\Input;
 use Bluzman\Command;
-use Bluzman\Validation\Rules\DirectoryEmpty;
-use Respect;
-use Respect\Validation\Validator as v;
+use Bluzman\Validator\Rule\Directory;
+use Bluzman\Validator\Rule\DirectoryEmpty;
+use Bluzman\Validator\Rule\Writable;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -58,7 +59,7 @@ class AllCommand extends Command\AbstractCommand
                 InputOption::VALUE_OPTIONAL,
                 'Name of new project',
                 null,
-                v::alnum('_-')->noWhitespace()
+                v::alphaNumeric('_-')->noWhitespace()
             ],
             [
                 'path',
@@ -66,7 +67,7 @@ class AllCommand extends Command\AbstractCommand
                 InputOption::VALUE_OPTIONAL,
                 'Project root path',
                 null,
-                v::directory()->writable()
+                v::alphaNumeric('_-/')
             ]
         ];
     }
@@ -79,6 +80,7 @@ class AllCommand extends Command\AbstractCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     * @return int|null|void
      * @throws \RuntimeException
      * @throws \Exception
      */
@@ -106,6 +108,16 @@ class AllCommand extends Command\AbstractCommand
 
         $this->getOutput()->writeln('Cloning skeleton project...');
 
+        $validator = new Directory();
+        if (!$validator->validate($path)) {
+            throw new Input\InputException('"' . $path . '" must be directory.');
+        }
+
+        $validator = new Writable();
+        if (!$validator->validate($path)) {
+            throw new Input\InputException('"' . $path . '" must be writable.');
+        }
+
         chdir($path);
 
         $projectPath = realpath($path) . DS . $name;
@@ -117,11 +129,12 @@ class AllCommand extends Command\AbstractCommand
             }
         }
 
-        //@todo Use symfony process
+        // @todo Use symfony process
         // create skeleton project
         $process = new Process(sprintf($this->getCmdPattern(), $name));
         $process->setTimeout(1600);
         $process->run();
+
         chdir($projectPath);
 
         return $this;

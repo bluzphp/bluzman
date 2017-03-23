@@ -6,13 +6,13 @@
 
 namespace Bluzman\Command\Init;
 
+use Bluz\Validator\Validator as v;
 use Bluzman\Command;
 use Bluzman\Generator;
 use Bluzman\Input\InputException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Respect\Validation\Validator as v;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -67,14 +67,29 @@ class ControllerCommand extends Command\AbstractCommand
     protected function getOptions()
     {
         return [
-            ['module', null, InputOption::VALUE_OPTIONAL, ' name of module.', null, v::alnum('-')->noWhitespace()],
-            ['name', null, InputOption::VALUE_OPTIONAL, ' name of new controller.', null, v::alnum('-')->noWhitespace()]
+            [
+                'module',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                ' name of module.',
+                null,
+                v::alphaNumeric('-')->noWhitespace()
+            ],
+            [
+                'name',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                ' name of new controller.',
+                null,
+                v::alphaNumeric('-')->noWhitespace()
+            ]
         ];
     }
 
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     * @return int|null|void
      * @throws InputException
      */
     protected function execute(InputInterface $input, OutputInterface $output)

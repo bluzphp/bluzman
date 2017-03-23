@@ -4,9 +4,9 @@
  * @link https://github.com/bluzphp/bluzman
  */
 
-namespace Bluzman\Tests\Validation\Rules;
+namespace Bluzman\Tests\Validator\Rule;
 
-use Bluzman\Validation\Rules\DirectoryEmpty;
+use Bluzman\Validator\Rule\DirectoryEmpty;
 
 /**
  * @author Pavel Machekhin
@@ -26,22 +26,21 @@ class DirectoryEmptyTest extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-
     }
 
     public function testEmptyDirectory()
     {
         $v = new DirectoryEmpty();
 
-        $this->assertTrue($v->check($this->emptyDir));
+        self::assertTrue($v->validate($this->emptyDir));
     }
 
     /**
-     * @expectedException \Bluzman\Validation\Exceptions\DirectoryEmptyException
+     * @expectedException \Bluz\Validator\Exception\ValidatorException
      */
     public function testNotEmptyDirectory()
     {
         $v = new DirectoryEmpty();
-        $v->check($this->notEmptyDir);
+        $v->assert($this->notEmptyDir);
     }
 }

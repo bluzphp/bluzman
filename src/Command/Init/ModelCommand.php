@@ -6,15 +6,15 @@
 
 namespace Bluzman\Command\Init;
 
+use Bluz\Validator\Validator as v;
 use Bluzman\Command;
+use Bluzman\Input\InputException;
 use Bluzman\Generator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Respect\Validation\Validator as v;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Filesystem\Filesystem;
-use Bluzman\Input\InputException;
 
 /**
  * ModelCommand
@@ -69,14 +69,29 @@ class ModelCommand extends Command\AbstractCommand
     protected function getOptions()
     {
         return [
-            ['name', null, InputOption::VALUE_OPTIONAL, ' name of model.', null, v::alnum('-')->noWhitespace()],
-            ['table', null, InputOption::VALUE_OPTIONAL, ' name of table.', null, v::alnum('-')->noWhitespace()]
+            [
+                'name',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                ' name of model.',
+                null,
+                v::alphaNumeric('-')->noWhitespace()
+            ],
+            [
+                'table',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                ' name of table.',
+                null,
+                v::alphaNumeric('-')->noWhitespace()
+            ]
         ];
     }
 
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     * @return int|null|void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

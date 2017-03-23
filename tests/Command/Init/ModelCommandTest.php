@@ -117,22 +117,22 @@ class ModelCommandTest extends AbstractCommandTest
         );
 
         // check that all went well
-        $this->assertTrue($command->verify());
+        self::assertTrue($command->verify());
 
         $display = $commandTester->getDisplay();
 
         // check all messages were displayed
-        $this->assertRegExp('/Running "init:model" command/', $display);
-        $this->assertRegExp('/has been successfully created/', $display);
+        self::assertRegExp('/Running "init:model" command/', $display);
+        self::assertRegExp('/has been successfully created/', $display);
 
         $table = $this->modelPath . DS . 'Table.php';
         $row = $this->modelPath . DS . 'Row.php';
 
-        $this->assertFileExists($table);
-        $this->assertEquals(md5_file($table), md5_file($tableTemplatePath));
+        self::assertFileExists($table);
+        self::assertEquals(md5_file($table), md5_file($tableTemplatePath));
 
-        $this->assertFileExists($row);
-        $this->assertEquals(md5_file($row), md5_file($rowTemplatePath));
+        self::assertFileExists($row);
+        self::assertEquals(md5_file($row), md5_file($rowTemplatePath));
     }
 
     public function dataProviderForCorrectWorkflow()
@@ -188,6 +188,6 @@ class ModelCommandTest extends AbstractCommandTest
             ['command' => $command->getName(), '--name' => 'tes t', '--table' => $this->table],
             ['interactive' => false]
         );
-        $this->assertEquals($this->getExpectedException(), 'InputException');
+        self::assertEquals($this->getExpectedException(), 'InputException');
     }
 }

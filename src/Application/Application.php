@@ -11,7 +11,6 @@ use Symfony\Component\Console;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use Composer;
 
 /**
  * @package Bluzman\Application
@@ -139,6 +138,8 @@ class Application extends Console\Application
      * @return \PDO
      * @throws \Bluz\Config\ConfigException
      * @todo Should we move it to Generator Model?
+     * @todo Switch to Bluz\Proxy\Config
+     * @todo Switch to Bluz\Proxy\Db
      */
     public function getDbConnection()
     {

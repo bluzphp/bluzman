@@ -6,9 +6,8 @@
 
 namespace Bluzman\Tests\Application;
 
-use Bluzman\Application\Config;
 use Bluzman\Tests\TestCase;
-use \Mockery as m;
+use Mockery\Container;
 
 /**
  * @author Pavel Machekhin
@@ -21,11 +20,16 @@ class ConfigTest extends TestCase
      */
     protected $config;
 
+    /**
+     * @var Container
+     */
+    protected $container;
+
     public function setUp()
     {
         parent::setUp();
 
-        $this->container = new \Mockery\Container;
+        $this->container = new Container;
 
         if (!is_dir($this->getBluzmanWorkingPath())) {
             mkdir($this->getBluzmanWorkingPath());
@@ -45,8 +49,8 @@ class ConfigTest extends TestCase
     public function testIsFixtureCorrect()
     {
         $this->config->setApplication($this->getMockWithFixturesWorkingPath());
-        $this->assertInstanceOf('\Bluzman\Application\Config', $this->config);
-        $this->assertNotEquals($this->config->getApplication()->getWorkingPath(), __DIR__);
+        self::assertInstanceOf('\Bluzman\Application\Config', $this->config);
+        self::assertNotEquals($this->config->getApplication()->getWorkingPath(), __DIR__);
     }
 
 
@@ -54,7 +58,7 @@ class ConfigTest extends TestCase
     {
         $this->config->setApplication($this->getMockWithFixturesWorkingPath());
 
-        $this->assertEquals($this->config->foo, 'bar');
+        self::assertEquals($this->config->foo, 'bar');
     }
 
     /**
@@ -67,7 +71,7 @@ class ConfigTest extends TestCase
         $this->config->setApplication($this->getMockWithTemporaryWorkingPath());
         $this->config->bar = 'foo';
 
-        $this->assertEquals('foo', $this->config->bar);
+        self::assertEquals('foo', $this->config->bar);
     }
 
     public function testConfigCreate()
@@ -75,7 +79,7 @@ class ConfigTest extends TestCase
         $this->config->setApplication($this->getMockWithTemporaryWorkingPath());
         $this->config->putOptions(['foo' => 'bar']);
 
-        $this->assertFileExists($this->getWorkingPath() . DS . '.bluzman' . DS . 'config.json');
+        self::assertFileExists($this->getWorkingPath() . DS . '.bluzman' . DS . 'config.json');
     }
 
     /**
@@ -89,7 +93,7 @@ class ConfigTest extends TestCase
 
         $options = $this->config->getOptions();
 
-        $this->assertEquals($data, $options);
+        self::assertEquals($data, $options);
     }
 
     /**
@@ -104,9 +108,9 @@ class ConfigTest extends TestCase
          */
         $bluzConfig = $this->config->getBluzConfig('dev');
 
-        $this->assertInstanceOf('\Bluz\Config\Config', $bluzConfig);
-        $this->assertEquals(['foo' => 'bar'], $bluzConfig->getData('foo'));
-        $this->assertEquals(['bar' => 'foo'], $bluzConfig->getData('bar'));
+        self::assertInstanceOf('\Bluz\Config\Config', $bluzConfig);
+        self::assertEquals(['foo' => 'bar'], $bluzConfig->getData('foo'));
+        self::assertEquals(['bar' => 'foo'], $bluzConfig->getData('bar'));
     }
 
     /**

@@ -4,7 +4,6 @@
  * @link https://github.com/bluzphp/bluzman
  */
 
-
 namespace Bluzman\Tests\Application;
 
 use Bluzman\Tests\TestCase;
@@ -21,7 +20,7 @@ class ApplicationTest extends TestCase
      */
     public function testIsFixtureCorrect()
     {
-        $this->assertInstanceOf('\Bluzman\Application\Application', $this->application);
+        self::assertInstanceOf('\Bluzman\Application\Application', $this->application);
     }
 
     /**
@@ -31,7 +30,7 @@ class ApplicationTest extends TestCase
     {
         $config = $this->application->getConfig();
 
-        $this->assertInstanceOf('\Bluzman\Application\Config', $config);
+        self::assertInstanceOf('\Bluzman\Application\Config', $config);
     }
 
     /**
@@ -39,8 +38,8 @@ class ApplicationTest extends TestCase
      */
     public function testCommandsAreAvailable()
     {
-        $this->assertTrue($this->application->get('server:start') instanceof Command);
-        $this->assertTrue($this->application->get('test') instanceof Command);
-        $this->assertTrue($this->application->get('init:all') instanceof Command);
+        self::assertTrue($this->application->get('server:start') instanceof Command);
+        self::assertTrue($this->application->get('test') instanceof Command);
+        self::assertTrue($this->application->get('init:all') instanceof Command);
     }
 }

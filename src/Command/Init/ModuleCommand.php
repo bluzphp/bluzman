@@ -7,8 +7,7 @@
 namespace Bluzman\Command\Init;
 
 use Bluzman\Command;
-use Respect;
-use Respect\Validation\Validator as v;
+use Bluz\Validator\Validator as v;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -66,13 +65,21 @@ class ModuleCommand extends Command\AbstractCommand
     protected function getOptions()
     {
         return [
-            ['name', null, InputOption::VALUE_OPTIONAL, 'The name of module.', null, v::alnum('_-')->noWhitespace()]
+            [
+                'name',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'The name of module.',
+                null,
+                v::alphaNumeric('_-')->noWhitespace()
+            ]
         ];
     }
 
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     * @return int|null|void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

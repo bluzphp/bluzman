@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
          stopOnFailure="false"
@@ -6,7 +5,7 @@
          verbose="true"
          bootstrap="./tests/bootstrap.php">
     <testsuites>
-        <testsuite name="Application Test Suite">
+        <testsuite name="Bluzman Test Suite">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>

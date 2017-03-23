@@ -30,6 +30,11 @@ class ControllerCommandTest extends AbstractCommandTest
      */
     protected $module;
 
+    /**
+     * @var string
+     */
+    protected $modulePath;
+
     public function setUp()
     {
         parent::setUp();
@@ -75,15 +80,14 @@ class ControllerCommandTest extends AbstractCommandTest
         );
 
         // check that all went well
-        $this->assertTrue($command->verify());
+        self::assertTrue($command->verify());
 
         $display = $commandTester->getDisplay();
 
         // check all messages were displayed
-        $this->assertRegExp('/Running "init:controller" command/', $display);
-        $this->assertRegExp('/has been successfully created/', $display);
-//        $this->assertFileEquals()
-        $this->assertFileExists(
+        self::assertRegExp('/Running "init:controller" command/', $display);
+        self::assertRegExp('/has been successfully created/', $display);
+        self::assertFileExists(
             $this->modulePath . DS . 'controllers'
             . DS . $this->name . '.php'
         );

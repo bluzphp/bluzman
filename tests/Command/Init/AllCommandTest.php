@@ -46,7 +46,6 @@ class AllCommandTest extends TestCase
 
     /**
      * @expectedException \Bluzman\Input\InputException
-     * @expectedExceptionMessage "test me now" must not contain whitespace
      */
     public function testNameOptionWithSpaces()
     {
@@ -63,7 +62,6 @@ class AllCommandTest extends TestCase
 
     /**
      * @expectedException \Bluzman\Input\InputException
-     * @expectedExceptionMessage "/root" must be writable
      */
     public function testNotWritablePathException()
     {
@@ -80,7 +78,6 @@ class AllCommandTest extends TestCase
 
     /**
      * @expectedException \Bluzman\Input\InputException
-     * @expectedExceptionMessage "/somepath" must be a directory
      */
     public function testNotExistsPathException()
     {
@@ -97,7 +94,6 @@ class AllCommandTest extends TestCase
 
     /**
      * @expectedException \Bluzman\Input\InputException
-     * @expectedExceptionMessage /test" must be empty
      */
     public function testNotEmptyPathException()
     {
@@ -138,8 +134,8 @@ class AllCommandTest extends TestCase
             ->andReturn(true)
             ->getMock();
 
-        $this->assertInstanceOf('\Bluzman\Command\Init\AllCommand', $commandMock);
-        $this->assertInstanceOf('\Bluzman\Application\Config', $configMock);
+        self::assertInstanceOf('\Bluzman\Command\Init\AllCommand', $commandMock);
+        self::assertInstanceOf('\Bluzman\Application\Config', $configMock);
 
         $this->getApplication()->addCommands([$commandMock]);
         $this->getApplication()->setConfig($configMock);
@@ -155,10 +151,10 @@ class AllCommandTest extends TestCase
 
         $display = $commandTester->getDisplay();
 
-        $this->assertRegExp('/Running "init:all" command/', $display);
-        $this->assertRegExp('/Cloning skeleton project/', $display);
-        $this->assertRegExp('/has been successfully initialized/', $display);
+        self::assertRegExp('/Running "init:all" command/', $display);
+        self::assertRegExp('/Cloning skeleton project/', $display);
+        self::assertRegExp('/has been successfully initialized/', $display);
 
-        $this->assertFileExists($this->workingPath . DS . $this->projectName . DS . '.bluzman');
+        self::assertFileExists($this->workingPath . DS . $this->projectName . DS . '.bluzman');
     }
 }

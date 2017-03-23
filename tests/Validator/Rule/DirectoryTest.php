@@ -4,31 +4,63 @@
  * @link https://github.com/bluzphp/bluzman
  */
 
-namespace Respect\Validation\Rules;
+namespace Bluzman\Tests\Validator\Rule;
+
+use Bluzman\Validator\Rule\Directory;
 
 class DirectoryTest extends \PHPUnit_Framework_TestCase
 {
+    protected $directories = [];
+
+    public function setUp()
+    {
+        $this->directories = [
+            sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'dataprovider-1',
+            sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'dataprovider-2',
+            sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'dataprovider-3',
+            sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'dataprovider-4',
+            sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'dataprovider-5',
+        ];
+
+//        var_dump($this->directories);
+
+        foreach ($this->directories as $directory) {
+            if (!is_dir($directory)) {
+                mkdir($directory, 0766, true);
+            }
+        }
+    }
+
+    public function tearDown()
+    {
+        foreach ($this->directories as $directory) {
+            if (is_dir($directory)) {
+                rmdir($directory);
+            }
+        }
+    }
+
     /**
      * @dataProvider providerForValidDirectory
      */
     public function testValidDirectoryShouldReturnTrue($input)
     {
         $rule = new Directory();
-        $this->assertTrue($rule->__invoke($input));
-        $this->assertTrue($rule->assert($input));
-        $this->assertTrue($rule->check($input));
+        self::assertTrue($rule->__invoke($input));
+        self::assertTrue($rule->assert($input));
+        self::assertTrue($rule->validate($input));
     }
 
     /**
      * @dataProvider providerForInvalidDirectory
-     * @expectedException Respect\Validation\Exceptions\DirectoryException
+     * @expectedException \Bluz\Validator\Exception\ValidatorException
      */
     public function testInvalidDirectoryShouldThrowException($input)
     {
         $rule = new Directory();
-        $this->assertFalse($rule->__invoke($input));
-        $this->assertFalse($rule->assert($input));
-        $this->assertFalse($rule->check($input));
+        self::assertFalse($rule->__invoke($input));
+        self::assertFalse($rule->assert($input));
+        self::assertFalse($rule->validate($input));
     }
 
     /**
@@ -37,7 +69,7 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
     public function testDirectoryWithObjects($object, $valid)
     {
         $rule = new Directory();
-        $this->assertEquals($valid, $rule->validate($object));
+        self::assertEquals($valid, $rule->validate($object));
     }
 
     public function providerForDirectoryObjects()
@@ -55,24 +87,7 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
 
     public function providerForValidDirectory()
     {
-        $directories = array(
-            sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'dataprovider-1',
-            sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'dataprovider-2',
-            sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'dataprovider-3',
-            sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'dataprovider-4',
-            sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'dataprovider-5',
-        );
-
-        return array(array('')) + array_map(
-                function ($directory) {
-                    if (!is_dir($directory)) {
-                        mkdir($directory, 0766, true);
-                    }
-
-                    return array(realpath($directory));
-                },
-                $directories
-            );
+        return $this->directories;
     }
 
     public function providerForInvalidDirectory()
@@ -89,4 +104,3 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 }
-

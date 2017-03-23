@@ -6,8 +6,8 @@
 
 namespace Bluzman\Input;
 
-use Respect\Validation;
-use Respect\Validation\Exceptions\ValidationException;
+use Bluz\Validator\Validator;
+use Bluz\Validator\Exception\ValidatorException;
 
 /**
  * @package Bluzman\Input
@@ -20,20 +20,20 @@ trait InputValidationTrait
     ];
 
     /**
-     * @var \Respect\Validation\Validator
+     * @var Validator
      */
     protected $validator;
 
     /**
-     * @param \Respect\Validation\Validator $validator
+     * @param Validator $validator
      */
-    public function setValidator(Validation\Validator $validator)
+    public function setValidator(Validator $validator)
     {
         $this->validator = $validator;
     }
 
     /**
-     * @return \Respect\Validation\Validator
+     * @return Validator
      */
     public function getValidator()
     {
@@ -49,14 +49,14 @@ trait InputValidationTrait
     {
         try {
             if ($this->getValidator()) {
-                $this->getValidator()->check($value);
+                return $this->getValidator()->assert($value);
             }
 
             return true;
-        } catch (ValidationException $e) {
-            throw new InputException($e->getMainMessage());
+        } catch (ValidatorException $e) {
+//            var_dump($e->getMessage());
+//            var_dump($e->getCode());
+            throw new InputException($e->getMessage());
         }
-
-        return false;
     }
 }

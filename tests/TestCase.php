@@ -6,11 +6,10 @@
 
 namespace Bluzman\Tests;
 
-use Nelmio\Alice\Loader\Yaml;
-use Mockery as m;
 use Faker;
+use Mockery;
+use Nelmio\Alice\Fixtures\Loader;
 use Symfony\Component\Filesystem\Filesystem;
-
 
 /**
  * @author Pavel Machekhin
@@ -97,7 +96,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         // generate unique working path for future use in commands
         $this->setWorkingPath(PATH_TMP . DS . $this->getFaker()->uuid);
 
-        $loader = new Yaml();
+        $loader = new Loader();
         $fixture = $loader->load(__DIR__ . DS . 'Resources' . DS . 'fixtures' . DS . 'application.yml');
 
         $this->setApplication(current($fixture));
@@ -125,7 +124,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        m::close();
+        Mockery::close();
 
         if (is_dir($this->getWorkingPath())) {
             $this->getFs()->remove($this->getWorkingPath());

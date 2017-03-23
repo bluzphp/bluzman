@@ -10,7 +10,7 @@ namespace Application\<?=$name?>;
  *
  * @package  Application\<?=$name . "\n"?>
  *
-<?=$properties . "\n"?>
+<?=$properties?>
  *
  * @author   <?=$author . "\n"?>
  * @created  <?=$date . "\n"?>
@@ -20,9 +20,9 @@ class Row extends \Bluz\Db\Row
     /**
      * @return void
      */
-     public function beforeInsert()
-     {
-     }
+    public function beforeInsert()
+    {
+    }
 
     /**
      * @return void

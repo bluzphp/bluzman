@@ -6,17 +6,16 @@
 
 namespace Bluzman\Command;
 
+use Bluz\Validator\Validator;
 use Bluzman\Application\Application;
 use Bluzman\Input\InputException;
 use Bluzman\Input\InputOption;
 use Bluzman\Input\InputArgument;
-use Respect\Validation\Validator;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use Respect;
 
 /**
  * Class AbstractCommand
@@ -302,8 +301,8 @@ abstract class AbstractCommand extends Console\Command\Command
     }
 
     /**
-     * @param  \Symfony\Component\Console\Input\InputInterface $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
+     * @param  InputInterface $input
+     * @param  OutputInterface $output
      * @return integer
      */
     final public function run(InputInterface $input, OutputInterface $output)

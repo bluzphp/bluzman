@@ -61,12 +61,12 @@ class ModuleCommandTest extends AbstractCommandTest
         );
 
         // check that all needed folders were created
-        $this->assertTrue($command->verify($command->getInput(), $command->getOutput()));
+        self::assertTrue($command->verify($command->getInput(), $command->getOutput()));
 
         $display = $commandTester->getDisplay();
 
         // check all messages were displayed
-        $this->assertRegExp('/Running "init:module" command/', $display);
-        $this->assertRegExp('/has been successfully created/', $display);
+        self::assertRegExp('/Running "init:module" command/', $display);
+        self::assertRegExp('/has been successfully created/', $display);
     }
 }
