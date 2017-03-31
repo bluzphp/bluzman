@@ -4,9 +4,9 @@
  * @link https://github.com/bluzphp/bluzman
  */
 
-namespace Bluzman\Tests\Command\Init;
+namespace Bluzman\Tests\Command\Generate;
 
-use Bluzman\Command\Init;
+use Bluzman\Command\Generate;
 
 use Faker;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -23,7 +23,7 @@ class ModelCommandTest extends AbstractCommandTest
     /**
      * @var string
      */
-    protected $name = 'Users';
+    protected $model = 'Users';
 
     /**
      * @var string
@@ -57,7 +57,7 @@ class ModelCommandTest extends AbstractCommandTest
         $this->modelPath = $this->workingPath
             . DS . 'application'
             . DS . 'models'
-            . DS . $this->name;
+            . DS . $this->model;
     }
 
     /**
@@ -84,7 +84,7 @@ class ModelCommandTest extends AbstractCommandTest
             ->andReturn($this->dataForTemplate)
             ->getMock();
 
-        $command = $container->mock('\Bluzman\Command\Init\ModelCommand[getPrimaryKey, getColumns, getObjTemplate]')
+        $command = $container->mock('\Bluzman\Command\Generate\ModelCommand[getPrimaryKey, getColumns, getTemplate]')
             ->shouldDeferMissing()
             ->shouldAllowMockingProtectedMethods();
         $command->shouldReceive('getPrimaryKey')
@@ -95,11 +95,11 @@ class ModelCommandTest extends AbstractCommandTest
             ->atLeast(1)
             ->andReturn($columns)
             ->getMock();
-        $command->shouldReceive('getObjTemplate')
+        $command->shouldReceive('getTemplate')
             ->withArgs(['RowTemplate'])
             ->andReturn($templateRow)
             ->getMock();
-        $command->shouldReceive('getObjTemplate')
+        $command->shouldReceive('getTemplate')
             ->withArgs(['TableTemplate'])
             ->andReturn($templateTable)
             ->getMock();
@@ -111,18 +111,18 @@ class ModelCommandTest extends AbstractCommandTest
         $commandTester->execute(
             [
                 'command' => $command->getName(),
-                '--name' => $this->name,
-                '--table' => $this->table
+                'model' => $this->model,
+                'table' => $this->table
             ]
         );
 
         // check that all went well
-        self::assertTrue($command->verify());
+        $command->verify($commandTester->getInput(), $commandTester->getOutput());
 
         $display = $commandTester->getDisplay();
 
         // check all messages were displayed
-        self::assertRegExp('/Running "init:model" command/', $display);
+        self::assertRegExp('/Running generate:model command/', $display);
         self::assertRegExp('/has been successfully created/', $display);
 
         $table = $this->modelPath . DS . 'Table.php';
@@ -168,7 +168,7 @@ class ModelCommandTest extends AbstractCommandTest
     public function testValidateOptionException()
     {
         $container = new \Mockery\Container;
-        $command = $container->mock('\Bluzman\Command\Init\ModelCommand[getPrimaryKey, getColumns]')
+        $command = $container->mock('\Bluzman\Command\Generate\ModelCommand[getPrimaryKey, getColumns]')
             ->shouldDeferMissing()
             ->shouldAllowMockingProtectedMethods();
         $command->shouldReceive('getPrimaryKey')
@@ -185,9 +185,11 @@ class ModelCommandTest extends AbstractCommandTest
         $commandTester = new CommandTester($command);
 
         $commandTester->execute(
-            ['command' => $command->getName(), '--name' => 'tes t', '--table' => $this->table],
-            ['interactive' => false]
+            [
+                'command' => $command->getName(),
+                'model' => '%%%%',
+                'table' => '%%%%'
+            ]
         );
-        self::assertEquals($this->getExpectedException(), 'InputException');
     }
 }

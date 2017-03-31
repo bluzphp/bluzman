@@ -4,9 +4,8 @@
  * @link https://github.com/bluzphp/bluzman
  */
 
-namespace Bluzman\Tests\Command\Init;
+namespace Bluzman\Tests\Command\Generate;
 
-use Bluzman\Application\Application;
 use Bluzman\Tests\TestCase;
 
 /**

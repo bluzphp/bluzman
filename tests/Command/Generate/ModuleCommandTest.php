@@ -4,9 +4,9 @@
  * @link https://github.com/bluzphp/bluzman
  */
 
-namespace Bluzman\Tests\Command\Init;
+namespace Bluzman\Tests\Command\Generate;
 
-use Bluzman\Command\Init;
+use Bluzman\Command\Generate;
 
 use Faker;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -14,26 +14,17 @@ use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
 
+
 /**
  * @author Pavel Machekhin
  * @created 2014-07-10 15:04
  */
-class ControllerCommandTest extends AbstractCommandTest
+class ModuleCommandTest extends AbstractCommandTest
 {
     /**
      * @var string
      */
-    protected $name;
-
-    /**
-     * @var string
-     */
-    protected $module;
-
-    /**
-     * @var string
-     */
-    protected $modulePath;
+    protected $moduleName;
 
     public function setUp()
     {
@@ -52,21 +43,12 @@ class ControllerCommandTest extends AbstractCommandTest
 
         $this->setApplication($app);
 
-        $this->module = $this->getFaker()->lexify();
-        $this->name = $this->getFaker()->lexify();
-        $this->modulePath = $this->workingPath
-            . DS . 'application'
-            . DS . 'modules'
-            . DS . $this->module;
-
-        $this->getFs()->mkdir(
-            $this->modulePath . DS . 'controllers'
-        );
+        $this->moduleName = $this->getFaker()->lexify();
     }
 
     public function testCorrectWorkflow()
     {
-        $command = new Init\ControllerCommand();
+        $command = new Generate\ModuleCommand();
 
         $this->getApplication()->addCommands([$command]);
 
@@ -74,22 +56,19 @@ class ControllerCommandTest extends AbstractCommandTest
         $commandTester->execute(
             [
                 'command' => $command->getName(),
-                '--name' => $this->name,
-                '--module' => $this->module
+                'module' => $this->moduleName
             ]
         );
 
-        // check that all went well
-        self::assertTrue($command->verify());
+        // check that all needed folders were created
+        $command->verify(
+            $commandTester->getInput(), $commandTester->getOutput()
+        );
 
         $display = $commandTester->getDisplay();
 
         // check all messages were displayed
-        self::assertRegExp('/Running "init:controller" command/', $display);
+        self::assertRegExp('/Running generate:module command/', $display);
         self::assertRegExp('/has been successfully created/', $display);
-        self::assertFileExists(
-            $this->modulePath . DS . 'controllers'
-            . DS . $this->name . '.php'
-        );
     }
 }

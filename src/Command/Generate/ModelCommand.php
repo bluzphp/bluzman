@@ -105,7 +105,7 @@ class ModelCommand extends AbstractGenerateCommand
         }
 
         // generate table
-        $template = new Generator\Template\TableTemplate();
+        $template = $this->getTemplate('TableTemplate');
         $template->setFilePath($this->getApplication()->getModelPath($modelName) .DS. 'Table.php');
         $template->setTemplateData([
             'name' => $modelName,
@@ -117,7 +117,7 @@ class ModelCommand extends AbstractGenerateCommand
         $generator->make();
 
         // generate row
-        $template = new Generator\Template\RowTemplate();
+        $template = $this->getTemplate('RowTemplate');
         $template->setFilePath($this->getApplication()->getModelPath($modelName) .DS. 'Row.php');
         $template->setTemplateData([
             'name' => $modelName,
@@ -190,5 +190,15 @@ class ModelCommand extends AbstractGenerateCommand
             ',
             [$connect['name'], $table]
         );
+    }
+
+    /**
+     * @param  string $classname
+     * @return mixed
+     */
+    protected function getTemplate($classname)
+    {
+        $class = '\\Bluzman\\Generator\\Template\\' . $classname;
+        return new $class;
     }
 }
