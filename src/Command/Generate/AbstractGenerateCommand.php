@@ -14,13 +14,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * AbstractCommand
  *
- * @category Command
- * @package  Bluzman
- *
- * @author   Pavel Machekhin
- * @created  2013-03-20 18:05
+ * @package  Bluzman\Command
  */
-abstract class AbstractCommand extends \Bluzman\Command\AbstractCommand
+abstract class AbstractGenerateCommand extends \Bluzman\Command\AbstractCommand
 {
     /**
      * @param InputInterface $input

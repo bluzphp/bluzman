@@ -14,13 +14,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * ControllerCommand
  *
- * @category Command
- * @package  Bluzman
- *
- * @author   Pavel Machekhin
- * @created  2013-03-28 13:58
+ * @package  Bluzman\Command
  */
-class ControllerCommand extends AbstractCommand
+class ControllerCommand extends AbstractGenerateCommand
 {
     /**
      * Command configuration
@@ -34,7 +30,7 @@ class ControllerCommand extends AbstractCommand
             ->setDescription('Generate a new controller')
             // the full command description shown when running the command with
             // the "--help" option
-            ->setHelp('This command allows you to generate a controller files')
+            ->setHelp('This command allows you to generate controller files')
         ;
 
         $this
@@ -46,8 +42,7 @@ class ControllerCommand extends AbstractCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int|null|void
-     * @throws InputException
+     * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -66,28 +61,33 @@ class ControllerCommand extends AbstractCommand
             $controller = $input->getArgument('controller');
             $this->getDefinition()->getArgument('controller')->validate($controller);
 
+            // generate directories and files
+            $this->generate($input, $output);
 
-            $this->generate($module, $controller)
-                ->verify($input, $output);
+            // verify it
+            $this->verify($input, $output);
 
             $this->write(
-                "Controller <info>{$input->getArgument('controller')}</info> has been successfully created " .
-                "in the module <info>{$input->getArgument('controller')}</info>."
+                "Controller <info>{$controller}</info> has been successfully created " .
+                "in the module <info>{$controller}</info>."
             );
-        } catch (InputException $e) {
+        } catch (\Exception $e) {
             $this->error("ERROR: {$e->getMessage()}");
         }
     }
 
     /**
-     * @param  string $module
-     * @param  string $controller
+     * @param InputInterface $input
+     * @param OutputInterface $output
      * @return $this
      */
-    protected function generate($module, $controller)
+    protected function generate(InputInterface $input, OutputInterface $output)
     {
+        $module = $input->getArgument('module');
+        $controller = $input->getArgument('controller');
+
         $template = new Generator\Template\ControllerTemplate;
-        $template->setFilePath($this->getFilePath($module, $controller));
+        $template->setFilePath($this->getControllerPath($module, $controller));
 
         $generator = new Generator\Generator($template);
         $generator->make();
@@ -106,7 +106,7 @@ class ControllerCommand extends AbstractCommand
      * @return string
      * @throws InputException
      */
-    protected function getFilePath($module, $controller)
+    protected function getControllerPath($module, $controller)
     {
         return $this->getApplication()->getModulePath($module)
             . DS . 'controllers'
@@ -127,7 +127,10 @@ class ControllerCommand extends AbstractCommand
     }
 
     /**
-     * Verify command result
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return void
+     * @throws \Bluzman\Generator\GeneratorException
      */
     public function verify(InputInterface $input, OutputInterface $output)
     {
@@ -144,10 +147,8 @@ class ControllerCommand extends AbstractCommand
 
         foreach ($paths as $path) {
             if (!$this->getFs()->exists($path)) {
-                return false;
+                throw new Generator\GeneratorException("File or directory `$path` is not exists");
             }
         }
-
-        return true;
     }
 }

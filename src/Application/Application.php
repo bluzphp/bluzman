@@ -6,6 +6,8 @@
 
 namespace Bluzman\Application;
 
+use Bluz\Config\Config;
+use Bluz\Proxy;
 use Bluzman\Command;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -29,6 +31,22 @@ class Application extends Console\Application
         parent::__construct($name, $version);
 
         $this->registerCommands();
+    }
+
+    /**
+     * init
+     *
+     * @return void
+     */
+    public function init()
+    {
+        // Init Bluz config
+        $config = new Config();
+        $config->setPath(PATH_APPLICATION);
+        $config->setEnvironment(BLUZ_ENV);
+        $config->init();
+
+        Proxy\Config::setInstance($config);
     }
 
     /**
@@ -62,12 +80,7 @@ class Application extends Console\Application
                 new Command\MagicCommand,
                 new Command\Generate\ModuleCommand,
                 new Command\Generate\ControllerCommand,
-
-
-//                new Command\Init\AllCommand,
-//                new Command\Init\ModuleCommand,
-//                new Command\Init\ControllerCommand,
-//                new Command\Init\ModelCommand,
+                new Command\Generate\ModelCommand,
 //                new Command\Server\StartCommand,
 //                new Command\Server\StopCommand,
 //                new Command\Server\StatusCommand,
@@ -83,16 +96,6 @@ class Application extends Console\Application
     public function getWorkingPath()
     {
         return getcwd();
-    }
-
-    /**
-     * Returns the path to the .bluzman directory
-     *
-     * @return string
-     */
-    public function getBluzmanPath()
-    {
-        return $this->getWorkingPath() . DS . '.bluzman';
     }
 
     /**

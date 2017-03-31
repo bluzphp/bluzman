@@ -6,19 +6,16 @@
 
 namespace Bluzman\Command\Generate;
 
+use Bluzman\Generator\GeneratorException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generate Module Structure
  *
- * @category Command
- * @package  Bluzman
- *
- * @author   Pavel Machekhin
- * @created  2013-04-05 21:57
+ * @package  Bluzman\Command
  */
-class ModuleCommand extends AbstractCommand
+class ModuleCommand extends AbstractGenerateCommand
 {
     /**
      * Command configuration
@@ -41,32 +38,39 @@ class ModuleCommand extends AbstractCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int|null|void
+     * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->write("Running <info>generate:module</info> command");
+        try {
+            $this->write("Running <info>generate:module</info> command");
 
-        $moduleName = $input->getArgument('module');
+            $module = $input->getArgument('module');
 
-        $argument = $this->getDefinition()->getArgument('module');
-        $argument->validate($moduleName);
+            $argument = $this->getDefinition()->getArgument('module');
+            $argument->validate($module);
 
-        // create main folder and subfolders
-        $this->initModuleStructure($moduleName);
+            // create main folder and subfolders
+            $this->generate($input, $output);
 
-        $this->verify($input, $output);
+            // verify it
+            $this->verify($input, $output);
 
-        $this->write("Module <info>$moduleName</info> has been successfully created.");
+            $this->write("Module <info>$module</info> has been successfully created.");
+        } catch (\Exception $e) {
+            $this->error("ERROR: {$e->getMessage()}");
+        }
     }
 
     /**
-     * @param $name
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return void
      */
-    protected function initModuleStructure($name)
+    protected function generate(InputInterface $input, OutputInterface $output)
     {
         $this->addSubFolders(
-            $this->getApplication()->getModulePath($name),
+            $this->getApplication()->getModulePath($input->getArgument('module')),
             [
                 'controllers',
                 'views'
@@ -93,11 +97,10 @@ class ModuleCommand extends AbstractCommand
     }
 
     /**
-     * @todo Revert if not verified
-     *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return bool
+     * @return void
+     * @throws GeneratorException
      */
     public function verify(InputInterface $input, OutputInterface $output)
     {
@@ -111,10 +114,8 @@ class ModuleCommand extends AbstractCommand
 
         foreach ($paths as $path) {
             if (!$this->getFs()->exists($path)) {
-                return false;
+                throw new GeneratorException("Directory `$path` is not exists");
             }
         }
-
-        return true;
     }
 }

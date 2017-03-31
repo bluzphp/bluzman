@@ -13,8 +13,7 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * Generator
  *
- * @category Generator
- * @package  Bluzman
+ * @package  Bluzman\Generator
  *
  * @author   Pavel Machekhin
  * @created  2013-03-28 16:24

@@ -5,8 +5,12 @@
  * @link https://github.com/bluzphp/bluzman
  */
 
-if (php_sapi_name() != 'cli') {
+if (php_sapi_name() !== 'cli') {
     die('Must run from command line');
+}
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+    // sorry windows lovers
+    throw new \Exception();
 }
 
 // Root path, double level up
@@ -14,9 +18,13 @@ if (php_sapi_name() != 'cli') {
 $root = realpath(dirname(dirname(dirname(dirname(__DIR__)))));
 
 // Definitions
-define('PATH_ROOT', $root);
-define('PATH_VENDOR', $root . '/vendor');
 define('DS', DIRECTORY_SEPARATOR);
+
+defined('PATH_ROOT') ? : define('PATH_ROOT', $root);
+defined('PATH_APPLICATION') ? : define('PATH_APPLICATION', $root . '/application');
+defined('PATH_DATA') ? : define('PATH_DATA', $root . '/data');
+defined('PATH_VENDOR') ? : define('PATH_VENDOR', $root . '/vendor');
+defined('PATH_PUBLIC') ? : define('PATH_PUBLIC', $root . '/public');
 
 // Environment
 $env = getenv('BLUZ_ENV') ?: 'dev';
@@ -27,14 +35,10 @@ ini_set('display_errors', 1);
 ini_set('log_errors', 0);
 ini_set('html_errors', 0);
 
-if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-    // sorry windows lovers
-    throw new \Exception();
-}
 
 // Get project info from composer.json
 $composerConfig = json_decode(
-    file_get_contents(PATH_ROOT . DIRECTORY_SEPARATOR . 'composer.json'),
+    file_get_contents(PATH_VENDOR .DS. 'bluzphp' .DS. 'bluzman' .DS. 'composer.json'),
     true
 );
 require_once PATH_VENDOR . '/autoload.php';
@@ -43,4 +47,5 @@ $application = new Bluzman\Application\Application(
     $composerConfig['description'],
     $composerConfig['version']
 );
+$application->init();
 $application->run();
