@@ -17,7 +17,7 @@ class ArrayHelper
     /**
      * Get an item from an array using "dot" notation.
      *
-     * Thanks to Illuminate. http://laravel.com/api/source-function-array_get.html#226-251
+     * Thanks to Illuminate. https://laravel.com/docs/5.4/helpers#method-array-get
      *
      * @param  array $array
      * @param  string $key

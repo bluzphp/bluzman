@@ -17,21 +17,25 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @author   Pavel Machekhin
  * @created  2013-03-28 14:03
  */
-class TestCommand extends AbstractCommand
+class MagicCommand extends AbstractCommand
 {
     /**
-     * @var string
+     * Command configuration
      */
-    protected $name = 'test';
+    protected function configure()
+    {
+        $this
+            // the name of the command (the part after "bin/bluzman")
+            ->setName('i-need-magic')
+            // the short description shown while running "php bin/bluzman list"
+            ->setDescription('Magic is here')
+            // the full command description shown when running the command with
+            // the "--help" option
+            ->setHelp('This command allows you to contribute')
+        ;
+    }
 
     /**
-     * @var string
-     */
-    protected $description = 'Run application tests';
-
-    /**
-     * @todo
-     *
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int|null|void

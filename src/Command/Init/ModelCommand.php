@@ -139,7 +139,7 @@ class ModelCommand extends Command\AbstractCommand
         $columns = $this->getColumns($this->getOption('table'));
 
         // generate table
-        $template = $this->getObjTemplate('TableTemplate');
+        $template = '\\Bluzman\\Generator\\Template\\TableTemplate';
         $template->setFilePath($this->getFilePath() . 'Table.php');
         $data = [
             'name' => ucfirst($this->getOption('name')),
@@ -153,7 +153,7 @@ class ModelCommand extends Command\AbstractCommand
         $generator->make();
 
         // generate row
-        $template = $this->getObjTemplate('RowTemplate');
+        $template = '\\Bluzman\\Generator\\Template\\RowTemplate';
         $template->setFilePath($this->getFilePath() . 'Row.php');
         unset($data);
         $data = [

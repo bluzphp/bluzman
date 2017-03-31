@@ -21,34 +21,6 @@ use Symfony\Component\Console\Input\InputArgument;
 class Application extends Console\Application
 {
     /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * Connection to
-     *
-     * @var \PDO
-     */
-    protected $conn = null;
-
-    /**
-     * @param \Bluzman\Application\Config $config
-     */
-    public function setConfig($config)
-    {
-        $this->config = $config;
-    }
-
-    /**
-     * @return \Bluzman\Application\Config
-     */
-    public function getConfig()
-    {
-        return $this->config;
-    }
-
-    /**
      * @param string $name
      * @param string $version
      */
@@ -56,8 +28,51 @@ class Application extends Console\Application
     {
         parent::__construct($name, $version);
 
-        $this->setConfig(new Config($this));
         $this->registerCommands();
+    }
+
+    /**
+     * Removed some commands from default input definition.
+     *
+     * @return InputDefinition An InputDefinition instance
+     */
+    protected function getDefaultInputDefinition()
+    {
+        return new InputDefinition(
+            [
+                new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
+                new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The environment to be used.', 'dev'),
+                new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'),
+                new InputOption('--quiet', '-q', InputOption::VALUE_NONE, 'Do not output any message.'),
+                new InputOption('--verbose', '-v', InputOption::VALUE_NONE, 'Increase verbosity of messages.'),
+                new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this application version.')
+            ]
+        );
+    }
+
+    /**
+     * Register Bluzman commands
+     *
+     * @todo Find a way to do this automatically
+     */
+    protected function registerCommands()
+    {
+        $this->addCommands(
+            [
+                new Command\MagicCommand,
+                new Command\Generate\ModuleCommand,
+                new Command\Generate\ControllerCommand,
+
+
+//                new Command\Init\AllCommand,
+//                new Command\Init\ModuleCommand,
+//                new Command\Init\ControllerCommand,
+//                new Command\Init\ModelCommand,
+//                new Command\Server\StartCommand,
+//                new Command\Server\StopCommand,
+//                new Command\Server\StatusCommand,
+            ]
+        );
     }
 
     /**
@@ -81,100 +96,48 @@ class Application extends Console\Application
     }
 
     /**
-     * Removed some commands from default input definition.
+     * Get Module path
      *
-     * @return InputDefinition An InputDefinition instance
+     * @param  string $name
+     * @return string
      */
-    protected function getDefaultInputDefinition()
+    public function getModulePath($name)
     {
-        return new InputDefinition(
-            [
-                new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
-                new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The environment to be used.', 'dev'),
-                new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'),
-                new InputOption('--quiet', '-q', InputOption::VALUE_NONE, 'Do not output any message.'),
-                new InputOption('--verbose', '-v', InputOption::VALUE_NONE, 'Increase verbosity of messages.'),
-                new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this application version.')
-            ]
-        );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function getDefaultHelperSet()
-    {
-        $helperSet = parent::getDefaultHelperSet();
-
-        // register helpers
-
-        return $helperSet;
-    }
-
-    /**
-     * Register Bluzman commands
-     *
-     * @todo Find a way to do this automatically
-     */
-    protected function registerCommands()
-    {
-        $this->addCommands(
-            [
-                new Command\Server\StartCommand,
-                new Command\Server\StopCommand,
-                new Command\Server\StatusCommand,
-                new Command\TestCommand,
-                new Command\Init\AllCommand,
-                new Command\Init\ModuleCommand,
-                new Command\Init\ControllerCommand,
-                new Command\Init\ModelCommand
-            ]
-        );
-    }
-
-    /**
-     * Returns a \PDO connection of actual Bluz Skeleton application.
-     *
-     * @return \PDO
-     * @throws \Bluz\Config\ConfigException
-     * @todo Should we move it to Generator Model?
-     * @todo Switch to Bluz\Proxy\Config
-     * @todo Switch to Bluz\Proxy\Db
-     */
-    public function getDbConnection()
-    {
-        if ($this->conn === null) {
-            $conf = $this->getConfig()->getBluzConfig(BLUZ_ENV)->getData('db')['connect'];
-            $dsn = "$conf[type]:host=$conf[host];dbname=$conf[name]";
-            $this->conn = new \PDO($dsn, $conf['user'], $conf['pass']);
-        }
-        return $this->conn;
-    }
-
-    /**
-     * @param $moduleName
-     * @return bool
-     */
-    public function isModuleExists($moduleName)
-    {
-        $pathDir = $this->getWorkingPath() . DIRECTORY_SEPARATOR
+        return $this->getWorkingPath() . DIRECTORY_SEPARATOR
             . 'application' . DIRECTORY_SEPARATOR
             . 'modules' . DIRECTORY_SEPARATOR
-            . $moduleName;
-
-        return is_dir($pathDir);
+            . $name;
     }
 
     /**
-     * @param $modelName
-     * @return bool
+     * Get Model path
+     *
+     * @param  string $name
+     * @return string
      */
-    public function isModelExists($modelName)
+    public function getModelPath($name)
     {
-        $pathDir = $this->getWorkingPath() . DIRECTORY_SEPARATOR
+        return $this->getWorkingPath() . DIRECTORY_SEPARATOR
             . 'application' . DIRECTORY_SEPARATOR
             . 'models' . DIRECTORY_SEPARATOR
-            . $modelName;
-        return is_dir($pathDir);
+            . $name;
+    }
+
+    /**
+     * @param  string $name
+     * @return bool
+     */
+    public function isModuleExists($name)
+    {
+        return is_dir($this->getModulePath($name));
+    }
+
+    /**
+     * @param  string $name
+     * @return bool
+     */
+    public function isModelExists($name)
+    {
+        return is_dir($this->getModelPath($name));
     }
 }

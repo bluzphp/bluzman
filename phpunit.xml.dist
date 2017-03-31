@@ -3,7 +3,7 @@
          stopOnFailure="false"
          colors="true"
          verbose="true"
-         bootstrap="./tests/bootstrap.php">
+         bootstrap="./tests/_bootstrap.php">
     <testsuites>
         <testsuite name="Bluzman Test Suite">
             <directory>./tests/</directory>

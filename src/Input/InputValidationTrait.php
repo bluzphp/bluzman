@@ -14,11 +14,6 @@ use Bluz\Validator\Exception\ValidatorException;
  */
 trait InputValidationTrait
 {
-    protected $messages = [
-        'alnum' => '{{name}} must contain only letters and digits',
-        'noWhitespace' => '{{name}} cannot contain spaces'
-    ];
-
     /**
      * @var Validator
      */
@@ -47,15 +42,13 @@ trait InputValidationTrait
      */
     public function validate($value)
     {
-        try {
-            if ($this->getValidator()) {
-                return $this->getValidator()->assert($value);
-            }
-
+        if (!$this->getValidator()) {
             return true;
+        }
+
+        try {
+            return $this->getValidator()->assert($value);
         } catch (ValidatorException $e) {
-//            var_dump($e->getMessage());
-//            var_dump($e->getCode());
             throw new InputException($e->getMessage());
         }
     }

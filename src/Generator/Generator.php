@@ -8,7 +8,6 @@ namespace Bluzman\Generator;
 
 use Bluz\View\View;
 use Bluzman\Generator\Template\AbstractTemplate;
-use Bluzman\Generator\Template\DummyTemplate;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

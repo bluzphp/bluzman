@@ -6,40 +6,23 @@
 
 namespace Bluzman\Command;
 
-use Bluz\Validator\Validator;
 use Bluzman\Application\Application;
-use Bluzman\Input\InputException;
-use Bluzman\Input\InputOption;
-use Bluzman\Input\InputArgument;
 use Symfony\Component\Console;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class AbstractCommand
  * @package Bluzman\Command
+ *
+ * @method Application getApplication()
  *
  * @author Pavel Machekhin
  * @created 2013-11-28 15:47
  */
 abstract class AbstractCommand extends Console\Command\Command
 {
-    const MAX_ATTEMPTS = 1;
-
-    protected $validatorNamespace = 'Bluzman\Command\Validator\\';
-
-    /**
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @var string
-     */
-    protected $description;
-
     /**
      * @var InputInterface
      */
@@ -49,6 +32,11 @@ abstract class AbstractCommand extends Console\Command\Command
      * @var OutputInterface
      */
     protected $output;
+
+    /**
+     * @var Filesystem
+     */
+    protected $fs;
 
     /**
      * @param InputInterface $input
@@ -83,221 +71,22 @@ abstract class AbstractCommand extends Console\Command\Command
     }
 
     /**
-     * @return array
+     * @param \Symfony\Component\Filesystem\Filesystem $fs
      */
-    protected function getArguments()
+    public function setFs($fs)
     {
-        return [];
+        $this->fs = $fs;
     }
 
     /**
-     * @return array
+     * @return \Symfony\Component\Filesystem\Filesystem
      */
-    protected function getOptions()
+    public function getFs()
     {
-        return [];
-    }
-
-    /**
-     * Set the name and description of command from the properties.
-     * Add to the command the arguments and options which are defined in the inherited classes.
-     */
-    public function __construct()
-    {
-        parent::__construct($this->name);
-
-        $this->setDescription($this->description);
-
-        $this->registerArguments();
-        $this->registerOptions();
-    }
-
-    /**
-     * Adds an option.
-     *
-     * @param string $name The option name
-     * @param string $shortcut The shortcut (can be null)
-     * @param integer $mode The option mode: One of the InputOption::VALUE_* constants
-     * @param string $description A description text
-     * @param mixed $default The default value (must be null for InputOption::VALUE_REQUIRED or InputOption::VALUE_NONE)
-     *
-     * @param null $validator
-     * @return Command The current instance
-     *
-     * @api
-     */
-    public function addOption(
-        $name,
-        $shortcut = null,
-        $mode = null,
-        $description = '',
-        $default = null,
-        $validator = null
-    ) {
-        $option = new InputOption($name, $shortcut, $mode, $description, $default);
-
-        if ($validator instanceof Validator) {
-            $option->setValidator($validator);
+        if (!$this->fs) {
+            $this->fs = new Filesystem();
         }
-
-        $this->getDefinition()->addOption($option);
-
-        return $this;
-    }
-
-    /**
-     * Adds an argument.
-     *
-     * @param string $name The argument name
-     * @param int $mode The argument mode: InputArgument::REQUIRED or InputArgument::OPTIONAL
-     * @param string $description A description text
-     * @param mixed $default The default value (for InputArgument::OPTIONAL mode only)
-     *
-     * @param null $validator
-     * @return Command The current instance
-     *
-     * @api
-     */
-    public function addArgument($name, $mode = null, $description = '', $default = null, $validator = null)
-    {
-        $argument = new InputArgument($name, $mode, $description, $default);
-
-        if ($validator instanceof Validator) {
-            $argument->setValidator($validator);
-        }
-
-        $this->getDefinition()->addArgument($argument);
-
-        return $this;
-    }
-
-    /**
-     * Register arguments for the command.
-     */
-    final protected function registerArguments()
-    {
-        foreach ($this->getArguments() as $argumentParams) {
-            call_user_func_array([$this, 'addArgument'], $argumentParams);
-        }
-    }
-
-    /**
-     * Register options for the command.
-     */
-    final protected function registerOptions()
-    {
-        foreach ($this->getOptions() as $optionParams) {
-            call_user_func_array([$this, 'addOption'], $optionParams);
-        }
-    }
-
-    /**
-     * @param $name
-     * @return mixed
-     * @throws InputException
-     */
-    final public function getOption($name)
-    {
-        /**
-         * @var InputOption $defOption
-         */
-        $defOption = $this->getDefinition()->getOption($name);
-
-        $optionValue = $this->getInput()->getOption($name);
-
-        $isValid = is_null($optionValue) ? false : $defOption->validate($optionValue);
-
-        if (!$isValid) {
-            $output = $this->getOutput();
-
-            // interact
-            if (!$this->getInput()->isInteractive()) {
-                throw new InputException;
-            }
-
-            /**
-             * @var Console\Helper\DialogHelper $dialog
-             */
-            $helper = $this->getHelperSet()->get('question');
-
-            // ask user enter a valid option value
-            $input = $this->getInput();
-            $question = new Question(
-                $this->question("Please enter the " . trim(strtolower($defOption->getDescription()), ' .'))
-            );
-            $question->setValidator(
-                function ($value) use ($name, $output, $helper, $defOption) {
-                    $defOption->validate($value);
-
-                    $this->getInput()->setOption($name, $value);
-
-                    return $value;
-                }
-            );
-
-            return $helper->ask(
-                $input,
-                $output,
-                $question
-            );
-        } else {
-            return $optionValue;
-        }
-    }
-
-    /**
-     * @param $name
-     * @return mixed
-     * @throws InputException
-     */
-    final public function getArgument($name)
-    {
-        /**
-         * @var InputOption $defArgument
-         */
-        $defArgument = $this->getDefinition()->getArgument($name);
-
-        $argumentValue = $this->getInput()->getArgument($name);
-
-        $isValid = is_null($argumentValue) ? false : $defArgument->validate($argumentValue);
-
-        if (!$isValid) {
-            $output = $this->getOutput();
-
-            // interact
-            if (!$this->getInput()->isInteractive()) {
-                throw new InputException;
-            }
-
-            /**
-             * @var Console\Helper\DialogHelper $dialog
-             */
-            $helper = $this->getHelperSet()->get('question');
-
-            // ask user enter a valid option value
-            $input = $this->getInput();
-            $question = new Question(
-                $this->question("Please enter the " . trim(strtolower($defArgument->getDescription()), ' .'))
-            );
-            $question->setValidator(
-                function ($value) use ($name, $output, $helper, $defArgument) {
-                    $defArgument->validate($value);
-
-                    $this->getInput()->setArgument($name, $value);
-
-                    return $value;
-                }
-            );
-            $question->setMaxAttempts(self::MAX_ATTEMPTS);
-
-            return $helper->ask(
-                $input,
-                $output,
-                $question
-            );
-        } else {
-            return $argumentValue;
-        }
+        return $this->fs;
     }
 
     /**
@@ -314,51 +103,39 @@ abstract class AbstractCommand extends Console\Command\Command
     }
 
     /**
-     * Dummy progress bar
+     * @param $message
+     * @return void
      */
-    protected function showProgress()
+    public function write($message)
     {
-        $progress = $this->getHelperSet()->get('progress');
-
-        $progress->start($this->getOutput(), 50000);
-        $progress->setFormat('Progress: [%bar%] %percent%%');
-
-        // update every 500 iterations
-        $progress->setRedrawFrequency(500);
-
-        $i = 0;
-        while ($i++ < 50000) {
-            $progress->advance();
-        }
-
-        $progress->finish();
+        $this->getOutput()->writeln("\n$message\n");
     }
 
     /**
      * @param $message
-     * @return string
-     */
-    public function question($message)
-    {
-        return "<question>" . $message . ":</question> \n> ";
-    }
-
-    /**
-     * @param $message
-     * @return string
+     * @return void
      */
     public function info($message)
     {
-        return '<info>' . $message . '</info>';
+        $this->write("<info>$message</info>");
     }
 
     /**
      * @param $message
-     * @return string
+     * @return void
+     */
+    public function question($message)
+    {
+        $this->write("<question>$message</question>:");
+    }
+
+    /**
+     * @param $message
+     * @return void
      */
     public function error($message)
     {
-        return '<error>' . $message . '</error>';
+        $this->write("<error>$message</error>");
     }
 
     /**
@@ -366,27 +143,9 @@ abstract class AbstractCommand extends Console\Command\Command
      */
     public function callForContribute()
     {
-        $this->getOutput()->writeln('');
-        $this->getOutput()->writeln(
-            $this->error(
-                " This command is not implemented yet. Don't be indifferent - you can contribute!" .
-                " https://github.com/bluzphp/bluzman. "
-            )
+        $this->info(
+            ' This command is not implemented yet. Don\'t be indifferent - you can contribute!' .
+            ' https://github.com/bluzphp/bluzman. '
         );
-        $this->getOutput()->writeln('');
-    }
-
-    /**
-     * @return Application
-     */
-    public function getApplication()
-    {
-        return parent::getApplication();
-    }
-
-    protected function getObjTemplate($classname)
-    {
-        $class = '\Bluzman\Generator\Template\\' . $classname;
-        return new $class;
     }
 }
