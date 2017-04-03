@@ -29,10 +29,10 @@ class TableTemplate extends AbstractTemplate
     public function setTemplateData($templateData)
     {
         // Primary key can be empty in options list
+        $primaryKey = '';
+
         if (!empty($templateData['primaryKey'])) {
-            $primaryKey = '\'' . join('\',\'', $templateData['primaryKey']) . '\'';
-        } else {
-            $primaryKey = '';
+            $primaryKey = '\'' . implode('\',\'', $templateData['primaryKey']) . '\'';
         }
 
         $templateData['primaryKey'] = $primaryKey;

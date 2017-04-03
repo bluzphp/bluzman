@@ -108,7 +108,7 @@ abstract class AbstractCommand extends Console\Command\Command
      */
     public function write($message)
     {
-        $this->getOutput()->writeln("\n$message\n");
+        $this->getOutput()->writeln($message);
     }
 
     /**
@@ -118,6 +118,15 @@ abstract class AbstractCommand extends Console\Command\Command
     public function info($message)
     {
         $this->write("<info>$message</info>");
+    }
+
+    /**
+     * @param $message
+     * @return void
+     */
+    public function comment($message)
+    {
+        $this->write("<comment>$message</comment>");
     }
 
     /**

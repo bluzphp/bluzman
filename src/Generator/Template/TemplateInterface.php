@@ -17,5 +17,8 @@ namespace Bluzman\Generator\Template;
  */
 interface TemplateInterface
 {
+    /**
+     * @return mixed
+     */
     public function make();
 }

@@ -6,7 +6,10 @@
 
 namespace Bluzman\Command\Generate;
 
+use Bluz\Validator\Validator as v;
 use Bluzman\Generator\GeneratorException;
+use Bluzman\Input\InputArgument;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -33,6 +36,14 @@ class ModuleCommand extends AbstractGenerateCommand
         ;
 
         $this->addModuleArgument();
+
+        $controller = new InputArgument(
+            'controller',
+            InputArgument::OPTIONAL|InputArgument::IS_ARRAY,
+            'Controller name(s)'
+        );
+
+        $this->getDefinition()->addArgument($controller);
     }
 
     /**
@@ -57,6 +68,22 @@ class ModuleCommand extends AbstractGenerateCommand
             $this->verify($input, $output);
 
             $this->write("Module <info>$module</info> has been successfully created.");
+
+            // create controllers
+            $controllers = $input->getArgument('controller') ?? [];
+
+            $command = $this->getApplication()->find('generate:controller');
+
+            foreach ($controllers as $controller) {
+                $arguments = [
+                    'command' => 'generate:controller',
+                    'module' => $module,
+                    'controller' => $controller
+                ];
+                $greetInput = new ArrayInput($arguments);
+                $command->run($greetInput, $output);
+            }
+
         } catch (\Exception $e) {
             $this->error("ERROR: {$e->getMessage()}");
         }
@@ -90,9 +117,12 @@ class ModuleCommand extends AbstractGenerateCommand
 
         foreach ($subFolders as $subFolderName) {
             $subFolderPath = $path . DIRECTORY_SEPARATOR . $subFolderName;
-
-            $this->getFs()->mkdir($subFolderPath, 0755);
-            $this->getFs()->touch([$subFolderPath . DIRECTORY_SEPARATOR . '.keep']);
+            if ($this->getFs()->exists($subFolderPath)) {
+                $this->comment("Directory <info>$subFolderPath</info> already exists");
+            } else {
+                $this->getFs()->mkdir($subFolderPath, 0755);
+                $this->getFs()->touch([$subFolderPath . DIRECTORY_SEPARATOR . '.keep']);
+            }
         }
     }
 

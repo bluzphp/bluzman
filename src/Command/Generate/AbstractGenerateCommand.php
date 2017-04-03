@@ -49,7 +49,11 @@ abstract class AbstractGenerateCommand extends \Bluzman\Command\AbstractCommand
      */
     protected function addControllerArgument()
     {
-        $controller = new InputArgument('controller', InputArgument::REQUIRED, 'Controller name is required');
+        $controller = new InputArgument(
+            'controller',
+            InputArgument::REQUIRED,
+            'Controller name is required'
+        );
         $controller->setValidator(
             v::string()->alphaNumeric('-_')->noWhitespace()
         );

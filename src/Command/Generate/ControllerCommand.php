@@ -8,6 +8,7 @@ namespace Bluzman\Command\Generate;
 
 use Bluzman\Generator;
 use Bluzman\Input\InputException;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -53,9 +54,15 @@ class ControllerCommand extends AbstractGenerateCommand
             $this->getDefinition()->getArgument('module')->validate($module);
 
             if (!$this->getApplication()->isModuleExists($module)) {
-                throw new InputException(
-                    "Module $module is not exist, ".
-                    "run command <question>bluzman generate:module $module</question> before");
+                $command = $this->getApplication()->find('generate:module');
+
+                $arguments = [
+                    'command' => 'generate:module',
+                    'module' => $module
+                ];
+
+                $greetInput = new ArrayInput($arguments);
+                $command->run($greetInput, $output);
             }
 
             $controller = $input->getArgument('controller');
@@ -86,18 +93,28 @@ class ControllerCommand extends AbstractGenerateCommand
         $module = $input->getArgument('module');
         $controller = $input->getArgument('controller');
 
-        $template = new Generator\Template\ControllerTemplate;
-        $template->setFilePath($this->getControllerPath($module, $controller));
+        $controllerFile = $this->getControllerPath($module, $controller);
+        if (file_exists($controllerFile)) {
+            $this->comment("Controller file <info>$module/$controller</info> already exists");
+        } else {
+            $template = new Generator\Template\ControllerTemplate;
+            $template->setFilePath($controllerFile);
 
-        $generator = new Generator\Generator($template);
-        $generator->make();
+            $generator = new Generator\Generator($template);
+            $generator->make();
+        }
 
-        $template = new Generator\Template\ViewTemplate;
-        $template->setFilePath($this->getViewPath($module, $controller));
-        $template->setTemplateData(['name' => $controller]);
+        $viewFile = $this->getViewPath($module, $controller);
+        if (file_exists($viewFile)) {
+            $this->comment("View file <info>$module/$controller</info> already exists");
+        } else {
+            $template = new Generator\Template\ViewTemplate;
+            $template->setFilePath($viewFile);
+            $template->setTemplateData(['name' => $controller]);
 
-        $generator = new Generator\Generator($template);
-        $generator->make();
+            $generator = new Generator\Generator($template);
+            $generator->make();
+        }
 
         return $this;
     }
