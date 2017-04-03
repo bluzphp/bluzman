@@ -47,8 +47,12 @@ class StatusCommand extends AbstractServerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->info('Running "server:status" command');
         try {
-            $pid = $this->getProcessId($input->getOption('host'), $input->getOption('port')) ?: false;
+            $host = $input->getOption('host');
+            $port = $input->getOption('port');
+
+            $pid = $this->getProcessId($host, $port) ?: false;
 
             if (!$pid) {
                 throw new NotRunningException;
@@ -63,9 +67,9 @@ class StatusCommand extends AbstractServerCommand
                 throw new NotRunningException;
             }
 
-            $this->info("Server is running. PID is $pid");
+            $this->write("Server <info>$host:$port</info> is running. PID is <info>$pid</info>");
         } catch (NotRunningException $e) {
-            $this->info('Server is not running');
+            $this->comment('Server is not running');
         }
     }
 }

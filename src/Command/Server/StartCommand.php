@@ -65,7 +65,7 @@ class StartCommand extends AbstractServerCommand
             $publicDir
         );
 
-        $this->info("Server has been started at $host:$port");
+        $this->write("Server has been started at <info>$host:$port</info>");
 
         if ($input->getOption('background')) {
             $process->disableOutput();
@@ -73,7 +73,7 @@ class StartCommand extends AbstractServerCommand
 
             $processId = $this->getProcessId($input->getOption('host'), $input->getOption('port'));
 
-            $this->info("PID is $processId");
+            $this->write("PID is <info>$processId</info>");
         } else {
             while ($process instanceof Process) {
                 if (!$process->isStarted()) {

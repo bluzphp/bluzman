@@ -47,9 +47,12 @@ class StopCommand extends AbstractServerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->info('Running "server:stop" command ...');
+        $this->info('Running "server:stop" command');
 
-        $pid = $this->getProcessId($input->getOption('host'), $input->getOption('port')) ?: false;
+        $host = $input->getOption('host');
+        $port = $input->getOption('port');
+
+        $pid = $this->getProcessId($host, $port) ?: false;
 
         if (empty($pid)) {
             $this->comment('Server is not running');
@@ -59,6 +62,6 @@ class StopCommand extends AbstractServerCommand
         $process = new Process("kill -9 $pid");
         $process->run();
 
-        $this->info('Server stopped');
+        $this->write("Server <info>$host:$port</info> stopped");
     }
 }
