@@ -59,11 +59,17 @@ class Application extends Console\Application
         return new InputDefinition(
             [
                 new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
-                new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The environment to be used.', 'dev'),
-                new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'),
-                new InputOption('--quiet', '-q', InputOption::VALUE_NONE, 'Do not output any message.'),
-                new InputOption('--verbose', '-v', InputOption::VALUE_NONE, 'Increase verbosity of messages.'),
-                new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this application version.')
+                new InputOption(
+                    '--env',
+                    '-e',
+                    InputOption::VALUE_REQUIRED,
+                    'The environment to be used',
+                    getenv('BLUZ_ENV') ?: 'dev'
+                ),
+                new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message'),
+                new InputOption('--quiet', '-q', InputOption::VALUE_NONE, 'Do not output any message'),
+                new InputOption('--verbose', '-v', InputOption::VALUE_NONE, 'Increase verbosity of messages'),
+                new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this application version')
             ]
         );
     }
@@ -82,9 +88,9 @@ class Application extends Console\Application
                 new Command\Generate\ControllerCommand,
                 new Command\Generate\ModelCommand,
                 new Command\Generate\CrudCommand,
-//                new Command\Server\StartCommand,
-//                new Command\Server\StopCommand,
-//                new Command\Server\StatusCommand,
+                new Command\Server\StartCommand,
+                new Command\Server\StopCommand,
+                new Command\Server\StatusCommand,
             ]
         );
     }

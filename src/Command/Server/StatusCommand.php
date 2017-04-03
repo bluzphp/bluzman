@@ -6,7 +6,7 @@
 
 namespace Bluzman\Command\Server;
 
-use Bluzman\Command\AbstractCommand;
+use Bluzman\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
@@ -20,26 +20,24 @@ use Symfony\Component\Process\Process;
  * @author   Pavel Machekhin
  * @created  2013-06-17 14:52
  */
-class StatusCommand extends AbstractCommand
+class StatusCommand extends AbstractServerCommand
 {
     /**
-     * @var string
+     * Command configuration
      */
-    protected $name = 'server:status';
-
-    /**
-     * @var string
-     */
-    protected $description = 'Get the status of built-in PHP server.';
-
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
+    protected function configure()
     {
-        return [];
+        $this
+            // the name of the command (the part after "bin/bluzman")
+            ->setName('server:status')
+            // the short description shown while running "php bin/bluzman list"
+            ->setDescription('Get the status of built-in PHP server')
+            // the full command description shown when running the command with
+            // the "--help" option
+            ->setHelp('This command allows you to check built-in PHP server')
+        ;
+        $this->addOption('host', null, InputOption::VALUE_OPTIONAL, 'IP address of the server', '0.0.0.0');
+        $this->addOption('port', null, InputOption::VALUE_OPTIONAL, 'Port of the server', '8000');
     }
 
     /**
@@ -49,41 +47,25 @@ class StatusCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /**
-         * @var $config \Bluzman\Application\Config
-         */
-        $config = $this->getApplication()->getConfig()->server;
-
         try {
-            $this->checkIsRunning();
-            $this->getOutput()->writeln($this->info('Server is running at ' . $config['address']));
+            $pid = $this->getProcessId($input->getOption('host'), $input->getOption('port')) ?: false;
+
+            if (!$pid) {
+                throw new NotRunningException;
+            }
+
+            $process = new Process("ps -p $pid -o comm=");
+            $process->run();
+
+            $processOutput = $process->getOutput();
+
+            if (empty($processOutput)) {
+                throw new NotRunningException;
+            }
+
+            $this->info("Server is running. PID is $pid");
         } catch (NotRunningException $e) {
-            $this->getOutput()->writeln($this->info('Server is not running.'));
+            $this->info('Server is not running');
         }
-    }
-
-    /**
-     * @return bool
-     * @throws NotRunningException
-     */
-    public function checkIsRunning()
-    {
-        /**
-         * @var $config \Bluzman\Application\Config
-         */
-        $config = $this->getApplication()->getConfig()->server;
-
-        if (!isset($config['pid'])) {
-            throw new NotRunningException;
-        }
-
-        $process = new Process('ps -p ' . $config['pid'] . ' -o comm=');
-        $process->run();
-
-        if (is_null($process->getOutput())) {
-            throw new NotRunningException;
-        }
-
-        return true;
     }
 }

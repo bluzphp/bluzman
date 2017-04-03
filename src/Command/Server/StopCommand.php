@@ -6,7 +6,7 @@
 
 namespace Bluzman\Command\Server;
 
-use Bluzman\Command\AbstractCommand;
+use Bluzman\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
@@ -20,36 +20,24 @@ use Symfony\Component\Process\Process;
  * @author   Pavel Machekhin
  * @created  2013-06-17 14:47
  */
-class StopCommand extends AbstractCommand
+class StopCommand extends AbstractServerCommand
 {
     /**
-     * @var string
+     * Command configuration
      */
-    protected $name = 'server:stop';
-
-    /**
-     * @var string
-     */
-    protected $description = 'Stop a built-in PHP server.';
-
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
+    protected function configure()
     {
-        return [];
-    }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [];
+        $this
+            // the name of the command (the part after "bin/bluzman")
+            ->setName('server:stop')
+            // the short description shown while running "php bin/bluzman list"
+            ->setDescription('Stop a built-in PHP server')
+            // the full command description shown when running the command with
+            // the "--help" option
+            ->setHelp('This command allows you to stop built-in PHP server')
+        ;
+        $this->addOption('host', null, InputOption::VALUE_OPTIONAL, 'IP address of the server', '0.0.0.0');
+        $this->addOption('port', null, InputOption::VALUE_OPTIONAL, 'Port of the server', '8000');
     }
 
     /**
@@ -59,20 +47,18 @@ class StopCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /**
-         * @var $config \Bluzman\Application\Config
-         */
-        $config = $this->getApplication()->getConfig()->server;
+        $this->info('Running "server:stop" command ...');
 
-        $this->getOutput()->writeln($this->info('Running "server:stop" command ...'));
+        $pid = $this->getProcessId($input->getOption('host'), $input->getOption('port')) ?: false;
 
-        $statusCommand = new StatusCommand();
-        $statusCommand->setApplication($this->getApplication());
-        $statusCommand->checkIsRunning();
+        if (empty($pid)) {
+            $this->comment('Server is not running');
+            return;
+        }
 
-        $process = new Process('kill -9 ' . $config['pid']);
+        $process = new Process("kill -9 $pid");
         $process->run();
 
-        $this->getApplication()->getConfig()->unsetOption('server');
+        $this->info('Server stopped');
     }
 }

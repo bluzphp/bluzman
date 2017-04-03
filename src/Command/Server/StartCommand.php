@@ -6,7 +6,6 @@
 
 namespace Bluzman\Command\Server;
 
-use Bluzman\Command\AbstractCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,57 +20,26 @@ use Symfony\Component\Process\Process;
  * @author   Pavel Machekhin
  * @created  2013-05-24 19:23
  */
-class StartCommand extends AbstractCommand
+class StartCommand extends AbstractServerCommand
 {
     /**
-     * @var string
+     * Command configuration
      */
-    protected $name = 'server:start';
-
-    /**
-     * @var string
-     */
-    protected $description = 'Launches a built-in PHP server.';
-
-    /**
-     * @var string
-     */
-    protected $environment;
-
-    /**
-     * @var string
-     */
-    protected $host;
-
-    /**
-     * @var string
-     */
-    protected $port;
-
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
+    protected function configure()
     {
-        return [];
-    }
+        $this
+            // the name of the command (the part after "bin/bluzman")
+            ->setName('server:start')
+            // the short description shown while running "php bin/bluzman list"
+            ->setDescription('Launches a built-in PHP server')
+            // the full command description shown when running the command with
+            // the "--help" option
+            ->setHelp('This command allows you to start built-in PHP server')
+        ;
 
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        $options = [
-            ['host', null, InputOption::VALUE_OPTIONAL, 'IP address of the server', '127.0.0.1'],
-            ['port', null, InputOption::VALUE_OPTIONAL, 'Port of the server', '1337'],
-            ['background', 'b', InputOption::VALUE_NONE, 'Run the server in the background']
-        ];
-
-        return $options;
+        $this->addOption('host', null, InputOption::VALUE_OPTIONAL, 'IP address of the server', '0.0.0.0');
+        $this->addOption('port', null, InputOption::VALUE_OPTIONAL, 'Port of the server', '8000');
+        $this->addOption('background', 'b', InputOption::VALUE_NONE, 'Run the server in the background');
     }
 
     /**
@@ -81,126 +49,35 @@ class StartCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // init application config
-        $this->getApplication()->getConfig();
+        $this->info('Running "server:start" command ... [' . $input->getOption('env'). ']');
 
-        $this->setHost($this->getInput()->getOption('host'));
-        $this->setPort($this->getInput()->getOption('port'));
-        $this->setEnvironment($this->getInput()->getOption('env'));
+        $host = $input->getOption('host');
+        $port = $input->getOption('port');
+        $env = $input->getOption('env');
 
-        $this->getOutput()->writeln(
-            $this->info('Running "server:start" command ... [' . $this->getEnvironment() . ']')
-        );
-
-        $this->startServer();
-    }
-
-    /**
-     * @param string $host
-     */
-    public function setHost($host)
-    {
-        $this->host = $host;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHost()
-    {
-        return $this->host;
-    }
-
-    /**
-     * @param string $port
-     */
-    public function setPort($port)
-    {
-        $this->port = $port;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPort()
-    {
-        return $this->port;
-    }
-
-    /**
-     * @param string $environment
-     */
-    public function setEnvironment($environment)
-    {
-        $this->environment = $environment;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEnvironment()
-    {
-        return $this->environment;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getAddress()
-    {
-        return $this->getHost() . ':' . $this->getPort();
-    }
-
-    protected function getBaseCommand()
-    {
-        return 'export BLUZ_ENV=' . $this->getEnvironment() . ' && php -S ' . $this->getAddress();
-    }
-
-    /**
-     * @return string
-     */
-    protected function getProcessId()
-    {
-        $this->showProgress();
-
-        $pattern = 'php -S ' . $this->getAddress();
-
-        return trim(
-            shell_exec('ps aux | grep "' . $pattern . '" | grep -v grep  | grep -v BLUZ_ENV | awk \'{print $2}\'')
-        );
-    }
-
-    /**
-     * @internal param $address
-     * @internal param $environment
-     */
-    protected function startServer()
-    {
         $publicDir = $this->getApplication()->getWorkingPath() . DS . 'public';
-        $shellCommand = $this->getBaseCommand();
 
-        $process = new Process($shellCommand, $publicDir);
+        // setup BLUZ_ENV to environment
+        // enable BLUZ_DEBUG
+        // use public/routing.php
+        $process = new Process(
+            "export BLUZ_ENV=$env && export BLUZ_DEBUG=1 && php -S $host:$port routing.php",
+            $publicDir
+        );
 
-        if ($this->getInput()->getOption('background')) {
+        $this->info("Server has been started at $host:$port");
+
+        if ($input->getOption('background')) {
             $process->disableOutput();
             $process->start();
 
-            $processId = $this->getProcessId();
+            $processId = $this->getProcessId($input->getOption('host'), $input->getOption('port'));
 
-            $this->getApplication()->getConfig()->setOption(
-                'server',
-                [
-                    'pid' => $processId,
-                    'address' => $address = 'http://' . $this->getAddress()
-                ]
-            );
-
-            $this->getOutput()->writeln($this->info('Server has been started at ' . $address));
+            $this->info("PID is $processId");
         } else {
             while ($process instanceof Process) {
                 if (!$process->isStarted()) {
                     $process->start();
-
                     continue;
                 }
 
@@ -210,8 +87,7 @@ class StartCommand extends AbstractCommand
                 if (!$process->isRunning() || $process->isTerminated()) {
                     $process = false;
 
-                    $this->getOutput()->writeln("");
-                    $this->getOutput()->writeln($this->info('Server has been stopped.'));
+                    $this->info('Server has been stopped.');
                 }
 
                 sleep(1);
