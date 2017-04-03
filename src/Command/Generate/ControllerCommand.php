@@ -120,30 +120,6 @@ class ControllerCommand extends AbstractGenerateCommand
     }
 
     /**
-     * @return string
-     * @throws InputException
-     */
-    protected function getControllerPath($module, $controller)
-    {
-        return $this->getApplication()->getModulePath($module)
-            . DS . 'controllers'
-            . DS . $controller
-            . '.php';
-    }
-
-    /**
-     * @return string
-     * @throws InputException
-     */
-    protected function getViewPath($module, $controller)
-    {
-        return $this->getApplication()->getModulePath($module)
-            . DS . 'views'
-            . DS . $controller
-            . '.phtml';
-    }
-
-    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return void

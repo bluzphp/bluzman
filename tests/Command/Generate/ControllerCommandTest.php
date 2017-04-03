@@ -7,12 +7,7 @@
 namespace Bluzman\Tests\Command\Generate;
 
 use Bluzman\Command\Generate;
-
-use Faker;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @author Pavel Machekhin
@@ -38,19 +33,6 @@ class ControllerCommandTest extends AbstractCommandTest
     public function setUp()
     {
         parent::setUp();
-
-        $container = new \Mockery\Container;
-
-        $app = $container->mock('\Bluzman\Application\Application[getWorkingPath]')
-            ->shouldDeferMissing()
-            ->shouldAllowMockingProtectedMethods();
-
-        $app->shouldReceive('getWorkingPath')
-            ->atLeast(1)
-            ->andReturn($this->workingPath)
-            ->getMock();
-
-        $this->setApplication($app);
 
         $this->module = $this->getFaker()->lexify();
         $this->controller = $this->getFaker()->lexify();

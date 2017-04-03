@@ -9,8 +9,7 @@ namespace Bluzman\Generator\Template;
 /**
  * ViewTemplate
  *
- * @category Generator
- * @package  Bluzman
+ * @package  Bluzman\Generator\Template
  *
  * @author   Pavel Machekhin
  * @created  2013-04-06 12:48

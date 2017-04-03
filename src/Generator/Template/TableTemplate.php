@@ -9,8 +9,7 @@ namespace Bluzman\Generator\Template;
 /**
  * TableTemplate
  *
- * @category Generator
- * @package  Bluzman
+ * @package  Bluzman\Generator\Template
  *
  * @author   Pavel Machekhin
  * @created  2013-04-16 13:35
@@ -21,7 +20,7 @@ class TableTemplate extends AbstractTemplate
     /**
      * @var string
      */
-    protected $templatePath = 'views/table.html';
+    protected $templatePath = 'views/models/table.html';
 
     /**
      * @param array $templateData

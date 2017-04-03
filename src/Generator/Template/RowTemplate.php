@@ -9,8 +9,7 @@ namespace Bluzman\Generator\Template;
 /**
  * RowTemplate
  *
- * @category Generator
- * @package  Bluzman
+ * @package  Bluzman\Generator\Template
  *
  * @author   Pavel Machekhin
  * @created  2013-04-16 15:35
@@ -21,7 +20,7 @@ class RowTemplate extends AbstractTemplate
     /**
      * @var string
      */
-    protected $templatePath = 'views/row.html';
+    protected $templatePath = 'views/models/row.html';
 
     /**
      * @param array $templateData

@@ -6,7 +6,6 @@
 
 namespace Bluzman\Command\Generate;
 
-use Bluz\Validator\Validator as v;
 use Bluzman\Generator\GeneratorException;
 use Bluzman\Input\InputArgument;
 use Symfony\Component\Console\Input\ArrayInput;

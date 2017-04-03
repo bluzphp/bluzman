@@ -20,17 +20,7 @@ class ApplicationTest extends TestCase
      */
     public function testIsFixtureCorrect()
     {
-        self::assertInstanceOf('\Bluzman\Application\Application', $this->application);
-    }
-
-    /**
-     * @depends testIsFixtureCorrect
-     */
-    public function testConfigProperty()
-    {
-        $config = $this->application->getConfig();
-
-        self::assertInstanceOf('\Bluzman\Application\Config', $config);
+        self::assertInstanceOf('\\Bluzman\\Application\\Application', $this->application);
     }
 
     /**
@@ -38,8 +28,6 @@ class ApplicationTest extends TestCase
      */
     public function testCommandsAreAvailable()
     {
-        self::assertTrue($this->application->get('server:start') instanceof Command);
-        self::assertTrue($this->application->get('test') instanceof Command);
-        self::assertTrue($this->application->get('init:all') instanceof Command);
+        self::assertTrue($this->application->get('i-need-magic') instanceof Command);
     }
 }

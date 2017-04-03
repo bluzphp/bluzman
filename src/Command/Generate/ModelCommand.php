@@ -37,12 +37,7 @@ class ModelCommand extends AbstractGenerateCommand
             ->setHelp('This command allows you to generate models files')
         ;
 
-        $model = new InputArgument('model', InputArgument::REQUIRED, 'Model name is required');
-        $model->setValidator(
-            v::string()->alphaNumeric()->noWhitespace()
-        );
-
-        $this->getDefinition()->addArgument($model);
+        $this->addModelArgument();
 
         $table = new InputArgument('table', InputArgument::REQUIRED, 'Table name is required');
         $table->setValidator(
@@ -105,28 +100,42 @@ class ModelCommand extends AbstractGenerateCommand
         }
 
         // generate table
-        $template = $this->getTemplate('TableTemplate');
-        $template->setFilePath($this->getApplication()->getModelPath($modelName) .DS. 'Table.php');
-        $template->setTemplateData([
-            'name' => $modelName,
-            'table' => $tableName,
-            'primaryKey' => $this->getPrimaryKey($tableName)
-        ]);
+        $tableFile = $this->getApplication()->getModelPath($modelName) .DS. 'Table.php';
 
-        $generator = new Generator\Generator($template);
-        $generator->make();
+        if (file_exists($tableFile)) {
+            $this->comment("Table file <info>$modelName/Table.php</info> already exists");
+        } else {
+            $template = $this->getTemplate('TableTemplate');
+            $template->setFilePath($tableFile);
+            $template->setTemplateData([
+                'name' => $modelName,
+                'table' => $tableName,
+                'primaryKey' => $this->getPrimaryKey($tableName)
+            ]);
+
+            $generator = new Generator\Generator($template);
+            $generator->make();
+        }
 
         // generate row
-        $template = $this->getTemplate('RowTemplate');
-        $template->setFilePath($this->getApplication()->getModelPath($modelName) .DS. 'Row.php');
-        $template->setTemplateData([
-            'name' => $modelName,
-            'table' => $tableName,
-            'columns' => $this->getColumns($tableName)
-        ]);
+        $rowFile = $this->getApplication()->getModelPath($modelName) .DS. 'Row.php';
 
-        $generator = new Generator\Generator($template);
-        $generator->make();
+        if (file_exists($rowFile)) {
+            $this->comment("Row file <info>$modelName/Row.php</info> already exists");
+        } else {
+            $template = $this->getTemplate('RowTemplate');
+            $template->setFilePath($rowFile);
+            $template->setTemplateData(
+                [
+                    'name' => $modelName,
+                    'table' => $tableName,
+                    'columns' => $this->getColumns($tableName)
+                ]
+            );
+
+            $generator = new Generator\Generator($template);
+            $generator->make();
+        }
     }
 
     /**
@@ -190,15 +199,5 @@ class ModelCommand extends AbstractGenerateCommand
             ',
             [$connect['name'], $table]
         );
-    }
-
-    /**
-     * @param  string $classname
-     * @return mixed
-     */
-    protected function getTemplate($classname)
-    {
-        $class = '\\Bluzman\\Generator\\Template\\' . $classname;
-        return new $class;
     }
 }

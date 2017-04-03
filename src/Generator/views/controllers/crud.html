@@ -1,0 +1,39 @@
+<?="<?php"?>
+/**
+ * CRUD for <?=$name?> model
+ *
+ * @author   <?=$author . "\n"?>
+ * @created  <?=$date . "\n"?>
+ */
+
+/**
+ * @namespace
+ */
+namespace Application;
+
+use Application\<?=$name?>;
+use Bluz\Controller\Controller;
+use Bluz\Controller\Mapper\Crud;
+
+/**
+ * @accept HTML
+ * @accept JSON
+ * @privilege Management
+ *
+ * @return mixed
+ */
+return function () {
+    /**
+     * @var Controller $this
+     */
+    $crud = new Crud();
+
+    $crud->setCrud(<?=$name?>\Crud::getInstance());
+
+    $crud->get('system', 'crud/get');
+    $crud->post('system', 'crud/post');
+    $crud->put('system', 'crud/put');
+    $crud->delete('system', 'crud/delete');
+
+    return $crud->run();
+};

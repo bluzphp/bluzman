@@ -9,8 +9,7 @@ namespace Bluzman\Generator\Template\Exception;
 /**
  * AlreadyExistsException
  *
- * @category Generator
- * @package  Bluzman
+ * @package  Bluzman\Generator\Template
  *
  * @author   Pavel Machekhin
  * @created  4/06/13 01:21 AM

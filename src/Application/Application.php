@@ -81,6 +81,7 @@ class Application extends Console\Application
                 new Command\Generate\ModuleCommand,
                 new Command\Generate\ControllerCommand,
                 new Command\Generate\ModelCommand,
+                new Command\Generate\CrudCommand,
 //                new Command\Server\StartCommand,
 //                new Command\Server\StopCommand,
 //                new Command\Server\StatusCommand,

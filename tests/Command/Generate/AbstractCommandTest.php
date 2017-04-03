@@ -7,6 +7,7 @@
 namespace Bluzman\Tests\Command\Generate;
 
 use Bluzman\Tests\TestCase;
+use Mockery\Container;
 
 /**
  * @author Pavel Machekhin
@@ -14,5 +15,21 @@ use Bluzman\Tests\TestCase;
  */
 abstract class AbstractCommandTest extends TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
 
+        $container = new Container;
+
+        $app = $container->mock('\Bluzman\Application\Application[getWorkingPath]')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
+
+        $app->shouldReceive('getWorkingPath')
+            ->atLeast(1)
+            ->andReturn($this->workingPath)
+            ->getMock();
+
+        $this->setApplication($app);
+    }
 }
