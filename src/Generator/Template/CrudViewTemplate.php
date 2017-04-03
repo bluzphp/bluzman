@@ -13,5 +13,5 @@ namespace Bluzman\Generator\Template;
  */
 class CrudViewTemplate extends AbstractTemplate
 {
-    protected $templatePath = 'views/views/crud.html';
+    protected $templatePath = 'views/views/crud.phtml';
 }

@@ -20,7 +20,7 @@ class RowTemplate extends AbstractTemplate
     /**
      * @var string
      */
-    protected $templatePath = 'views/models/row.html';
+    protected $templatePath = 'views/models/row.phtml';
 
     /**
      * @param array $templateData

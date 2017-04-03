@@ -6,12 +6,12 @@
 namespace Bluzman\Generator\Template;
 
 /**
- * Template for crud controller
+ * Template for crud view
  *
  * @package  Bluzman\Generator\Template
  * @author   Anton Shevchuk
  */
-class CrudControllerTemplate extends AbstractTemplate
+class GridViewTemplate extends AbstractTemplate
 {
-    protected $templatePath = 'views/controllers/crud.phtml';
+    protected $templatePath = 'views/views/grid.phtml';
 }

@@ -1,0 +1,35 @@
+<?="<?php"?>
+
+/**
+ * @namespace
+ */
+namespace Application\<?=$name?>;
+
+/**
+ * Grid based on Table
+ *
+ * @package  Application\<?=$name . "\n"?>
+ *
+ * @author   <?=$author . "\n"?>
+ * @created  <?=$date . "\n"?>
+ */
+class Grid extends \Bluz\Grid\Grid
+{
+    /**
+     * @var string
+     */
+    protected $uid = '<?=strtolower($name)?>';
+
+    /**
+     * @return self
+     */
+    public function init()
+    {
+        $this->setAdapter(Table::select());
+        $this->setDefaultLimit(25);
+        $this->setAllowOrders([]);
+        $this->processSource();
+
+        return $this;
+    }
+}

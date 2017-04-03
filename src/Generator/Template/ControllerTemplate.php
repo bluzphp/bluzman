@@ -17,5 +17,5 @@ namespace Bluzman\Generator\Template;
 
 class ControllerTemplate extends AbstractTemplate
 {
-    protected $templatePath = 'views/controller.html';
+    protected $templatePath = 'views/controllers/index.phtml';
 }

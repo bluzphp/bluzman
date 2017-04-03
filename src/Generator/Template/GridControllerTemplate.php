@@ -11,7 +11,7 @@ namespace Bluzman\Generator\Template;
  * @package  Bluzman\Generator\Template
  * @author   Anton Shevchuk
  */
-class CrudControllerTemplate extends AbstractTemplate
+class GridControllerTemplate extends AbstractTemplate
 {
-    protected $templatePath = 'views/controllers/crud.phtml';
+    protected $templatePath = 'views/controllers/grid.phtml';
 }

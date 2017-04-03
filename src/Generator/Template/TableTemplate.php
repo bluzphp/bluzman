@@ -20,7 +20,7 @@ class TableTemplate extends AbstractTemplate
     /**
      * @var string
      */
-    protected $templatePath = 'views/models/table.html';
+    protected $templatePath = 'views/models/table.phtml';
 
     /**
      * @param array $templateData

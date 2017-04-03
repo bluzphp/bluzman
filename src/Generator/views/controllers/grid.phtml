@@ -1,0 +1,28 @@
+<?="<?php"?>
+
+/**
+ * Grid controller for <?=$name?> model
+ *
+ * @author   <?=$author . "\n"?>
+ * @created  <?=$date . "\n"?>
+ */
+
+/**
+ * @namespace
+ */
+namespace Application;
+
+use Bluz\Controller\Controller;
+
+/**
+ * @privilege Management
+ *
+ * @return mixed
+ */
+return function () {
+    /**
+     * @var Controller $this
+     */
+    $grid = new <?=$name?>\Grid();
+    $this->assign('grid', $grid);
+};
