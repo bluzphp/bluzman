@@ -66,7 +66,7 @@ class GridCommand extends AbstractGenerateCommand
 
             if (!$this->getApplication()->isModelExists($model)) {
                 throw new InputException(
-                    "Model $model is not exist, ".
+                    "Model $model is not exist, " .
                     "run command <question>bluzman generate:model $model</question> before"
                 );
             }
@@ -76,7 +76,7 @@ class GridCommand extends AbstractGenerateCommand
 
                 if (!$this->getApplication()->isModuleExists($module)) {
                     throw new InputException(
-                        "Module $module is not exist, ".
+                        "Module $module is not exist, " .
                         "run command <question>bluzman generate:module $module</question> before"
                     );
                 }
