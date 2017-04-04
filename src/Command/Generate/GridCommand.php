@@ -111,7 +111,7 @@ class GridCommand extends AbstractGenerateCommand
         $model = ucfirst($input->getArgument('model'));
 
         // generate CRUD
-        $crudFile = $this->getApplication()->getModelPath($model) .DS. 'Grid.php';
+        $crudFile = $this->getApplication()->getModelPath($model) . DS . 'Grid.php';
 
         if (file_exists($crudFile)) {
             $this->comment("Crud file <info>$model/Grid.php</info> already exists");

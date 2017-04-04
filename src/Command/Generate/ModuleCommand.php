@@ -104,8 +104,8 @@ class ModuleCommand extends AbstractGenerateCommand
     }
 
     /**
-     * @param $path
-     * @param array $subFolders
+     * @param string $path
+     * @param string[] $subFolders
      */
     protected function addSubFolders($path, array $subFolders = [])
     {

@@ -88,7 +88,7 @@ abstract class AbstractGenerateCommand extends \Bluzman\Command\AbstractCommand
      */
     protected function getTemplate($class)
     {
-        $class = '\\Bluzman\\Generator\\Template\\' . $class ;
+        $class = '\\Bluzman\\Generator\\Template\\' . $class;
         return new $class;
     }
 

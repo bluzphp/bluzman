@@ -99,7 +99,7 @@ class ModelCommand extends AbstractGenerateCommand
         }
 
         // generate table
-        $tableFile = $this->getApplication()->getModelPath($modelName) .DS. 'Table.php';
+        $tableFile = $this->getApplication()->getModelPath($modelName) . DS . 'Table.php';
 
         if (file_exists($tableFile)) {
             $this->comment("Table file <info>$modelName/Table.php</info> already exists");
@@ -117,7 +117,7 @@ class ModelCommand extends AbstractGenerateCommand
         }
 
         // generate row
-        $rowFile = $this->getApplication()->getModelPath($modelName) .DS. 'Row.php';
+        $rowFile = $this->getApplication()->getModelPath($modelName) . DS . 'Row.php';
 
         if (file_exists($rowFile)) {
             $this->comment("Row file <info>$modelName/Row.php</info> already exists");

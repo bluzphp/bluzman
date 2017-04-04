@@ -6,8 +6,6 @@
 
 namespace Bluzman\Command\Generate;
 
-use Bluz\Validator\Validator as v;
-use Bluzman\Input\InputArgument;
 use Bluzman\Input\InputException;
 use Bluzman\Generator;
 use Symfony\Component\Console\Input\InputInterface;
@@ -98,8 +96,8 @@ class RestCommand extends AbstractGenerateCommand
      */
     protected function generate(InputInterface $input, OutputInterface $output)
     {
-        $model= ucfirst($input->getArgument('model'));
-        $module= $input->getArgument('module');
+        $model = ucfirst($input->getArgument('model'));
+        $module = $input->getArgument('module');
 
         $this->write("Generate <info>$module/controllers/rest.php</info>");
 
