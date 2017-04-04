@@ -1,14 +1,14 @@
 <?="<?php\n"?>
-/** @var \Application\<?=$name?>\Row $row */
+/** @var \Application\<?=$model?>\Row $row */
 $uid = uniqid('form_');
-$url = $this->url('<?=$name?>', 'crud');
+$url = $this->url('<?=$module?>', 'crud');
 <?="?>\n"?>
-<form id="<?='<?=$uid?>'?>" action="<?='<?=url?>'?>" class="form-horizontal ajax" method="POST">
+<form id="<?='<?=$uid?>'?>" action="<?='<?=$url?>'?>" class="form-horizontal ajax" method="POST">
     <input type="hidden" name="_method" value="<?='<?=$method?>'?>"/>
     <!-- Place form fields here -->
     <button type="submit" class="btn btn-primary"><?='<?=__("Save")?>'?></button>
 </form>
-<?="<?php"?>
+<?="<?php\n"?>
 // need for plain request
 if (isset($errors)) :
     $this->partial('crud/errors.phtml', ['uid' => $uid, 'errors' => $errors]);

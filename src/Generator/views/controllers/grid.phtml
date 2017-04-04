@@ -1,7 +1,7 @@
 <?="<?php"?>
 
 /**
- * Grid controller for <?=$name?> model
+ * Grid controller for <?=$model?> model
  *
  * @author   <?=$author . "\n"?>
  * @created  <?=$date . "\n"?>
@@ -23,6 +23,6 @@ return function () {
     /**
      * @var Controller $this
      */
-    $grid = new <?=$name?>\Grid();
+    $grid = new <?=$model?>\Grid();
     $this->assign('grid', $grid);
 };

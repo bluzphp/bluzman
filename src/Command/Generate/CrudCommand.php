@@ -112,7 +112,7 @@ class CrudCommand extends AbstractGenerateCommand
             $template = $this->getTemplate('CrudTemplate');
             $template->setFilePath($crudFile);
             $template->setTemplateData([
-                'name' => $modelName
+                'model' => $modelName
             ]);
 
             $generator = new Generator\Generator($template);
@@ -128,7 +128,7 @@ class CrudCommand extends AbstractGenerateCommand
             } else {
                 $template = new Generator\Template\CrudControllerTemplate();
                 $template->setFilePath($controllerFile);
-                $template->setTemplateData(['name' => $modelName]);
+                $template->setTemplateData(['model' => $modelName]);
 
                 $generator = new Generator\Generator($template);
                 $generator->make();
@@ -142,7 +142,10 @@ class CrudCommand extends AbstractGenerateCommand
             } else {
                 $template = new Generator\Template\CrudViewTemplate();
                 $template->setFilePath($viewFile);
-                $template->setTemplateData(['name' => $modelName]);
+                $template->setTemplateData([
+                    'model' => $modelName,
+                    'module' => $module
+                ]);
 
                 $generator = new Generator\Generator($template);
                 $generator->make();

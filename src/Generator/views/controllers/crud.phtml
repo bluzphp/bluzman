@@ -1,7 +1,7 @@
 <?="<?php"?>
 
 /**
- * CRUD controller for <?=$name?> model
+ * CRUD controller for <?=$model?> model
  *
  * @author   <?=$author . "\n"?>
  * @created  <?=$date . "\n"?>
@@ -28,7 +28,7 @@ return function () {
      */
     $crud = new Crud();
 
-    $crud->setCrud(<?=$name?>\Crud::getInstance());
+    $crud->setCrud(<?=$model?>\Crud::getInstance());
 
     $crud->get('system', 'crud/get');
     $crud->post('system', 'crud/post');

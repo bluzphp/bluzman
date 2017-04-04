@@ -3,12 +3,12 @@
 /**
  * @namespace
  */
-namespace Application\<?=$name?>;
+namespace Application\<?=$model?>;
 
 /**
  * Class Table for `<?=$table?>`
  *
- * @package  Application\<?=$name . "\n"?>
+ * @package  Application\<?=$model . "\n"?>
  *
  * @author   <?=$author . "\n"?>
  * @created  <?=$date . "\n"?>
@@ -20,7 +20,7 @@ class Table extends \Bluz\Db\Table
      */
     protected $name = '<?=$table?>';
 
-    protected $rowClass = '\Application\<?=$name?>\Row';
+    protected $rowClass = '\Application\<?=$model?>\Row';
 
     /**
      * Primary key(s)

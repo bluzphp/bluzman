@@ -112,7 +112,7 @@ class GridCommand extends AbstractGenerateCommand
             $template = $this->getTemplate('GridTemplate');
             $template->setFilePath($crudFile);
             $template->setTemplateData([
-                'name' => $modelName
+                'model' => $modelName
             ]);
 
             $generator = new Generator\Generator($template);
@@ -128,7 +128,7 @@ class GridCommand extends AbstractGenerateCommand
             } else {
                 $template = new Generator\Template\GridControllerTemplate();
                 $template->setFilePath($controllerFile);
-                $template->setTemplateData(['name' => $modelName]);
+                $template->setTemplateData(['model' => $modelName]);
 
                 $generator = new Generator\Generator($template);
                 $generator->make();
@@ -142,7 +142,7 @@ class GridCommand extends AbstractGenerateCommand
             } else {
                 $template = new Generator\Template\GridViewTemplate();
                 $template->setFilePath($viewFile);
-                $template->setTemplateData(['name' => $modelName]);
+                $template->setTemplateData(['model' => $modelName]);
 
                 $generator = new Generator\Generator($template);
                 $generator->make();

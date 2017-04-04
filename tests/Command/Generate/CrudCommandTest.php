@@ -86,6 +86,7 @@ class CrudCommandTest extends AbstractCommandTest
         $file = $this->modelPath . DS . 'Crud.php';
 
         self::assertFileExists($file);
+
         self::assertEquals(
             md5_file($file),
             md5_file(__DIR__ . DS . '..' . DS . '..' . DS. 'Generator' . DS . 'samples' . DS . 'crud.html')

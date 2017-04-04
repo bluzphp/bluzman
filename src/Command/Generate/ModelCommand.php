@@ -108,7 +108,7 @@ class ModelCommand extends AbstractGenerateCommand
             $template = $this->getTemplate('TableTemplate');
             $template->setFilePath($tableFile);
             $template->setTemplateData([
-                'name' => $modelName,
+                'model' => $modelName,
                 'table' => $tableName,
                 'primaryKey' => $this->getPrimaryKey($tableName)
             ]);
@@ -127,7 +127,7 @@ class ModelCommand extends AbstractGenerateCommand
             $template->setFilePath($rowFile);
             $template->setTemplateData(
                 [
-                    'name' => $modelName,
+                    'model' => $modelName,
                     'table' => $tableName,
                     'columns' => $this->getColumns($tableName)
                 ]
