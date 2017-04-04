@@ -14,8 +14,7 @@ use Symfony\Component\Process\Process;
 /**
  * ServerCommand
  *
- * @category Command
- * @package  Bluzman
+ * @package  Bluzman\Command\Server
  *
  * @author   Pavel Machekhin
  * @created  2013-05-24 19:23

@@ -14,8 +14,7 @@ use Symfony\Component\Process\Process;
 /**
  * StopCommand
  *
- * @category Command
- * @package  Bluzman
+ * @package  Bluzman\Command\Server
  *
  * @author   Pavel Machekhin
  * @created  2013-06-17 14:47
