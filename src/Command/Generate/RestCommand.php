@@ -52,15 +52,15 @@ class RestCommand extends AbstractGenerateCommand
 
             if (!$this->getApplication()->isModelExists($model)) {
                 throw new InputException(
-                    "Model $model is not exist, ".
+                    "Model $model is not exist, " .
                     "run command <question>bluzman generate:model $model</question> before"
                 );
             }
 
-            $crudPath = $this->getApplication()->getModelPath($model) .DS. 'Crud.php';
+            $crudPath = $this->getApplication()->getModelPath($model) . DS . 'Crud.php';
             if (!is_file($crudPath)) {
                 throw new InputException(
-                    "CRUD for $model is not exist, ".
+                    "CRUD for $model is not exist, " .
                     "run command <question>bluzman generate:crud $model</question> before"
                 );
             }
@@ -70,7 +70,7 @@ class RestCommand extends AbstractGenerateCommand
 
             if (!$this->getApplication()->isModuleExists($module)) {
                 throw new InputException(
-                    "Module $module is not exist, ".
+                    "Module $module is not exist, " .
                     "run command <question>bluzman generate:module $module</question> before"
                 );
             }
