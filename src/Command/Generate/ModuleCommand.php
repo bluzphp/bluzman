@@ -38,7 +38,7 @@ class ModuleCommand extends AbstractGenerateCommand
 
         $controller = new InputArgument(
             'controller',
-            InputArgument::OPTIONAL|InputArgument::IS_ARRAY,
+            InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
             'Controller name(s)'
         );
 
