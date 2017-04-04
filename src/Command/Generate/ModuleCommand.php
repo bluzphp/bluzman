@@ -82,7 +82,6 @@ class ModuleCommand extends AbstractGenerateCommand
                 $greetInput = new ArrayInput($arguments);
                 $command->run($greetInput, $output);
             }
-
         } catch (\Exception $e) {
             $this->error("ERROR: {$e->getMessage()}");
         }

@@ -70,7 +70,6 @@ class ModelCommand extends AbstractGenerateCommand
             $this->verify($input, $output);
 
             $this->write("Model <info>{$model}</info> has been successfully created.");
-
         } catch (InputException $e) {
             $this->error("ERROR: {$e->getMessage()}");
         }
