@@ -17,103 +17,96 @@ Bluzman is a set of command-line tools which provides a simple workflow with an 
 
 Features
 -------------------------
-* Application scaffolding
 * Code-generator of application components
+* Shorthand for phinx and composer tools (TODO)
+* Shorthand for built-in web-server
 
 Requirements
 -------------------------
 * OS: Linux
 * PHP: 7.0 (or later)
 
-Installation
--------------------------
-It is recommended to add bluzman to your PATH variable, which specifies where executable files are located. This will provide an ability to use one bluzman installation with many applications.
-
-##### Steps to install: #####
-1. Clone from repository
-
-    ```
-    $ git clone git://github.com/bashmach/bluzman.git
-    $ cd bluzman
-    ```
-2. Install dependencies with composer
-
-    ```
-    $ composer install
-    ```
-3. Finish install - add bluzman to PATH variable.
-
-    You can skip this, however you will need to use a fullpath to bluzman script from bin directory.
-
-    ```
-    $ sh ./bin/install.sh
-    ```
-Start new session in your terminal or run this command in current session:
-
-    ```
-    $ export PATH=$PATH:/%path_to_bluzman_directory%/bin
-    ```
-
 Usage
 -------------------------
 List of available commands
 ```
-    $ bluzman list
+    $ php ./vendor/bin/bluzman list
 ```
-### Scaffold application
 
-Create new project from bluzphp/skeleton by composer.
-```
-    $ bluzman init:all
-```
 ### Model generator
 
-Create new model or overwrite the old.
 For create new model you must run the command in terminal:
 ```
-    $ bluzman init:model --name model_name --table table_name
+    $ bluzman generate:model model_name table_name
 ```
 
-Or run command in interactively mode:
-```
-    $ bluzman init:model
-    Enter the name of model: model_name
-    Enter the name of table: table_name
-```
+ - _model_name_ - the name of model. With this name will be created folder of model.
+ - _table_name_ - the name of databases table for pattern formation properties object model.
 
- "model_name" - the name of model. With this name will be created folder module.
-
- "table_name" - the name of databases table for pattern formation properties object model.
-
-After completion you will see a message::
-```
-    Model "model_name" has been successfully created in the model "model_name"
-```
 
 ### Module generator
 
 For create new module you must run the command in terminal
 ```
-    $ bluzman init:module --name module_name
+    $ bluzman generate:module module_name [controller_name]...
 ```
-Or run command in interactively mode:
-```
-    $ bluzman init:module
-    Enter the name of module: module_name
-```
+
+ - _module_name_ - the name of module. With this name will be created folder of module.
+ - _controller_name_ - the name(s) of controller(s). With this name will be created controller and view. Optional.
 
 ### Controller generator
 
-
-Create new controller or overwrite the old.
 For create new controller you must run the command in terminal:
 ```
-    $ bluzman init:controller --module module_name --name controller_name
+    $ bluzman generate:controller module_name controller_name
 ```
-After completion you will see a message::
+
+ - _module_name_ - the name of module. With this name will be created folder of module.
+ - _controller_name_ - the name of controller. With this name will be created controller and view.
+ 
+### CRUD generator
+
+For create CRUD class you must run the command in terminal:
+
 ```
-    Controller "controller_name" has been successfully created in the module "module_name".
+    $ bluzman generate:crud model_name 
 ```
+Generator will create a class in `model_name/Crud.php`
+
+If you want to generate CRUD controller and view you must run the command in terminal:
+
+```
+    $ bluzman generate:crud model_name module_name
+```
+
+Generator will create a controller in `module_name/controllers/crud.php` and a view `module_name/views/crud.php`
+
+### REST generator
+
+For create REST controller you must run the command in terminal:
+
+```
+    $ bluzman generate:rest model_name module_name
+```
+
+Generator will create a controller in `module_name/controllers/rest.php`.
+ 
+### GRID generator
+
+For create GRID class you must run the command in terminal:
+
+```
+    $ bluzman generate:grid model_name 
+```
+Generator will create a class in `model_name/Grid.php`
+
+If you want to generate GRID controller and view you must run the command in terminal:
+
+```
+    $ bluzman generate:grid model_name module_name
+```
+
+Generator will create a controller in `module_name/controllers/grid.php` and a view `module_name/views/grid.php`
 
 ### Server
 
@@ -123,7 +116,7 @@ To launch built-in PHP server you must run the command in terminal:
 ```
     $ bluzman server:start [--host[="..."]] [--port=["..."]]
 ```
-By default server will be available by the address **127.0.0.1:1337** and you will see all logs in the terminal.
+By default server will be available by the address **0.0.0.0:8000** and you will see all logs in the terminal.
 
 But there is an option to run server in the background, this requires an option **-b**:
 
@@ -133,11 +126,10 @@ But there is an option to run server in the background, this requires an option 
 
 And if server launched in the background, it can be stopped with following command:
 ```
-    $ bluzman server:stop
+    $ bluzman server:stop [--host[="..."]] [--port=["..."]]
 ```
 
 If you want to know the status of the server you must run the command in terminal:
 ```
-    $ bluzman server:status
+    $ bluzman server:status [--host[="..."]] [--port=["..."]]
 ```
-

@@ -86,6 +86,7 @@ class ModelCommand extends AbstractGenerateCommand
         $modelName = ucfirst($input->getArgument('model'));
         $tableName = $input->getArgument('table');
 
+        /*
         if ($this->getApplication()->isModelExists($modelName)) {
             $helper = $this->getHelperSet()->get("question");
             $question = new ConfirmationQuestion(
@@ -97,6 +98,7 @@ class ModelCommand extends AbstractGenerateCommand
                 return;
             }
         }
+        */
 
         // generate table
         $tableFile = $this->getApplication()->getModelPath($modelName) . DS . 'Table.php';

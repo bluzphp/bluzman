@@ -40,7 +40,7 @@ class GridCommand extends AbstractGenerateCommand
         $module = new InputArgument(
             'module',
             InputArgument::OPTIONAL,
-            'Module name, if you need to generate `view` controller and view'
+            'Module name, if you need to generate GRID controller and view'
         );
 
         $module->setValidator(
