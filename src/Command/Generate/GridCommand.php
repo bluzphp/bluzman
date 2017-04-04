@@ -88,6 +88,11 @@ class GridCommand extends AbstractGenerateCommand
 
             $this->write("GRID for <info>{$model}</info> has been successfully created.");
 
+            if ($module = $input->getArgument('module')) {
+                $this->write(
+                    "Open page <info>/acl</info> in your browser and set permissions for <info>{$module}</info>"
+                );
+            }
         } catch (InputException $e) {
             $this->error("ERROR: {$e->getMessage()}");
         }
@@ -101,18 +106,18 @@ class GridCommand extends AbstractGenerateCommand
      */
     protected function generate(InputInterface $input, OutputInterface $output)
     {
-        $modelName = ucfirst($input->getArgument('model'));
+        $model = ucfirst($input->getArgument('model'));
 
         // generate CRUD
-        $crudFile = $this->getApplication()->getModelPath($modelName) .DS. 'Grid.php';
+        $crudFile = $this->getApplication()->getModelPath($model) .DS. 'Grid.php';
 
         if (file_exists($crudFile)) {
-            $this->comment("Crud file <info>$modelName/Grid.php</info> already exists");
+            $this->comment("Crud file <info>$model/Grid.php</info> already exists");
         } else {
             $template = $this->getTemplate('GridTemplate');
             $template->setFilePath($crudFile);
             $template->setTemplateData([
-                'model' => $modelName
+                'model' => $model
             ]);
 
             $generator = new Generator\Generator($template);
@@ -128,7 +133,7 @@ class GridCommand extends AbstractGenerateCommand
             } else {
                 $template = new Generator\Template\GridControllerTemplate();
                 $template->setFilePath($controllerFile);
-                $template->setTemplateData(['model' => $modelName]);
+                $template->setTemplateData(['model' => $model]);
 
                 $generator = new Generator\Generator($template);
                 $generator->make();
@@ -142,7 +147,7 @@ class GridCommand extends AbstractGenerateCommand
             } else {
                 $template = new Generator\Template\GridViewTemplate();
                 $template->setFilePath($viewFile);
-                $template->setTemplateData(['model' => $modelName]);
+                $template->setTemplateData(['model' => $model]);
 
                 $generator = new Generator\Generator($template);
                 $generator->make();

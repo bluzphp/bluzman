@@ -87,7 +87,11 @@ class CrudCommand extends AbstractGenerateCommand
             $this->verify($input, $output);
 
             $this->write("CRUD for <info>{$model}</info> has been successfully created.");
-
+            if ($module = $input->getArgument('module')) {
+                $this->write(
+                    "Open page <info>/acl</info> in your browser and set permissions for <info>{$module}</info>"
+                );
+            }
         } catch (InputException $e) {
             $this->error("ERROR: {$e->getMessage()}");
         }
@@ -101,18 +105,18 @@ class CrudCommand extends AbstractGenerateCommand
      */
     protected function generate(InputInterface $input, OutputInterface $output)
     {
-        $modelName = ucfirst($input->getArgument('model'));
+        $model = ucfirst($input->getArgument('model'));
 
         // generate CRUD
-        $crudFile = $this->getApplication()->getModelPath($modelName) .DS. 'Crud.php';
+        $crudFile = $this->getApplication()->getModelPath($model) .DS. 'Crud.php';
 
         if (file_exists($crudFile)) {
-            $this->comment("Crud file <info>$modelName/Crud.php</info> already exists");
+            $this->comment("Crud file <info>$model/Crud.php</info> already exists");
         } else {
             $template = $this->getTemplate('CrudTemplate');
             $template->setFilePath($crudFile);
             $template->setTemplateData([
-                'model' => $modelName
+                'model' => $model
             ]);
 
             $generator = new Generator\Generator($template);
@@ -128,7 +132,7 @@ class CrudCommand extends AbstractGenerateCommand
             } else {
                 $template = new Generator\Template\CrudControllerTemplate();
                 $template->setFilePath($controllerFile);
-                $template->setTemplateData(['model' => $modelName]);
+                $template->setTemplateData(['model' => $model]);
 
                 $generator = new Generator\Generator($template);
                 $generator->make();
@@ -143,7 +147,7 @@ class CrudCommand extends AbstractGenerateCommand
                 $template = new Generator\Template\CrudViewTemplate();
                 $template->setFilePath($viewFile);
                 $template->setTemplateData([
-                    'model' => $modelName,
+                    'model' => $model,
                     'module' => $module
                 ]);
 

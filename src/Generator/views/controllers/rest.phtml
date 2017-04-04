@@ -1,0 +1,46 @@
+<?="<?php"?>
+
+/**
+ * REST controller for <?=$model?> model
+ *
+ * @author   <?=$author . "\n"?>
+ * @created  <?=$date . "\n"?>
+ */
+
+/**
+ * @namespace
+ */
+namespace Application;
+
+use Application\<?=$model?>;
+use Bluz\Controller\Controller;
+use Bluz\Controller\Mapper\Rest;
+
+/**
+ * @accept JSON
+ *
+ * @acl Read
+ * @acl Create
+ * @acl Update
+ * @acl Delete
+ *
+ * @return mixed
+ */
+return function () {
+    /**
+     * @var Controller $this
+     */
+    $rest = new Rest();
+
+    $rest->setCrud(<?=$model?>\Crud::getInstance());
+
+    $rest->head('system', 'rest/head', 'Read');
+    $rest->get('system', 'rest/get', 'Read');
+    $rest->options('system', 'rest/options', 'Read');
+    $rest->post('system', 'rest/post', 'Create');
+    $rest->put('system', 'rest/put', 'Update');
+    $rest->patch('system', 'rest/put', 'Update');
+    $rest->delete('system', 'rest/delete', 'Delete');
+
+    return $rest->run();
+};
