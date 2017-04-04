@@ -4,6 +4,8 @@
  */
 namespace Application\Users;
 
+use Bluz\Grid\Source\SelectSource;
+
 /**
  * Grid based on Table
  *
@@ -24,7 +26,11 @@ class Grid extends \Bluz\Grid\Grid
      */
     public function init()
     {
-        $this->setAdapter(Table::select());
+        // Current table as source of grid
+        $adapter = new SelectSource();
+        $adapter->setSource(Table::select());
+
+        $this->setAdapter($adapter);
         $this->setDefaultLimit(25);
         $this->setAllowOrders([]);
         $this->processSource();

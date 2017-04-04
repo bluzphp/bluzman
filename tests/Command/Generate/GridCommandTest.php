@@ -59,7 +59,7 @@ class GridCommandTest extends AbstractCommandTest
             ->shouldDeferMissing()
             ->shouldAllowMockingProtectedMethods();
         $command->shouldReceive('getTemplate')
-            ->withArgs(['CrudTemplate'])
+            ->withArgs(['GridTemplate'])
             ->andReturn($template)
             ->getMock();
 
