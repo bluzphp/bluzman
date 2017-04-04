@@ -49,7 +49,7 @@ class StartCommand extends AbstractServerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->info('Running "server:start" command ... [' . $input->getOption('env'). ']');
+        $this->info('Running "server:start" command ... [' . $input->getOption('env') . ']');
 
         $host = $input->getOption('host');
         $port = $input->getOption('port');
