@@ -13,7 +13,7 @@
   ],
   "require": {
     "php": ">=7.0",
-    "composer/composer": "dev-master",
+    "composer/composer": "~1.4",
     "symfony/console": "~3.0",
     "symfony/event-dispatcher": "~3.0",
     "symfony/filesystem": "~3.0",
@@ -27,7 +27,8 @@
     "mockery/mockery": "~0.9",
     "nelmio/alice": "~2.2",
     "fzaninotto/faker": "~1.6",
-    "squizlabs/php_codesniffer": "~2.3"
+    "squizlabs/php_codesniffer": "~2.3",
+    "satooshi/php-coveralls": "~1.0"
   },
   "bin": ["bin/bluzman"],
   "scripts": {

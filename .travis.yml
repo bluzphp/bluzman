@@ -6,11 +6,15 @@ install:
   # Composer
   - composer self-update
   - COMPOSER_ROOT_VERSION=dev-master composer install
+before_script:
+  - mkdir .reports
 script:
   # Code style
   - php vendor/bin/phpcs ./src --standard=PSR1,PSR2 --encoding=utf-8
   # PHPUnit
-  - php vendor/bin/phpunit
+  - php vendor/bin/phpunit --coverage-clover=.reports/clover.xml
+after_success:
+  - travis_retry php vendor/bin/coveralls
 notifications:
   email: false
   webhooks:
