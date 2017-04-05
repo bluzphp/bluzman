@@ -6,12 +6,10 @@
 
 namespace Bluzman\Command\Db;
 
-use Bluzman\Command\Generate\AbstractDbCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Bluzman\Input\InputArgument;
 
 /**
- * MigrateCommand
+ * Create migration command
  *
  * @package  Bluzman\Command\Db
  * @author   Anton Shevchuk
@@ -32,15 +30,9 @@ class CreateCommand extends AbstractDbCommand
             // the "--help" option
             ->setHelp('This command is shorthand to phinx tool')
         ;
-    }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return int|null|void
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $this->callForContribute();
+        $name = new InputArgument('name', InputArgument::REQUIRED, 'Migration name is required');
+
+        $this->getDefinition()->addArgument($name);
     }
 }

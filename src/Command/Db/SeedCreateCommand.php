@@ -6,13 +6,15 @@
 
 namespace Bluzman\Command\Db;
 
+use Bluzman\Input\InputArgument;
+
 /**
- * Run migrate command
+ * Create seed command
  *
  * @package  Bluzman\Command\Db
  * @author   Anton Shevchuk
  */
-class MigrateCommand extends AbstractDbCommand
+class SeedCreateCommand extends AbstractDbCommand
 {
     /**
      * Command configuration
@@ -21,12 +23,16 @@ class MigrateCommand extends AbstractDbCommand
     {
         $this
             // the name of the command (the part after "bin/bluzman")
-            ->setName('db:migrate')
+            ->setName('db:seed:create')
             // the short description shown while running "php bin/bluzman list"
-            ->setDescription('Apply DB migrations')
+            ->setDescription('Create seed file')
             // the full command description shown when running the command with
             // the "--help" option
             ->setHelp('This command is shorthand to phinx tool')
         ;
+
+        $name = new InputArgument('name', InputArgument::REQUIRED, 'Seed name is required');
+
+        $this->getDefinition()->addArgument($name);
     }
 }

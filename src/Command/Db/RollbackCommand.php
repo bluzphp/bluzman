@@ -6,13 +6,15 @@
 
 namespace Bluzman\Command\Db;
 
+use Bluzman\Input\InputArgument;
+
 /**
- * Run migrate command
+ * Run rollback command
  *
  * @package  Bluzman\Command\Db
  * @author   Anton Shevchuk
  */
-class MigrateCommand extends AbstractDbCommand
+class RollbackCommand extends AbstractDbCommand
 {
     /**
      * Command configuration
@@ -21,9 +23,9 @@ class MigrateCommand extends AbstractDbCommand
     {
         $this
             // the name of the command (the part after "bin/bluzman")
-            ->setName('db:migrate')
+            ->setName('db:rollback')
             // the short description shown while running "php bin/bluzman list"
-            ->setDescription('Apply DB migrations')
+            ->setDescription('Rollback last migration')
             // the full command description shown when running the command with
             // the "--help" option
             ->setHelp('This command is shorthand to phinx tool')

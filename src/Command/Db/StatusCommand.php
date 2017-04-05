@@ -6,13 +6,15 @@
 
 namespace Bluzman\Command\Db;
 
+use Bluzman\Input\InputArgument;
+
 /**
- * Run migrate command
+ * Get migrations status
  *
  * @package  Bluzman\Command\Db
  * @author   Anton Shevchuk
  */
-class MigrateCommand extends AbstractDbCommand
+class StatusCommand extends AbstractDbCommand
 {
     /**
      * Command configuration
@@ -21,12 +23,16 @@ class MigrateCommand extends AbstractDbCommand
     {
         $this
             // the name of the command (the part after "bin/bluzman")
-            ->setName('db:migrate')
+            ->setName('db:status')
             // the short description shown while running "php bin/bluzman list"
-            ->setDescription('Apply DB migrations')
+            ->setDescription('Get migration status')
             // the full command description shown when running the command with
             // the "--help" option
             ->setHelp('This command is shorthand to phinx tool')
         ;
+
+        $env = new InputArgument('--environment', InputArgument::OPTIONAL, 'Environment', 'default');
+
+        $this->getDefinition()->addArgument($env);
     }
 }
