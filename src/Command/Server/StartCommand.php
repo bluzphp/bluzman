@@ -30,7 +30,7 @@ class StartCommand extends AbstractServerCommand
             // the name of the command (the part after "bin/bluzman")
             ->setName('server:start')
             // the short description shown while running "php bin/bluzman list"
-            ->setDescription('Launches a built-in PHP server')
+            ->setDescription('Launche a built-in PHP server')
             // the full command description shown when running the command with
             // the "--help" option
             ->setHelp('This command allows you to start built-in PHP server')
