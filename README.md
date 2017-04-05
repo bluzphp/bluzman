@@ -118,6 +118,23 @@ Generator will create a controller in `module_name/controllers/grid.php` and a v
 bluzman db:status
 ```
 
+## Install and remove modules
+
+Retrieve available modules:
+```bash
+bluzman module:list
+```
+
+Install module:
+```bash
+bluzman module:install auth
+```
+
+Remove module:
+```bash
+bluzman module:remove auth
+```
+
 ## Server
 
 Bluzman provides a commands list to operate with built-in PHP server.

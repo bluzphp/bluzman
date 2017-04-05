@@ -1,7 +1,6 @@
 {
   "name": "bluzphp/bluzman",
   "description": "Bluzman - Simple workflow manager for Bluz Skeleton",
-  "version": "2.0.0",
   "type": "library",
   "minimum-stability": "dev",
   "license": "MIT",
@@ -13,6 +12,7 @@
   ],
   "require": {
     "php": ">=7.0",
+    "codeception/codeception": "~2.2",
     "composer/composer": "~1.4",
     "robmorgan/phinx": "~0.8",
     "symfony/console": "~3.0",
