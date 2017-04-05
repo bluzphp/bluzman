@@ -9,8 +9,7 @@ namespace Bluzman\Command\Server;
 /**
  * NotRunningException
  *
- * @category Command
- * @package  Bluzman
+ * @package  Bluzman\Command\Server
  *
  * @author   Pavel Machekhin
  * @created  2013-06-17 15:11

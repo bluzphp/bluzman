@@ -11,7 +11,7 @@ use Bluzman\Command\AbstractCommand;
  * AbstractServerCommand
  *
  * @package  Bluzman\Command\Server
- * @author   dark
+ * @author   Anton Shevchuk
  */
 abstract class AbstractServerCommand extends AbstractCommand
 {

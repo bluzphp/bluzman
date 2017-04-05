@@ -18,7 +18,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 /**
  * ModelCommand
  *
- * @package  Bluzman\Command
+ * @package  Bluzman\Command\Generate
  */
 class ModelCommand extends AbstractGenerateCommand
 {

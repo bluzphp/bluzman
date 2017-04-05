@@ -29,15 +29,17 @@ Requirements
 Usage
 -------------------------
 List of available commands
+```bash
+php ./vendor/bin/bluzman list
 ```
-    $ php ./vendor/bin/bluzman list
-```
+
+## Code generators
 
 ### Model generator
 
 For create new model you must run the command in terminal:
-```
-    $ bluzman generate:model model_name table_name
+```bash
+bluzman generate:model model_name table_name
 ```
 
  - _model_name_ - the name of model. With this name will be created folder of model.
@@ -47,8 +49,8 @@ For create new model you must run the command in terminal:
 ### Module generator
 
 For create new module you must run the command in terminal
-```
-    $ bluzman generate:module module_name [controller_name]...
+```bash
+bluzman generate:module module_name [controller_name]...
 ```
 
  - _module_name_ - the name of module. With this name will be created folder of module.
@@ -57,8 +59,8 @@ For create new module you must run the command in terminal
 ### Controller generator
 
 For create new controller you must run the command in terminal:
-```
-    $ bluzman generate:controller module_name controller_name
+```bash
+bluzman generate:controller module_name controller_name
 ```
 
  - _module_name_ - the name of module. With this name will be created folder of module.
@@ -68,15 +70,15 @@ For create new controller you must run the command in terminal:
 
 For create CRUD class you must run the command in terminal:
 
-```
-    $ bluzman generate:crud model_name 
+```bash
+bluzman generate:crud model_name 
 ```
 Generator will create a class in `model_name/Crud.php`
 
 If you want to generate CRUD controller and view you must run the command in terminal:
 
-```
-    $ bluzman generate:crud model_name module_name
+```bash
+bluzman generate:crud model_name module_name
 ```
 
 Generator will create a controller in `module_name/controllers/crud.php` and a view `module_name/views/crud.php`
@@ -85,8 +87,8 @@ Generator will create a controller in `module_name/controllers/crud.php` and a v
 
 For create REST controller you must run the command in terminal:
 
-```
-    $ bluzman generate:rest model_name module_name
+```bash
+bluzman generate:rest model_name module_name
 ```
 
 Generator will create a controller in `module_name/controllers/rest.php`.
@@ -95,41 +97,49 @@ Generator will create a controller in `module_name/controllers/rest.php`.
 
 For create GRID class you must run the command in terminal:
 
-```
-    $ bluzman generate:grid model_name 
+```bash
+bluzman generate:grid model_name 
 ```
 Generator will create a class in `model_name/Grid.php`
 
 If you want to generate GRID controller and view you must run the command in terminal:
 
-```
-    $ bluzman generate:grid model_name module_name
+```bash
+bluzman generate:grid model_name module_name
 ```
 
 Generator will create a controller in `module_name/controllers/grid.php` and a view `module_name/views/grid.php`
 
-### Server
+## Migrations
+> All `db:*` commands is just shorthand to call `php /vendor/bin/phinx command -e default -c phinx.php`. 
+
+### Status
+```bash
+bluzman db:status
+```
+
+## Server
 
 Bluzman provides a commands list to operate with built-in PHP server.
 
 To launch built-in PHP server you must run the command in terminal:
-```
-    $ bluzman server:start [--host[="..."]] [--port=["..."]]
+```bash
+bluzman server:start [--host[="..."]] [--port=["..."]]
 ```
 By default server will be available by the address **0.0.0.0:8000** and you will see all logs in the terminal.
 
 But there is an option to run server in the background, this requires an option **-b**:
 
-```
-    $ bluzman server:start ... -b
+```bash
+bluzman server:start ... -b
 ```
 
 And if server launched in the background, it can be stopped with following command:
-```
-    $ bluzman server:stop [--host[="..."]] [--port=["..."]]
+```bash
+bluzman server:stop [--host[="..."]] [--port=["..."]]
 ```
 
 If you want to know the status of the server you must run the command in terminal:
-```
-    $ bluzman server:status [--host[="..."]] [--port=["..."]]
+```bash
+bluzman server:status [--host[="..."]] [--port=["..."]]
 ```

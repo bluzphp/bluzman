@@ -7,6 +7,7 @@
 namespace Bluzman\Command\Generate;
 
 use Bluz\Validator\Validator as v;
+use Bluzman\Command\AbstractCommand;
 use Bluzman\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,9 +15,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * AbstractCommand
  *
- * @package  Bluzman\Command
+ * @package  Bluzman\Command\Generate
  */
-abstract class AbstractGenerateCommand extends \Bluzman\Command\AbstractCommand
+abstract class AbstractGenerateCommand extends AbstractCommand
 {
     /**
      * @param InputInterface $input

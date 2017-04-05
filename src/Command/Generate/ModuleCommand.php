@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Generate Module Structure
  *
- * @package  Bluzman\Command
+ * @package  Bluzman\Command\Generate
  */
 class ModuleCommand extends AbstractGenerateCommand
 {

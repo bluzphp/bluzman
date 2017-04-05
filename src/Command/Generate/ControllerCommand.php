@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * ControllerCommand
  *
- * @package  Bluzman\Command
+ * @package  Bluzman\Command\Generate
  */
 class ControllerCommand extends AbstractGenerateCommand
 {
