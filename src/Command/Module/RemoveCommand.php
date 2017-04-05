@@ -45,7 +45,6 @@ class RemoveCommand extends AbstractCommand
         );
 
         $this->getDefinition()->addArgument($module);
-
     }
 
     /**

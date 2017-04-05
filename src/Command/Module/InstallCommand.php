@@ -45,7 +45,6 @@ class InstallCommand extends AbstractCommand
         );
 
         $this->getDefinition()->addArgument($module);
-
     }
 
     /**
