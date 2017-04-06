@@ -135,6 +135,17 @@ Remove module:
 bluzman module:remove auth
 ```
 
+## Tests
+For run all tests:
+```bash
+bluzman test
+```
+
+For run specified group:
+```bash
+bluzman test module-options
+```
+
 ## Server
 
 Bluzman provides a commands list to operate with built-in PHP server.
