@@ -29,6 +29,7 @@ class ApplicationTest extends TestCase
     public function testCommandsAreAvailable()
     {
         self::assertTrue($this->application->get('i-need-magic') instanceof Command);
+        self::assertTrue($this->application->get('test') instanceof Command);
         self::assertTrue($this->application->get('db:create') instanceof Command);
         self::assertTrue($this->application->get('db:migrate') instanceof Command);
         self::assertTrue($this->application->get('db:rollback') instanceof Command);
