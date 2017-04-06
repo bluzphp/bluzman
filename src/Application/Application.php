@@ -84,6 +84,7 @@ class Application extends Console\Application
         $this->addCommands(
             [
                 new Command\MagicCommand,
+                new Command\TestCommand,
                 new Command\Db\CreateCommand,
                 new Command\Db\MigrateCommand,
                 new Command\Db\RollbackCommand,
