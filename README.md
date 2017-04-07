@@ -111,11 +111,39 @@ bluzman generate:grid model_name module_name
 Generator will create a controller in `module_name/controllers/grid.php` and a view `module_name/views/grid.php`
 
 ## Migrations
-> All `db:*` commands is just shorthand to call `php /vendor/bin/phinx command -e default -c phinx.php`. 
+> All `db:command` commands is just shorthand to call `php /vendor/bin/phinx command -e default -c phinx.php`. 
 
 ### Status
 ```bash
 bluzman db:status
+```
+
+### Create migration
+```bash
+bluzman db:create UsersTable
+```
+
+### Migrate
+```bash
+bluzman db:migrate
+```
+
+### Rollback last migration
+```bash
+bluzman db:rollback
+```
+
+### Create seed
+```bash
+bluzman db:seed:create UserSeed
+```
+
+### Apply seed data
+```bash
+# all seed
+bluzman db:seed:run
+# specified seed
+bluzman db:seed:run UserSeed
 ```
 
 ## Install and remove modules
