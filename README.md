@@ -111,11 +111,39 @@ bluzman generate:grid model_name module_name
 Generator will create a controller in `module_name/controllers/grid.php` and a view `module_name/views/grid.php`
 
 ## Migrations
-> All `db:*` commands is just shorthand to call `php /vendor/bin/phinx command -e default -c phinx.php`. 
+> All `db:command` commands is just shorthand to call `php /vendor/bin/phinx command -e default -c phinx.php`. 
 
 ### Status
 ```bash
 bluzman db:status
+```
+
+### Create migration
+```bash
+bluzman db:create UsersTable
+```
+
+### Migrate
+```bash
+bluzman db:migrate
+```
+
+### Rollback last migration
+```bash
+bluzman db:rollback
+```
+
+### Create seed
+```bash
+bluzman db:seed:create UserSeed
+```
+
+### Apply seed data
+```bash
+# all seed
+bluzman db:seed:run
+# specified seed
+bluzman db:seed:run UserSeed
 ```
 
 ## Install and remove modules
@@ -135,13 +163,24 @@ Remove module:
 bluzman module:remove auth
 ```
 
+## Tests
+For run all tests:
+```bash
+bluzman test
+```
+
+For run specified group:
+```bash
+bluzman test module-options
+```
+
 ## Server
 
 Bluzman provides a commands list to operate with built-in PHP server.
 
 To launch built-in PHP server you must run the command in terminal:
 ```bash
-bluzman server:start [--host[="..."]] [--port=["..."]]
+bluzman server:start --host[="..."] --port[="..."]
 ```
 By default server will be available by the address **0.0.0.0:8000** and you will see all logs in the terminal.
 
@@ -153,10 +192,10 @@ bluzman server:start ... -b
 
 And if server launched in the background, it can be stopped with following command:
 ```bash
-bluzman server:stop [--host[="..."]] [--port=["..."]]
+bluzman server:stop --host[="..."] --port[="..."]
 ```
 
 If you want to know the status of the server you must run the command in terminal:
 ```bash
-bluzman server:status [--host[="..."]] [--port=["..."]]
+bluzman server:status --host[="..."] --port[="..."]
 ```
