@@ -77,7 +77,7 @@ class Application extends Console\Application
     /**
      * Register Bluzman commands
      *
-     * @todo Find a way to do this automatically
+     * @todo Find a way to do this automatically or move it to /bin/bluzman
      */
     protected function registerCommands()
     {

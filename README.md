@@ -180,7 +180,7 @@ Bluzman provides a commands list to operate with built-in PHP server.
 
 To launch built-in PHP server you must run the command in terminal:
 ```bash
-bluzman server:start [--host[="..."]] [--port=["..."]]
+bluzman server:start --host[="..."] --port[="..."]
 ```
 By default server will be available by the address **0.0.0.0:8000** and you will see all logs in the terminal.
 
@@ -192,10 +192,10 @@ bluzman server:start ... -b
 
 And if server launched in the background, it can be stopped with following command:
 ```bash
-bluzman server:stop [--host[="..."]] [--port=["..."]]
+bluzman server:stop --host[="..."] --port[="..."]
 ```
 
 If you want to know the status of the server you must run the command in terminal:
 ```bash
-bluzman server:status [--host[="..."]] [--port=["..."]]
+bluzman server:status --host[="..."] --port[="..."]
 ```
