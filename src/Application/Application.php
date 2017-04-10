@@ -64,7 +64,7 @@ class Application extends Console\Application
                     '-e',
                     InputOption::VALUE_REQUIRED,
                     'The environment to be used',
-                    getenv('BLUZ_ENV') ?: 'dev'
+                    getenv('BLUZ_ENV') ?: 'production'
                 ),
                 new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message'),
                 new InputOption('--quiet', '-q', InputOption::VALUE_NONE, 'Do not output any message'),

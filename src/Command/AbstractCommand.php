@@ -99,6 +99,8 @@ abstract class AbstractCommand extends Console\Command\Command
         $this->setInput($input);
         $this->setOutput($output);
 
+        putenv('BLUZ_ENV=' . $input->getOption('--env'));
+
         return parent::run($input, $output);
     }
 
