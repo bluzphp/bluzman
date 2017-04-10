@@ -27,7 +27,7 @@ defined('PATH_VENDOR') ? : define('PATH_VENDOR', $root . '/vendor');
 defined('PATH_PUBLIC') ? : define('PATH_PUBLIC', $root . '/public');
 
 // Environment
-$env = getenv('BLUZ_ENV') ?: 'dev';
+$env = getenv('BLUZ_ENV') ?: 'production';
 define('BLUZ_ENV', $env);
 
 error_reporting(E_ALL | E_STRICT);

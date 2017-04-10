@@ -92,14 +92,16 @@ abstract class AbstractCommand extends Console\Command\Command
     /**
      * @param  InputInterface $input
      * @param  OutputInterface $output
-     * @return integer
+     * @return void
      */
-    final public function run(InputInterface $input, OutputInterface $output)
+    final public function initialize(InputInterface $input, OutputInterface $output)
     {
+        parent::initialize($input, $output);
+
         $this->setInput($input);
         $this->setOutput($output);
 
-        return parent::run($input, $output);
+        putenv('BLUZ_ENV=' . $input->getOption('env'));
     }
 
     /**
