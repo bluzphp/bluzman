@@ -5,8 +5,6 @@
  * @link https://github.com/bluzphp/bluzman
  */
 
-use Bluzman\Input\InputOption;
-
 if (php_sapi_name() !== 'cli') {
     die('Must run from command line');
 }
@@ -49,17 +47,5 @@ $application = new Bluzman\Application\Application(
     $composerConfig['description'],
     $composerConfig['version']
 );
-
-// Add global Options to the Application
-$application->getDefinition()->addOptions([
-    new InputOption(
-        '--env',
-        '-e',
-        InputOption::VALUE_REQUIRED,
-        'The environment to be used',
-        BLUZ_ENV
-    ),
-]);
-
 $application->init();
 $application->run();

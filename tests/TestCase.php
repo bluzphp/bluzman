@@ -89,6 +89,9 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $this->application = $application;
     }
 
+    /**
+     * Setup FileSystem and Application fixture
+     */
     public function setUp()
     {
         $this->setFs(new Filesystem());
