@@ -8,11 +8,7 @@ namespace Bluzman\Tests\Generator;
 
 use Bluzman\Generator\Generator;
 use Bluzman\Generator\Template\AbstractTemplate;
-use Bluzman\Tests\Generator\DummyTemplate;
 use Bluzman\Tests\TestCase;
-use Faker\Factory;
-use Mockery as m;
-
 
 /**
  * @author Pavel Machekhin
