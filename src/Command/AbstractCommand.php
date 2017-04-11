@@ -6,7 +6,9 @@
 
 namespace Bluzman\Command;
 
+use Bluz\Validator\Validator as v;
 use Bluzman\Application\Application;
+use Bluzman\Input\InputArgument;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -158,5 +160,45 @@ abstract class AbstractCommand extends Console\Command\Command
             ' This command is not implemented yet. Don\'t be indifferent - you can contribute!' .
             ' https://github.com/bluzphp/bluzman. '
         );
+    }
+
+    /**
+     * addModuleArgument
+     *
+     * @param int $required
+     * @return AbstractCommand
+     */
+    protected function addModuleArgument($required = InputArgument::REQUIRED)
+    {
+        $module = new InputArgument('module', $required, 'Module name is required');
+        $module->setValidator(
+            v::string()->alphaNumeric('-_')->noWhitespace()
+        );
+
+        $this->getDefinition()->addArgument($module);
+
+        return $this;
+    }
+
+    /**
+     * addControllerArgument
+     *
+     * @param int $required
+     * @return AbstractCommand
+     */
+    protected function addControllerArgument($required = InputArgument::REQUIRED)
+    {
+        $controller = new InputArgument(
+            'controller',
+            $required,
+            'Controller name is required'
+        );
+        $controller->setValidator(
+            v::string()->alphaNumeric('-_')->noWhitespace()
+        );
+
+        $this->getDefinition()->addArgument($controller);
+
+        return $this;
     }
 }
