@@ -6,7 +6,6 @@
 
 namespace Bluzman\Command\Generate;
 
-use Bluz\Validator\Validator as v;
 use Bluzman\Input\InputArgument;
 use Bluzman\Input\InputException;
 use Bluzman\Generator;
