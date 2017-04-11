@@ -35,20 +35,10 @@ class GridCommand extends AbstractGenerateCommand
             ->setHelp('This command allows you to generate GRID files')
         ;
 
-        $this->addModelArgument();
-
-        $module = new InputArgument(
-            'module',
-            InputArgument::OPTIONAL,
-            'Module name, if you need to generate GRID controller and view'
-        );
-
-        $module->setValidator(
-            v::string()->alphaNumeric('-_')->noWhitespace()
-        );
-
-
-        $this->getDefinition()->addArgument($module);
+        $this
+            ->addModelArgument()
+            ->addModuleArgument(InputArgument::OPTIONAL)
+        ;
     }
 
     /**

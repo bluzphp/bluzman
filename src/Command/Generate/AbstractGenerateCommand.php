@@ -27,44 +27,6 @@ abstract class AbstractGenerateCommand extends AbstractCommand
     abstract public function verify(InputInterface $input, OutputInterface $output);
 
     /**
-     * addModuleArgument
-     *
-     * @return self
-     */
-    protected function addModuleArgument()
-    {
-        $module = new InputArgument('module', InputArgument::REQUIRED, 'Module name is required');
-        $module->setValidator(
-            v::string()->alphaNumeric('-_')->noWhitespace()
-        );
-
-        $this->getDefinition()->addArgument($module);
-
-        return $this;
-    }
-
-    /**
-     * addControllerArgument
-     *
-     * @return self
-     */
-    protected function addControllerArgument()
-    {
-        $controller = new InputArgument(
-            'controller',
-            InputArgument::REQUIRED,
-            'Controller name is required'
-        );
-        $controller->setValidator(
-            v::string()->alphaNumeric('-_')->noWhitespace()
-        );
-
-        $this->getDefinition()->addArgument($controller);
-
-        return $this;
-    }
-
-    /**
      * addModelArguments
      *
      * @return self

@@ -37,13 +37,7 @@ class TestCommand extends AbstractCommand
             ->setHelp('Run codeception tests')
         ;
 
-        $module = new InputArgument(
-            'module',
-            InputArgument::OPTIONAL,
-            'Run tests of module group'
-        );
-
-        $this->getDefinition()->addArgument($module);
+        $this->addModuleArgument(InputArgument::OPTIONAL);
     }
 
     /**

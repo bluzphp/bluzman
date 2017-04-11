@@ -34,20 +34,10 @@ class CrudCommand extends AbstractGenerateCommand
             // the "--help" option
             ->setHelp('This command allows you to generate CRUD files');
 
-        $this->addModelArgument();
-
-        $module = new InputArgument(
-            'module',
-            InputArgument::OPTIONAL,
-            'Module name, if you need to generate CRUD controller and view'
-        );
-
-        $module->setValidator(
-            v::string()->alphaNumeric('-_')->noWhitespace()
-        );
-
-
-        $this->getDefinition()->addArgument($module);
+        $this
+            ->addModelArgument()
+            ->addModuleArgument(InputArgument::OPTIONAL)
+        ;
     }
 
     /**
