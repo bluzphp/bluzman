@@ -50,7 +50,7 @@ class TestCommand extends AbstractCommand
         // call `codeception run` command programmatically
         $arguments = [
             'run',
-            '--config ' . PATH_ROOT . DS . 'codeception.yml'
+            '--config '. PATH_ROOT .DS. 'codeception.yml'
         ];
 
         if ($group = $input->getArgument('module')) {
@@ -68,7 +68,7 @@ class TestCommand extends AbstractCommand
     protected function getCodeceptionApplication()
     {
         // @todo need refactoring this part - move functions to separate files
-        require_once PATH_VENDOR . DS . 'codeception' . DS . 'codeception' . DS . 'autoload.php';
+        require_once PATH_VENDOR .DS. 'codeception' .DS. 'codeception' .DS. 'autoload.php';
 
         $app = new Codeception\Application('Codeception', Codeception\Codecept::VERSION);
         $app->add(new Codeception\Command\Run('run'));
