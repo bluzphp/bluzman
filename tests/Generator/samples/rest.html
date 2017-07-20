@@ -29,9 +29,7 @@ return function () {
     /**
      * @var Controller $this
      */
-    $rest = new Rest();
-
-    $rest->setCrud(Users\Crud::getInstance());
+    $rest = new Rest(Users\Crud::getInstance());
 
     $rest->head('system', 'rest/head', 'Read');
     $rest->get('system', 'rest/get', 'Read');
