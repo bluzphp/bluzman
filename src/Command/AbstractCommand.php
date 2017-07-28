@@ -172,7 +172,7 @@ abstract class AbstractCommand extends Console\Command\Command
     {
         $module = new InputArgument('module', $required, 'Module name is required');
         $module->setValidator(
-            v::string()->alphaNumeric('-_')->noWhitespace()
+            v::create()->string()->alphaNumeric('-_')->noWhitespace()
         );
 
         $this->getDefinition()->addArgument($module);
@@ -194,7 +194,7 @@ abstract class AbstractCommand extends Console\Command\Command
             'Controller name is required'
         );
         $controller->setValidator(
-            v::string()->alphaNumeric('-_')->noWhitespace()
+            v::create()->string()->alphaNumeric('-_')->noWhitespace()
         );
 
         $this->getDefinition()->addArgument($controller);

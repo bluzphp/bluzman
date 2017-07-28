@@ -35,7 +35,7 @@ abstract class AbstractGenerateCommand extends AbstractCommand
     {
         $model = new InputArgument('model', InputArgument::REQUIRED, 'Model name is required');
         $model->setValidator(
-            v::string()->alphaNumeric()->noWhitespace()
+            v::create()->string()->alphaNumeric()->noWhitespace()
         );
 
         $this->getDefinition()->addArgument($model);

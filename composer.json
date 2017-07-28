@@ -12,7 +12,7 @@
   ],
   "require": {
     "php": ">=7.0",
-    "codeception/codeception": "~2.2",
+    "codeception/codeception": "~2.3",
     "composer/composer": "~1.4",
     "robmorgan/phinx": "~0.8",
     "symfony/console": "~3.0",
@@ -21,14 +21,14 @@
     "symfony/finder": "~3.0",
     "symfony/process": "~3.0",
     "symfony/yaml": "~3.0",
-    "bluzphp/framework": "~7.4"
+    "bluzphp/framework": "~7.7"
   },
   "require-dev": {
     "phpunit/phpunit": "~5.7",
     "mockery/mockery": "~0.9",
     "nelmio/alice": "~2.2",
     "fzaninotto/faker": "~1.6",
-    "squizlabs/php_codesniffer": "~2.3",
+    "squizlabs/php_codesniffer": "~3.0",
     "satooshi/php-coveralls": "~1.0"
   },
   "bin": ["bin/bluzman"],
