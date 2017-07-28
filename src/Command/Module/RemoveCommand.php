@@ -60,7 +60,7 @@ class RemoveCommand extends AbstractCommand
 
         $arguments = [
             'command' => 'remove',
-            'packages' => ['bluzphp/module-' . $input->getArgument('module')]
+            'packages' => ['bluzphp/module-'. $input->getArgument('module')]
         ];
 
         // call `composer install` command programmatically
