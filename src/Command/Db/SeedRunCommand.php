@@ -32,6 +32,7 @@ class SeedRunCommand extends AbstractDbCommand
         ;
 
         $name = new InputArgument('--seed', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'Seed name(s) to run');
+
         $this->getDefinition()->addArgument($name);
     }
 }

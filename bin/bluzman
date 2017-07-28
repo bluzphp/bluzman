@@ -35,7 +35,6 @@ ini_set('display_errors', 1);
 ini_set('log_errors', 0);
 ini_set('html_errors', 0);
 
-
 // Get project info from composer.json
 $composerConfig = json_decode(
     file_get_contents(PATH_VENDOR .DS. 'bluzphp' .DS. 'bluzman' .DS. 'composer.json'),

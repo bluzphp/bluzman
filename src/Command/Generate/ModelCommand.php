@@ -41,7 +41,7 @@ class ModelCommand extends AbstractGenerateCommand
 
         $table = new InputArgument('table', InputArgument::REQUIRED, 'Table name is required');
         $table->setValidator(
-            v::string()->alphaNumeric('_')->noWhitespace()
+            v::create()->string()->alphaNumeric('_')->noWhitespace()
         );
 
         $this->getDefinition()->addArgument($table);

@@ -45,7 +45,7 @@ class RestCommand extends AbstractGenerateCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $this->write("Running <info>generate:rest</info> command");
+            $this->write('Running <info>generate:rest</info> command');
 
             $model = $input->getArgument('model');
             $this->getDefinition()->getArgument('model')->validate($model);
