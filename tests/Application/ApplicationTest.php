@@ -6,8 +6,9 @@
 
 namespace Bluzman\Tests\Application;
 
+use Bluzman\Application\Application;
 use Bluzman\Tests\TestCase;
-use \Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\Command;
 
 /**
  * @author Pavel Machekhin
@@ -20,7 +21,7 @@ class ApplicationTest extends TestCase
      */
     public function testIsFixtureCorrect()
     {
-        self::assertInstanceOf('\\Bluzman\\Application\\Application', $this->application);
+        self::assertInstanceOf(Application::class, $this->application);
     }
 
     /**
@@ -28,26 +29,26 @@ class ApplicationTest extends TestCase
      */
     public function testCommandsAreAvailable()
     {
-        self::assertTrue($this->application->get('i-need-magic') instanceof Command);
-        self::assertTrue($this->application->get('run') instanceof Command);
-        self::assertTrue($this->application->get('test') instanceof Command);
-        self::assertTrue($this->application->get('db:create') instanceof Command);
-        self::assertTrue($this->application->get('db:migrate') instanceof Command);
-        self::assertTrue($this->application->get('db:rollback') instanceof Command);
-        self::assertTrue($this->application->get('db:seed:create') instanceof Command);
-        self::assertTrue($this->application->get('db:seed:run') instanceof Command);
-        self::assertTrue($this->application->get('db:seed:run') instanceof Command);
-        self::assertTrue($this->application->get('generate:controller') instanceof Command);
-        self::assertTrue($this->application->get('generate:crud') instanceof Command);
-        self::assertTrue($this->application->get('generate:grid') instanceof Command);
-        self::assertTrue($this->application->get('generate:model') instanceof Command);
-        self::assertTrue($this->application->get('generate:module') instanceof Command);
-        self::assertTrue($this->application->get('generate:rest') instanceof Command);
-        self::assertTrue($this->application->get('module:install') instanceof Command);
-        self::assertTrue($this->application->get('module:list') instanceof Command);
-        self::assertTrue($this->application->get('module:remove') instanceof Command);
-        self::assertTrue($this->application->get('server:start') instanceof Command);
-        self::assertTrue($this->application->get('server:status') instanceof Command);
-        self::assertTrue($this->application->get('server:stop') instanceof Command);
+        self::assertInstanceOf(Command::class, $this->application->get('i-need-magic'));
+        self::assertInstanceOf(Command::class, $this->application->get('run'));
+        self::assertInstanceOf(Command::class, $this->application->get('test'));
+        self::assertInstanceOf(Command::class, $this->application->get('db:create'));
+        self::assertInstanceOf(Command::class, $this->application->get('db:migrate'));
+        self::assertInstanceOf(Command::class, $this->application->get('db:rollback'));
+        self::assertInstanceOf(Command::class, $this->application->get('db:seed:create'));
+        self::assertInstanceOf(Command::class, $this->application->get('db:seed:run'));
+        self::assertInstanceOf(Command::class, $this->application->get('db:seed:run'));
+        self::assertInstanceOf(Command::class, $this->application->get('generate:controller'));
+        self::assertInstanceOf(Command::class, $this->application->get('generate:crud'));
+        self::assertInstanceOf(Command::class, $this->application->get('generate:grid'));
+        self::assertInstanceOf(Command::class, $this->application->get('generate:model'));
+        self::assertInstanceOf(Command::class, $this->application->get('generate:module'));
+        self::assertInstanceOf(Command::class, $this->application->get('generate:rest'));
+        self::assertInstanceOf(Command::class, $this->application->get('module:install'));
+        self::assertInstanceOf(Command::class, $this->application->get('module:list'));
+        self::assertInstanceOf(Command::class, $this->application->get('module:remove'));
+        self::assertInstanceOf(Command::class, $this->application->get('server:start'));
+        self::assertInstanceOf(Command::class, $this->application->get('server:status'));
+        self::assertInstanceOf(Command::class, $this->application->get('server:stop'));
     }
 }
