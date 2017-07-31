@@ -7,14 +7,14 @@
 namespace Bluzman\Tests\Application;
 
 use Bluzman\Application\Application;
-use Bluzman\Tests\TestCase;
+use Bluzman\Tests\BluzmanTestCase;
 use Symfony\Component\Console\Command\Command;
 
 /**
  * @author Pavel Machekhin
  * @created 2013-12-07 01:21
  */
-class ApplicationTest extends TestCase
+class ApplicationTest extends BluzmanTestCase
 {
     /**
      * Verify fixture
