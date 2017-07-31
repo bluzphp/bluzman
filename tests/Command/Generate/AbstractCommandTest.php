@@ -6,14 +6,14 @@
 
 namespace Bluzman\Tests\Command\Generate;
 
-use Bluzman\Tests\TestCase;
+use Bluzman\Tests\BluzmanTestCase;
 use Mockery\Container;
 
 /**
  * @author Pavel Machekhin
  * @created 2014-07-10 15:24
  */
-abstract class AbstractCommandTest extends TestCase
+abstract class AbstractCommandTest extends BluzmanTestCase
 {
     public function setUp()
     {

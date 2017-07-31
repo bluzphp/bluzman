@@ -8,13 +8,13 @@ namespace Bluzman\Tests\Generator;
 
 use Bluzman\Generator\Generator;
 use Bluzman\Generator\Template\AbstractTemplate;
-use Bluzman\Tests\TestCase;
+use Bluzman\Tests\BluzmanTestCase;
 
 /**
  * @author Pavel Machekhin
  * @created 2014-08-10 13:36
  */
-class GeneratorTest extends TestCase
+class GeneratorTest extends BluzmanTestCase
 {
     public function testGetTemplateData()
     {

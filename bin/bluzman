@@ -5,7 +5,7 @@
  * @link https://github.com/bluzphp/bluzman
  */
 
-if (php_sapi_name() !== 'cli') {
+if (PHP_SAPI !== 'cli') {
     die('Must run from command line');
 }
 if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
@@ -15,7 +15,7 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 
 // Root path, double level up
 // UP to root from "/application/vendor/bluzphp/bluzman/bin"
-$root = realpath(dirname(dirname(dirname(dirname(__DIR__)))));
+$root = realpath(dirname(__DIR__, 4));
 
 // Definitions
 define('DS', DIRECTORY_SEPARATOR);

@@ -15,7 +15,7 @@ use Symfony\Component\Filesystem\Filesystem;
  * @author Pavel Machekhin
  * @created 2013-12-15 01:34
  */
-class TestCase extends \PHPUnit_Framework_TestCase
+class BluzmanTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Bluzman\Application\Application

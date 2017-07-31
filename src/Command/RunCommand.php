@@ -9,6 +9,7 @@ namespace Bluzman\Command;
 use Application\CliBootstrap;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -36,13 +37,23 @@ class RunCommand extends AbstractCommand
             ->setHelp('Run specified controller with options params')
         ;
 
-        $params = new InputArgument(
+        $uri = new InputArgument(
             'uri',
             InputArgument::REQUIRED,
             'URI to call'
         );
 
-        $this->getDefinition()->addArgument($params);
+        $this->getDefinition()->addArgument($uri);
+
+
+        $debug = new InputOption(
+            '--debug',
+            '-d',
+            InputOption::VALUE_NONE,
+            'Display debug information'
+        );
+
+        $this->getDefinition()->addOption($debug);
     }
 
     /**
@@ -52,6 +63,10 @@ class RunCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if ($input->getOption('debug')) {
+            error_reporting(E_ALL);
+            ini_set('display_errors', 1);
+        }
         $app = CliBootstrap::getInstance();
         $app->setInput($input);
         $app->setOutput($output);
