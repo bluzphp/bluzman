@@ -60,7 +60,7 @@ class StartCommand extends AbstractServerCommand
         // enable BLUZ_DEBUG
         // use public/routing.php
         $process = new Process(
-            "export BLUZ_ENV=$env && export BLUZ_DEBUG=1 && php -S $host:$port routing.php",
+            "export BLUZ_ENV=$env && export BLUZ_DEBUG=1 && export BLUZ_LOG=1 && php -S $host:$port routing.php",
             $publicDir
         );
 
