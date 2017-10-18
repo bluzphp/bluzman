@@ -1,6 +1,5 @@
+.DS_Store
 .idea
-!**.stub
+vendor
 composer.lock
 composer.phar
-vendor
-build
