@@ -5,6 +5,8 @@
  */
 namespace Application\<?=$model?>;
 
+use \Application\<?=$model?>\Row;
+
 /**
  * Class Table for `<?=$table?>`
  *
@@ -20,7 +22,7 @@ class Table extends \Bluz\Db\Table
      */
     protected $name = '<?=$table?>';
 
-    protected $rowClass = '\Application\<?=$model?>\Row';
+    protected $rowClass = Row::class;
 
     /**
      * Primary key(s)

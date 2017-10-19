@@ -99,7 +99,6 @@ class ModelCommand extends AbstractGenerateCommand
             }
         }
         */
-
         // generate table
         $tableFile = $this->getApplication()->getModelPath($modelName) . DS . 'Table.php';
 

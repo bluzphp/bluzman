@@ -1,5 +1,5 @@
 # fixture for Application
 Bluzman\Application\Application:
-  -
+  app:
     name: 'Bluzman Tests Application'
     version: '1.0.0'
