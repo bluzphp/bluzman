@@ -103,7 +103,14 @@ abstract class AbstractCommand extends Console\Command\Command
         $this->setInput($input);
         $this->setOutput($output);
 
-        putenv('BLUZ_ENV=' . $input->getOption('env'));
+        putenv('BLUZ_ENV=' . ($input->getOption('env') ?: getenv('BLUZ_ENV')));
+
+        $config = new \Bluz\Config\Config();
+        $config->setPath(PATH_APPLICATION);
+        $config->setEnvironment($input->getOption('env'));
+        $config->init();
+
+        \Bluz\Proxy\Config::setInstance($config);
     }
 
     /**

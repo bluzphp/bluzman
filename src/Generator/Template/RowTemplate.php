@@ -32,8 +32,8 @@ class RowTemplate extends AbstractTemplate
             $columns = $templateData['columns'];
             foreach ($columns as $column) {
                 // all properties will be `string` except `bigint`, `int`, etc. columns
-                $columnType = preg_match('/^int/', $column['type']) ? 'integer' : 'string';
-                $properties .= " * @property " . $columnType . " $" . $column['name'] . "\n";
+                $columnType = false !== strpos($column['type'], 'int') ? 'integer' : 'string';
+                $properties .= ' * @property ' . $columnType . ' $' . $column['name'] . "\n";
             }
             unset($templateData['columns']);
         }

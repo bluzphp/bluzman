@@ -3,5 +3,5 @@
  * @return array
  */
 return [
-    "foo" => "bar"
+    'foo' => 'bar'
 ];

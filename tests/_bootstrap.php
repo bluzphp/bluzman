@@ -13,6 +13,10 @@ $root = realpath(dirname(__DIR__));
 define('PATH_ROOT', $root);
 define('PATH_VENDOR', PATH_ROOT . DS . 'vendor');
 define('PATH_TMP', PATH_ROOT . DS . 'tests' . DS . 'Resources' . DS . 'tmp');
+define(
+    'PATH_APPLICATION',
+    PATH_ROOT . DS . 'tests' . DS . 'Application' . DS . 'Resources' . DS . 'fixtures' . DS . 'app' . DS . 'application'
+);
 define('BLUZ_ENV', 'dev');
 
 // register composer autoloader
