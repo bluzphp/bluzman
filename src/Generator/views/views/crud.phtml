@@ -1,12 +1,12 @@
 <?="<?php\n"?>
 /** @var \Application\<?=$model?>\Row $row */
-$uid = uniqid('form_');
+$uid = uniqid('form_', false);
 $url = $this->url('<?=$module?>', 'crud');
 <?="?>\n"?>
-<form id="<?='<?=$uid?>'?>" action="<?='<?=$url?>'?>" class="form-horizontal ajax" method="POST">
-    <input type="hidden" name="_method" value="<?='<?=$method?>'?>"/>
-    <!-- Place form fields here -->
-    <button type="submit" class="btn btn-primary"><?='<?=__("Save")?>'?></button>
+<form id="<?='<?=$uid?>'?>" action="<?='<?=$url?>'?>" class="form-horizontal" data-ajax method="POST">
+  <input type="hidden" name="_method" value="<?='<?=$method?>'?>"/>
+  <!-- Place form fields here -->
+  <button type="submit" class="btn btn-primary"><?='<?=__("Save")?>'?></button>
 </form>
 <?="<?php\n"?>
 // need for plain request
