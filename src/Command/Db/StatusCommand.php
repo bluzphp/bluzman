@@ -30,9 +30,5 @@ class StatusCommand extends AbstractDbCommand
             // the "--help" option
             ->setHelp('This command is shorthand to phinx tool')
         ;
-
-        $env = new InputArgument('--environment', InputArgument::OPTIONAL, 'Environment', 'default');
-
-        $this->getDefinition()->addArgument($env);
     }
 }
