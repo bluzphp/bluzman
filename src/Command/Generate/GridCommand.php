@@ -34,56 +34,30 @@ class GridCommand extends AbstractGenerateCommand
             ->setHelp('This command allows you to generate GRID files')
         ;
 
-        $this
-            ->addModelArgument()
-            ->addModuleArgument(InputArgument::OPTIONAL)
-        ;
+        $this->addModelArgument();
+        $this->addModuleArgument(InputArgument::OPTIONAL);
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
+     *
      * @return void
+     * @throws \Bluzman\Generator\GeneratorException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : void
     {
+        $this->write('Running <info>generate:grid</info> command');
         try {
-            $this->write("Running <info>generate:grid</info> command");
-
-            $model = $input->getArgument('model');
-            $this->getDefinition()->getArgument('model')->validate($model);
-
-            if (!$this->getApplication()->isModelExists($model)) {
-                throw new InputException(
-                    "Model $model is not exist, " .
-                    "run command <question>bluzman generate:model $model</question> before"
-                );
-            }
-
-            if ($module = $input->getArgument('module')) {
-                $this->getDefinition()->getArgument('module')->validate($module);
-
-                if (!$this->getApplication()->isModuleExists($module)) {
-                    throw new InputException(
-                        "Module $module is not exist, " .
-                        "run command <question>bluzman generate:module $module</question> before"
-                    );
-                }
-            }
+            // validate
+            $this->validateModelArgument();
+            $this->validateModuleArgument();
 
             // generate directories and files
             $this->generate($input, $output);
 
-            // verify it
+            // verify files
             $this->verify($input, $output);
-
-            $this->write("GRID for <info>{$model}</info> has been successfully created.");
-
-            if ($module = $input->getArgument('module')) {
-                $this->write(
-                    "Open page <info>/acl</info> in your browser and set permissions for <info>{$module}</info>"
-                );
-            }
         } catch (InputException $e) {
             $this->error("ERROR: {$e->getMessage()}");
         }
@@ -95,54 +69,35 @@ class GridCommand extends AbstractGenerateCommand
      * @return void
      * @throws InputException
      */
-    protected function generate(InputInterface $input, OutputInterface $output)
+    protected function generate(InputInterface $input, OutputInterface $output) : void
     {
         $model = ucfirst($input->getArgument('model'));
+        $module = $input->getArgument('module');
 
-        // generate CRUD
-        $crudFile = $this->getApplication()->getModelPath($model) . DS . 'Grid.php';
+        // template data
+        $data = [
+            'model' => $model,
+            'module' => $module
+        ];
 
-        if (file_exists($crudFile)) {
-            $this->comment("Crud file <info>$model/Grid.php</info> already exists");
-        } else {
-            $template = $this->getTemplate('GridTemplate');
-            $template->setFilePath($crudFile);
-            $template->setTemplateData([
-                'model' => $model
-            ]);
+        // generate GRID class
+        $gridFile = $this->getApplication()->getModelPath($model) . DS . 'Grid.php';
+        $this->generateFile('GridTemplate', $gridFile, $data);
 
-            $generator = new Generator\Generator($template);
-            $generator->make();
-        }
+        if ($module) {
+            $this->write(" |> Generate Grid controller <info>$module/controllers/grid.php</info>");
 
-        if ($module = $input->getArgument('module')) {
-            $this->write("Generate <info>$module/controllers/grid.php</info>");
+            // controller and view generators required the `Model\Table` class
+            // validator is present on previous step
+            $data['columns'] = $this->getTableInstance($model)::getMeta();
 
             $controllerFile = $this->getControllerPath($module, 'grid');
-            if (file_exists($controllerFile)) {
-                $this->comment("Controller file <info>$module/grid</info> already exists");
-            } else {
-                $template = new Generator\Template\GridControllerTemplate();
-                $template->setFilePath($controllerFile);
-                $template->setTemplateData(['model' => $model, 'module' => $module]);
+            $this->generateFile('GridControllerTemplate', $controllerFile, $data);
 
-                $generator = new Generator\Generator($template);
-                $generator->make();
-            }
-
-            $this->write("Generate <info>$module/views/grid.phtml</info>");
+            $this->write(" |> Generate Grid view <info>$module/views/grid.phtml</info>");
 
             $viewFile = $this->getViewPath($module, 'grid');
-            if (file_exists($viewFile)) {
-                $this->comment("View file <info>$module/grid</info> already exists");
-            } else {
-                $template = new Generator\Template\GridViewTemplate();
-                $template->setFilePath($viewFile);
-                $template->setTemplateData(['model' => $model, 'module' => $module]);
-
-                $generator = new Generator\Generator($template);
-                $generator->make();
-            }
+            $this->generateFile('GridViewTemplate', $viewFile, $data);
         }
     }
 
@@ -152,9 +107,12 @@ class GridCommand extends AbstractGenerateCommand
      * @return void
      * @throws \Bluzman\Generator\GeneratorException
      */
-    public function verify(InputInterface $input, OutputInterface $output)
+    public function verify(InputInterface $input, OutputInterface $output) : void
     {
-        $modelPath = $this->getApplication()->getModelPath($input->getArgument('model'));
+        $model = $input->getArgument('model');
+        $module = $input->getArgument('module');
+
+        $modelPath = $this->getApplication()->getModelPath($model);
 
         $paths = [
             $modelPath . DS . 'Grid.php',
@@ -164,6 +122,16 @@ class GridCommand extends AbstractGenerateCommand
             if (!$this->getFs()->exists($path)) {
                 throw new Generator\GeneratorException("File `$path` is not exists");
             }
+        }
+
+        // notifications
+        $this->write(" |> GRID for <info>{$model}</info> has been successfully created.");
+
+        if ($module) {
+            $this->write(
+                " |> <options=bold>Open page <info>/acl</info> in your browser ".
+                "and set permission <info>Management</info> for <info>{$module}</info> module</>"
+            );
         }
     }
 }

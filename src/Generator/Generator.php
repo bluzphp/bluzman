@@ -88,6 +88,7 @@ class Generator
         $this->setTemplate($template);
         $this->setAbsolutePath(__DIR__);
         $this->setFs(new Filesystem());
+
     }
 
     public function getCompiledTemplate()
@@ -105,6 +106,7 @@ class Generator
      */
     public function make()
     {
+//        var_dump($this->getTemplate()->getTemplateData());
         $this->getFs()->dumpFile(
             $this->getTemplate()->getFilePath(),
             $this->getCompiledTemplate()

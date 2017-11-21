@@ -6,9 +6,11 @@
 
 namespace Bluzman\Command;
 
-use Bluz\Validator\Validator as v;
+use Bluz\Proxy\Config;
+use Bluz\Validator\Validator;
 use Bluzman\Application\Application;
 use Bluzman\Input\InputArgument;
+use Bluzman\Input\InputException;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -43,7 +45,7 @@ abstract class AbstractCommand extends Console\Command\Command
     /**
      * @param InputInterface $input
      */
-    public function setInput(InputInterface $input)
+    public function setInput(InputInterface $input) : void
     {
         $this->input = $input;
     }
@@ -59,7 +61,7 @@ abstract class AbstractCommand extends Console\Command\Command
     /**
      * @param OutputInterface $output
      */
-    public function setOutput(OutputInterface $output)
+    public function setOutput(OutputInterface $output) : void
     {
         $this->output = $output;
     }
@@ -75,7 +77,7 @@ abstract class AbstractCommand extends Console\Command\Command
     /**
      * @param \Symfony\Component\Filesystem\Filesystem $fs
      */
-    public function setFs($fs)
+    public function setFs($fs) : void
     {
         $this->fs = $fs;
     }
@@ -92,9 +94,11 @@ abstract class AbstractCommand extends Console\Command\Command
     }
 
     /**
-     * @param  InputInterface $input
+     * @param  InputInterface  $input
      * @param  OutputInterface $output
+     *
      * @return void
+     * @throws \Bluz\Config\ConfigException
      */
     final public function initialize(InputInterface $input, OutputInterface $output)
     {
@@ -110,14 +114,14 @@ abstract class AbstractCommand extends Console\Command\Command
         $config->setEnvironment($input->getOption('env'));
         $config->init();
 
-        \Bluz\Proxy\Config::setInstance($config);
+        Config::setInstance($config);
     }
 
     /**
      * @param $message
      * @return void
      */
-    public function write($message)
+    public function write($message) : void
     {
         $this->getOutput()->writeln($message);
     }
@@ -126,7 +130,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * @param $message
      * @return void
      */
-    public function info($message)
+    public function info($message) : void
     {
         $this->write("<info>$message</info>");
     }
@@ -135,7 +139,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * @param $message
      * @return void
      */
-    public function comment($message)
+    public function comment($message) : void
     {
         $this->write("<comment>$message</comment>");
     }
@@ -144,7 +148,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * @param $message
      * @return void
      */
-    public function question($message)
+    public function question($message) : void
     {
         $this->write("<question>$message</question>:");
     }
@@ -153,7 +157,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * @param $message
      * @return void
      */
-    public function error($message)
+    public function error($message) : void
     {
         $this->write("<error>$message</error>");
     }
@@ -170,42 +174,68 @@ abstract class AbstractCommand extends Console\Command\Command
     }
 
     /**
-     * addModuleArgument
+     * Add Module Argument
      *
      * @param int $required
-     * @return AbstractCommand
+     * @return void
      */
-    protected function addModuleArgument($required = InputArgument::REQUIRED)
+    protected function addModuleArgument($required = InputArgument::REQUIRED) : void
     {
         $module = new InputArgument('module', $required, 'Module name is required');
-        $module->setValidator(
-            v::create()->string()->alphaNumeric('-_')->noWhitespace()
-        );
-
         $this->getDefinition()->addArgument($module);
-
-        return $this;
     }
 
     /**
-     * addControllerArgument
+     * Validate Module Argument
+     *
+     * @return void
+     * @throws \Bluzman\Input\InputException
+     */
+    protected function validateModuleArgument() : void
+    {
+        $module = $this->getInput()->getArgument('module');
+
+        $validator = Validator::create()
+            ->string()
+            ->alphaNumeric('-_')
+            ->noWhitespace();
+
+        if ($this->getDefinition()->getArgument('module')->isRequired()
+            && !$validator->validate($module)) {
+            throw new InputException($validator->getError());
+        }
+    }
+
+    /**
+     * Add Controller Argument
      *
      * @param int $required
-     * @return AbstractCommand
+     * @return void
      */
-    protected function addControllerArgument($required = InputArgument::REQUIRED)
+    protected function addControllerArgument($required = InputArgument::REQUIRED) : void
     {
-        $controller = new InputArgument(
-            'controller',
-            $required,
-            'Controller name is required'
-        );
-        $controller->setValidator(
-            v::create()->string()->alphaNumeric('-_')->noWhitespace()
-        );
-
+        $controller = new InputArgument('controller', $required, 'Controller name is required');
         $this->getDefinition()->addArgument($controller);
+    }
 
-        return $this;
+    /**
+     * Validate Module Argument
+     *
+     * @return void
+     * @throws \Bluzman\Input\InputException
+     */
+    protected function validateControllerArgument() : void
+    {
+        $controller = $this->getInput()->getArgument('controller');
+
+        $validator = Validator::create()
+            ->string()
+            ->alphaNumeric('-_')
+            ->noWhitespace();
+
+        if ($this->getDefinition()->getArgument('controller')->isRequired()
+            && !$validator->validate($controller)) {
+            throw new InputException($validator->getError());
+        }
     }
 }

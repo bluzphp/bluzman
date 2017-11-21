@@ -11,6 +11,7 @@ namespace Bluzman\Generator\Template;
  *
  * @package  Bluzman\Generator\Template
  *
+ * @todo     Migrate to Bluz\View\View
  * @author   Pavel Machekhin
  * @created  2013-03-28 16:36
  */

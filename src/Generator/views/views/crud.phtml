@@ -5,8 +5,38 @@ $url = $this->url('<?=$module?>', 'crud');
 <?="?>\n"?>
 <form id="<?='<?=$uid?>'?>" action="<?='<?=$url?>'?>" class="form-horizontal" data-ajax method="POST">
   <input type="hidden" name="_method" value="<?='<?=$method?>'?>"/>
-  <!-- Place form fields here -->
-  <button type="submit" class="btn btn-primary"><?='<?=__("Save")?>'?></button>
+  <div class="modal-header">
+    <h4 class="modal-title"><?="<?=__('$model')?>"?></h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="<?=__('Close')?>">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+<?php foreach ($columns as $column => $meta) : ?>
+<?php if ($meta['key'] === 'PRI') : // primary key ?>
+    <input type="hidden" name="<?=$column?>" value="<?="<?= \$row['$column'] ?>"?>"/>
+<?php continue; endif; ?>
+    <div class="form-group row">
+      <label class="col-form-label col-lg-4" for="<?=$column?>"><?="<?=__('$column')?>"?></label>
+      <div class="col-lg-8">
+<?php if ($column === 'created' || $column === 'updated') : // timestamps ?>
+        <input type="datetime-local" id="<?=$column?>" class="form-control" disabled value="<?="<?= \$row['$column'] ?>"?>"/>
+<?php elseif ($meta['type'] === 'int') : // number ?>
+        <input type="number" id="<?=$column?>" class="form-control" value="<?="<?= \$row['$column'] ?>"?>"/>
+<?php elseif ($meta['type'] === 'enum') : // select box ?>
+        <?="<?= \$this->select('$column', [], \$row['$column'], ['id' => '$column', 'class' => 'form-control']);?>"?>
+<?php else : // others ?>
+        <input type="text" id="<?=$column?>" class="form-control" value="<?="<?= \$row['$column'] ?>"?>"/>
+<?php endif; ?>
+      </div>
+    </div>
+<?php endforeach; ?>
+    <!-- Place additional form fields here -->
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary"><?=__('Save')?></button>
+    <a href="#" class="btn btn-default" data-dismiss="modal"><?=__('Close')?></a>
+  </div>
 </form>
 <?="<?php\n"?>
 // need for plain request

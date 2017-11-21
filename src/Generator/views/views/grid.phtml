@@ -30,8 +30,9 @@ $uid = $grid->getUid();
   <table class="table table-striped table-hover">
     <thead>
       <tr>
-        <th width="40px"><a href="<?="<?= \$grid->order('id') ?: '#' ?>"?>"><?="<?= __('Id') ?>"?></a></th>
-        <th>Header example</th>
+        <?php foreach ($columns as $column => $meta) : $columnTitle = ucfirst($column); ?>
+        <th><a href="<?="<?= \$grid->order('{$column}') ?: '#' ?>"?>"><?="<?= __('{$columnTitle}') ?>"?></a></th>
+        <?php endforeach; ?>
         <!-- Place your column headers here, for generate link for order use method $grid->order('column name') -->
         <th width="160px"></th>
       </tr>
@@ -39,15 +40,17 @@ $uid = $grid->getUid();
     <tbody>
       <?='<?php foreach($grid->getData() as $row) : ?>'?><?="\n"?>
       <tr>
-        <td><?="<?=\$row['id']?>"?></td>
-        <td>Content example</td>
+        <?php foreach ($columns as $column => $meta) : ?>
+        <td><?="<?= \$row['{$column}'] ?>"?></td>
+        <?php endforeach; ?>
+        <?php $first = current(array_keys($columns)); ?>
         <!-- Place your content her, use $row['column name'] -->
         <td class="controls">
-          <a href="<?="<?= \$this->url('$module', 'crud', ['id' => \$row['id']]) ?>"?>" class="btn btn-primary"
+          <a href="<?="<?= \$this->url('$module', 'crud', ['id' => \$row['$first']]) ?>"?>" class="btn btn-primary"
              data-ajax-dialog data-ajax-method="get" data-modal-style="modal-lg">
             <i class="fa fa-pencil"></i>
           </a>
-          <a href="<?="<?= \$this->url('$module', 'crud', ['id' => \$row['id']]) ?>"?>" class="btn btn-danger"
+          <a href="<?="<?= \$this->url('$module', 'crud', ['id' => \$row['$first']]) ?>"?>" class="btn btn-danger"
              data-confirm data-ajax data-ajax-method="delete">
             <i class="fa fa-trash-o"></i>
           </a>

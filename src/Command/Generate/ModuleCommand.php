@@ -35,14 +35,6 @@ class ModuleCommand extends AbstractGenerateCommand
         ;
 
         $this->addModuleArgument();
-
-        $controller = new InputArgument(
-            'controller',
-            InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
-            'Controller name(s)'
-        );
-
-        $this->getDefinition()->addArgument($controller);
     }
 
     /**
@@ -52,36 +44,16 @@ class ModuleCommand extends AbstractGenerateCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->write('Running <info>generate:module</info> command');
         try {
-            $this->write("Running <info>generate:module</info> command");
-
-            $module = $input->getArgument('module');
-
-            $argument = $this->getDefinition()->getArgument('module');
-            $argument->validate($module);
+            // validate
+            $this->validateModuleArgument();
 
             // create main folder and subfolders
             $this->generate($input, $output);
 
             // verify it
             $this->verify($input, $output);
-
-            $this->write("Module <info>$module</info> has been successfully created.");
-
-            // create controllers
-            $controllers = $input->getArgument('controller') ?? [];
-
-            $command = $this->getApplication()->find('generate:controller');
-
-            foreach ($controllers as $controller) {
-                $arguments = [
-                    'command' => 'generate:controller',
-                    'module' => $module,
-                    'controller' => $controller
-                ];
-                $greetInput = new ArrayInput($arguments);
-                $command->run($greetInput, $output);
-            }
         } catch (\Exception $e) {
             $this->error("ERROR: {$e->getMessage()}");
         }
@@ -94,8 +66,9 @@ class ModuleCommand extends AbstractGenerateCommand
      */
     protected function generate(InputInterface $input, OutputInterface $output)
     {
-        $this->addSubFolders(
-            $this->getApplication()->getModulePath($input->getArgument('module')),
+        $path = $this->getApplication()->getModulePath($input->getArgument('module'));
+        $this->createSubFolders(
+            $path,
             [
                 'controllers',
                 'views'
@@ -107,7 +80,7 @@ class ModuleCommand extends AbstractGenerateCommand
      * @param string $path
      * @param string[] $subFolders
      */
-    protected function addSubFolders($path, array $subFolders = [])
+    protected function createSubFolders($path, array $subFolders = [])
     {
         if (!$this->getFs()->exists($path)) {
             $this->getFs()->mkdir($path);
@@ -116,7 +89,7 @@ class ModuleCommand extends AbstractGenerateCommand
         foreach ($subFolders as $subFolderName) {
             $subFolderPath = $path . DIRECTORY_SEPARATOR . $subFolderName;
             if ($this->getFs()->exists($subFolderPath)) {
-                $this->comment("Directory <info>$subFolderPath</info> already exists");
+                $this->comment(" |> Directory <info>$subFolderPath</info> already exists");
             } else {
                 $this->getFs()->mkdir($subFolderPath, 0755);
                 $this->getFs()->touch([$subFolderPath . DIRECTORY_SEPARATOR . '.keep']);
@@ -130,9 +103,10 @@ class ModuleCommand extends AbstractGenerateCommand
      * @return void
      * @throws GeneratorException
      */
-    public function verify(InputInterface $input, OutputInterface $output)
+    public function verify(InputInterface $input, OutputInterface $output) : void
     {
-        $modulePath = $this->getApplication()->getModulePath($input->getArgument('module'));
+        $module = $input->getArgument('module');
+        $modulePath = $this->getApplication()->getModulePath($module);
 
         $paths = [
             $modulePath,
@@ -145,5 +119,7 @@ class ModuleCommand extends AbstractGenerateCommand
                 throw new GeneratorException("Directory `$path` is not exists");
             }
         }
+
+        $this->write(" |> Module <info>$module</info> has been successfully created.");
     }
 }

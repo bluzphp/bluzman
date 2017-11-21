@@ -33,6 +33,17 @@ class Grid extends \Bluz\Grid\Grid
 
         $this->setAdapter($adapter);
         $this->setDefaultLimit(25);
-        $this->setAllowOrders([]);
+<?php if (count($columns)) : ?>
+        $this->setAllowFilters([
+<?php foreach ($columns as $column => $meta) : ?>
+            '<?=$column?>',
+<?php endforeach; ?>
+        ]);
+        $this->setAllowOrders([
+<?php foreach ($columns as $column => $meta) : ?>
+            '<?=$column?>',
+<?php endforeach; ?>
+        ]);
+<?php endif; ?>
     }
 }

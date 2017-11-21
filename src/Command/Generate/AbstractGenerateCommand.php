@@ -6,9 +6,14 @@
 
 namespace Bluzman\Command\Generate;
 
-use Bluz\Validator\Validator as v;
+use Bluz\Db\Table;
+use Bluz\Proxy\Db;
+use Bluz\Validator\Validator;
 use Bluzman\Command\AbstractCommand;
+use Bluzman\Generator\Generator;
+use Bluzman\Generator\GeneratorException;
 use Bluzman\Input\InputArgument;
+use Bluzman\Input\InputException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -24,23 +29,95 @@ abstract class AbstractGenerateCommand extends AbstractCommand
      * @param OutputInterface $output
      * @return mixed
      */
-    abstract public function verify(InputInterface $input, OutputInterface $output);
+    abstract public function verify(InputInterface $input, OutputInterface $output) : void;
 
     /**
-     * addModelArguments
+     * Add Model Argument
      *
-     * @return self
+     * @return void
      */
-    protected function addModelArgument()
+    protected function addModelArgument() : void
     {
         $model = new InputArgument('model', InputArgument::REQUIRED, 'Model name is required');
-        $model->setValidator(
-            v::create()->string()->alphaNumeric()->noWhitespace()
-        );
-
         $this->getDefinition()->addArgument($model);
+    }
 
-        return $this;
+    /**
+     * Validate Model Argument
+     *
+     * @return void
+     * @throws \Bluzman\Input\InputException
+     */
+    protected function validateModelArgument() : void
+    {
+        $model = $this->getInput()->getArgument('model');
+
+        $validator = Validator::create()
+            ->string()
+            ->alphaNumeric()
+            ->noWhitespace();
+
+        if ($this->getDefinition()->getArgument('model')->isRequired()
+            && !$validator->validate($model)) {
+            throw new InputException($validator->getError());
+        }
+    }
+
+    /**
+     * Add Table Argument
+     *
+     * @return void
+     */
+    protected function addTableArgument() : void
+    {
+        $table = new InputArgument('table', InputArgument::REQUIRED, 'Table name is required');
+        $this->getDefinition()->addArgument($table);
+    }
+
+    /**
+     * Validate Table Argument
+     *
+     * @return void
+     * @throws \Bluzman\Input\InputException
+     */
+    protected function validateTableArgument() : void
+    {
+        $table = $this->getInput()->getArgument('table');
+
+        $validator = Validator::create()
+            ->string()
+            ->alphaNumeric('_')
+            ->noWhitespace();
+
+        if ($this->getDefinition()->getArgument('table')->isRequired()
+            && !$validator->validate($table)) {
+            throw new InputException($validator->getError());
+        }
+    }
+
+    /**
+     * Get Table instance
+     *
+     * @param  string $model
+     *
+     * @return Table
+     * @throws \Bluzman\Generator\GeneratorException
+     */
+    protected function getTableInstance($model) : Table
+    {
+        $file = $this->getApplication()->getModelPath($model) . DS . 'Table.php';
+        if (!file_exists($file)) {
+            throw new GeneratorException(
+                "Model $model is not exist, run command `bluzman generate:model $model` before"
+            );
+        }
+        include_once $file;
+        $class = '\\Application\\'. ucfirst($model) . '\\Table';
+        if (!class_exists($class)) {
+            throw new GeneratorException("Bluzman can't found `Table` class for model `$model`");
+        }
+        return $class::getInstance();
+
     }
 
     /**
@@ -56,9 +133,32 @@ abstract class AbstractGenerateCommand extends AbstractCommand
     }
 
     /**
+     * Small wrapper for simplify code
+     *
+     * @param  string $class
+     * @param  string $file
+     * @param  array  $data
+     *
+     * @return void
+     */
+    protected function generateFile($class, $file, array $data = []) : void
+    {
+        if (file_exists($file)) {
+            $this->comment(" |> File <info>$file</info> already exists");
+        }
+
+        $template = $this->getTemplate($class);
+        $template->setFilePath($file);
+        $template->setTemplateData($data);
+
+        $generator = new Generator($template);
+        $generator->make();
+    }
+
+    /**
      * @return string
      */
-    protected function getControllerPath($module, $controller)
+    protected function getControllerPath($module, $controller) : string
     {
         return $this->getApplication()->getModulePath($module)
             . DS . 'controllers'
@@ -69,11 +169,52 @@ abstract class AbstractGenerateCommand extends AbstractCommand
     /**
      * @return string
      */
-    protected function getViewPath($module, $controller)
+    protected function getViewPath($module, $controller) : string
     {
         return $this->getApplication()->getModulePath($module)
             . DS . 'views'
             . DS . $controller
             . '.phtml';
+    }
+
+    /**
+     * @todo move it to DB class
+     * @return array
+     */
+    protected function getPrimaryKey($table)
+    {
+        $connect = Db::getOption('connect');
+
+        return Db::fetchColumn(
+            '
+            SELECT COLUMN_NAME
+            FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+            WHERE TABLE_SCHEMA = ?
+              AND TABLE_NAME = ?
+             AND CONSTRAINT_NAME = ?
+            ',
+            [$connect['name'], $table, 'PRIMARY']
+        );
+    }
+
+    /**
+     * @todo move it to DB class
+     * @return array
+     */
+    protected function getColumns($table)
+    {
+        $connect = Db::getOption('connect');
+
+        return Db::fetchAll(
+            '
+            SELECT 
+              COLUMN_NAME as name,
+              COLUMN_TYPE as type
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = ?
+              AND TABLE_NAME = ?
+            ',
+            [$connect['name'], $table]
+        );
     }
 }
