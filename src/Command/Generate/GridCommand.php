@@ -129,7 +129,7 @@ class GridCommand extends AbstractGenerateCommand
 
         if ($module) {
             $this->write(
-                " |> <options=bold>Open page <info>/acl</info> in your browser ".
+                " |> <options=bold>Open page <info>/acl</info> in your browser " .
                 "and set permission <info>Management</info> for <info>{$module}</info> module</>"
             );
         }

@@ -112,7 +112,7 @@ class RestCommand extends AbstractGenerateCommand
 
         $this->write(" |> REST for <info>{$model}</info> has been successfully created.");
         $this->write(
-            " |> <options=bold>Open page <info>/acl</info> in your browser ".
+            " |> <options=bold>Open page <info>/acl</info> in your browser " .
             "and set permissions <info>Management</info> for <info>{$module}</info> module</>"
         );
     }

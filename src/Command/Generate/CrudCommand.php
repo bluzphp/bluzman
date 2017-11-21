@@ -132,7 +132,7 @@ class CrudCommand extends AbstractGenerateCommand
         $this->write(" |> CRUD for <info>{$model}</info> has been successfully created.");
         if ($module) {
             $this->write(
-                " |> <options=bold>Open page <info>/acl</info> in your browser ".
+                " |> <options=bold>Open page <info>/acl</info> in your browser " .
                 "and set permission <info>Management</info> for <info>{$module}</info> module</>"
             );
         }

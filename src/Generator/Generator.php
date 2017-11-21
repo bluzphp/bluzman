@@ -35,6 +35,13 @@ class Generator
      */
     protected $fs;
 
+    public function __construct(AbstractTemplate $template)
+    {
+        $this->setTemplate($template);
+        $this->setAbsolutePath(__DIR__);
+        $this->setFs(new Filesystem());
+    }
+
     /**
      * @return AbstractTemplate
      */
@@ -46,7 +53,7 @@ class Generator
     /**
      * @param AbstractTemplate $template
      */
-    public function setTemplate($template)
+    public function setTemplate($template) : void
     {
         $this->template = $template;
     }
@@ -62,7 +69,7 @@ class Generator
     /**
      * @param string $absolutePath
      */
-    public function setAbsolutePath($absolutePath)
+    public function setAbsolutePath($absolutePath) : void
     {
         $this->absolutePath = $absolutePath;
     }
@@ -78,20 +85,23 @@ class Generator
     /**
      * @param Filesystem $fs
      */
-    public function setFs($fs)
+    public function setFs($fs) : void
     {
         $this->fs = $fs;
     }
 
-    public function __construct(AbstractTemplate $template)
+    /**
+     * @internal param $path
+     */
+    public function make() : void
     {
-        $this->setTemplate($template);
-        $this->setAbsolutePath(__DIR__);
-        $this->setFs(new Filesystem());
-
+        $this->getFs()->dumpFile(
+            $this->getTemplate()->getFilePath(),
+            $this->getCompiledTemplate()
+        );
     }
 
-    public function getCompiledTemplate()
+    protected function getCompiledTemplate()
     {
         $view = new View();
         $view->setPath($this->getAbsolutePath());
@@ -99,17 +109,5 @@ class Generator
         $view->setFromArray($this->getTemplate()->getTemplateData());
 
         return $view->render();
-    }
-
-    /**
-     * @internal param $path
-     */
-    public function make()
-    {
-//        var_dump($this->getTemplate()->getTemplateData());
-        $this->getFs()->dumpFile(
-            $this->getTemplate()->getFilePath(),
-            $this->getCompiledTemplate()
-        );
     }
 }

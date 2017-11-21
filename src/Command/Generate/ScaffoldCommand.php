@@ -53,7 +53,6 @@ class ScaffoldCommand extends AbstractGenerateCommand
 
             // verify it
             $this->verify($input, $output);
-
         } catch (\Exception $e) {
             $this->error("ERROR: {$e->getMessage()}");
         }

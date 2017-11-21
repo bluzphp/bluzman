@@ -112,12 +112,11 @@ abstract class AbstractGenerateCommand extends AbstractCommand
             );
         }
         include_once $file;
-        $class = '\\Application\\'. ucfirst($model) . '\\Table';
+        $class = '\\Application\\' . ucfirst($model) . '\\Table';
         if (!class_exists($class)) {
             throw new GeneratorException("Bluzman can't found `Table` class for model `$model`");
         }
         return $class::getInstance();
-
     }
 
     /**
