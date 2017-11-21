@@ -80,16 +80,20 @@ class GridCommand extends AbstractGenerateCommand
             'module' => $module
         ];
 
+        if ($module) {
+            // controller and view generators required the `Model\Table` class
+            // validator is present on previous step
+            $data['columns'] = $this->getTableInstance($model)::getMeta();
+        }
+
         // generate GRID class
+        $this->write(" |> Generate Grid class <info>$model\\Grid</info>");
+
         $gridFile = $this->getApplication()->getModelPath($model) . DS . 'Grid.php';
         $this->generateFile('GridTemplate', $gridFile, $data);
 
         if ($module) {
             $this->write(" |> Generate Grid controller <info>$module/controllers/grid.php</info>");
-
-            // controller and view generators required the `Model\Table` class
-            // validator is present on previous step
-            $data['columns'] = $this->getTableInstance($model)::getMeta();
 
             $controllerFile = $this->getControllerPath($module, 'grid');
             $this->generateFile('GridControllerTemplate', $controllerFile, $data);

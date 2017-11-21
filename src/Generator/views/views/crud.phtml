@@ -14,19 +14,19 @@ $url = $this->url('<?=$module?>', 'crud');
   <div class="modal-body">
 <?php foreach ($columns as $column => $meta) : ?>
 <?php if ($meta['key'] === 'PRI') : // primary key ?>
-    <input type="hidden" name="<?=$column?>" value="<?="<?= \$row['$column'] ?>"?>"/>
+    <input type="hidden" id="<?=$column?>" name="<?=$column?>" value="<?="<?= \$row['$column'] ?>"?>"/>
 <?php continue; endif; ?>
     <div class="form-group row">
       <label class="col-form-label col-lg-4" for="<?=$column?>"><?="<?=__('$column')?>"?></label>
       <div class="col-lg-8">
 <?php if ($column === 'created' || $column === 'updated') : // timestamps ?>
-        <input type="datetime-local" id="<?=$column?>" class="form-control" disabled value="<?="<?= \$row['$column'] ?>"?>"/>
+        <input type="datetime-local" id="<?=$column?>" name="<?=$column?>" class="form-control" disabled value="<?="<?= \$row['$column'] ?>"?>"/>
 <?php elseif ($meta['type'] === 'int') : // number ?>
-        <input type="number" id="<?=$column?>" class="form-control" value="<?="<?= \$row['$column'] ?>"?>"/>
+        <input type="number" id="<?=$column?>" name="<?=$column?>" class="form-control" value="<?="<?= \$row['$column'] ?>"?>"/>
 <?php elseif ($meta['type'] === 'enum') : // select box ?>
         <?="<?= \$this->select('$column', [], \$row['$column'], ['id' => '$column', 'class' => 'form-control']);?>"?>
 <?php else : // others ?>
-        <input type="text" id="<?=$column?>" class="form-control" value="<?="<?= \$row['$column'] ?>"?>"/>
+        <input type="text" id="<?=$column?>" name="<?=$column?>" class="form-control" value="<?="<?= \$row['$column'] ?>"?>"/>
 <?php endif; ?>
       </div>
     </div>

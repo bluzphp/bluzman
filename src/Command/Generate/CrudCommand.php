@@ -79,7 +79,8 @@ class CrudCommand extends AbstractGenerateCommand
             'module' => $module
         ];
 
-        // generate CRUD
+        // generate CRUD class
+        $this->write(" |> Generate CRUD class <info>$model\\Crud</info>");
         $crudFile = $this->getApplication()->getModelPath($model) . DS . 'Crud.php';
         $this->generateFile('CrudTemplate', $crudFile, $data);
 
