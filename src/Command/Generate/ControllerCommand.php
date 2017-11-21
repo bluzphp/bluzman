@@ -7,7 +7,6 @@
 namespace Bluzman\Command\Generate;
 
 use Bluzman\Generator;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

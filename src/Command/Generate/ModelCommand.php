@@ -10,7 +10,6 @@ use Bluzman\Input\InputException;
 use Bluzman\Generator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
  * ModelCommand

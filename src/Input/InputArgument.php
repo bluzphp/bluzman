@@ -11,5 +11,4 @@ namespace Bluzman\Input;
  */
 class InputArgument extends \Symfony\Component\Console\Input\InputArgument
 {
-    use InputValidationTrait;
 }
