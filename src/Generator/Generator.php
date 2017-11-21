@@ -101,7 +101,7 @@ class Generator
         );
     }
 
-    protected function getCompiledTemplate()
+    public function getCompiledTemplate()
     {
         $view = new View();
         $view->setPath($this->getAbsolutePath());
