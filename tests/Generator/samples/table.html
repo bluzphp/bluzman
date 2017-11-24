@@ -4,8 +4,6 @@
  */
 namespace Application\Users;
 
-use \Application\Users\Row;
-
 /**
  * Class Table for `users`
  *
@@ -21,6 +19,9 @@ class Table extends \Bluz\Db\Table
      */
     protected $name = 'users';
 
+    /**
+     * @var string
+     */
     protected $rowClass = Row::class;
 
     /**

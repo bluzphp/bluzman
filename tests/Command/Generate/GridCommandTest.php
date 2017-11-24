@@ -24,7 +24,14 @@ class GridCommandTest extends AbstractCommandTest
      */
     protected $modelPath;
 
-    protected $dataForTemplate = ['author' => 'test', 'date' => '00-00-00 00:00:00'];
+    protected $dataForTemplate = [
+        'author' => 'test',
+        'date' => '00-00-00 00:00:00',
+        'columns' => [
+            'id' => ['type' => 'int'],
+            'name' => ['type' => 'varchar'],
+        ]
+    ];
 
     public function setUp()
     {
@@ -62,6 +69,7 @@ class GridCommandTest extends AbstractCommandTest
             ->withArgs(['GridTemplate'])
             ->andReturn($template)
             ->getMock();
+
 
         $this->getApplication()->addCommands([$command]);
 

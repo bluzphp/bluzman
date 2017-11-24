@@ -43,6 +43,13 @@ abstract class AbstractDbCommand extends AbstractCommand
 
         $phinxArguments['command'] = $commandName;
         $phinxArguments['--configuration'] = PATH_APPLICATION . DS . 'configs' . DS . 'phinx.php';
+
+        // write database name to console
+        // to avoid any mistakes
+        $config = include $phinxArguments['--configuration'];
+        $this->write('<info>host</info> ' . $config['environments']['default']['host']);
+        $this->write('<info>name</info> ' . $config['environments']['default']['name']);
+
         if ($command->getDefinition()->hasOption('environment')) {
             $phinxArguments['--environment'] = 'default';
         }

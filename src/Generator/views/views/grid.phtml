@@ -6,44 +6,62 @@ if (!$grid) return;
 $uid = $grid->getUid();
 <?="?>\n"?>
 <div class="clearfix" data-spy="grid" data-grid="<?='<?=$uid?>'?>">
-    <script>
-        // use data-spy="grid" for use AJAX for reload grid
-        require(['bluz.grid']);
-    </script>
+  <script>
+    // use data-spy="grid" for use AJAX for reload grid
+    require(['bluz.grid']);
+  </script>
 
-    <?='<?=$this->partial("grid/total.phtml", ["grid"=>$grid]) ?>'?><?="\n"?>
-    <?='<?=$this->partial("grid/limit.phtml", ["grid"=>$grid]) ?>'?><?="\n"?>
+  <nav class="navbar navbar-light bg-light justify-content-between">
+    <div>
+      <a href="<?="<?=\$this->url('$module', 'crud')?>"?>" class="btn btn-primary"
+         data-ajax-dialog data-ajax-method="get" data-modal-style="modal-lg">
+         <?="<?= __('Create') ?>"?>
+      </a>
+      <!-- Place filters here -->
+    </div>
+    <!-- Place search form here -->
+  </nav>
 
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th width="80px">#</th>
-                <th>Header example</th>
-                <!-- Place your column headers here, for generate link for order use method $grid->order('column name') -->
-                <th width="72px"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?='<?php foreach($grid->getData() as $i => $row) : ?>'?><?="\n"?>
-            <tr>
-                <td><?='<?=$i?>'?></td>
-                <td>Content example</td>
-                <!-- Place your content her, use $row['column name'] -->
-                <td class="controls">
-                    <a href="#" class="btn btn-xs btn-primary dialog" data-ajax-method="get">
-                        <i class="fa fa-pencil"></i>
-                    </a>
-                    <a href="#" class="confirm btn btn-xs btn-danger ajax" data-ajax-method="delete">
-                        <i class="fa fa-trash-o"></i>
-                    </a>
-                </td>
-            </tr>
-            <?='<?php endforeach; ?>'?><?="\n"?>
-        </tbody>
-    </table>
+  <hr/>
 
-    <?='<?=$this->partial("grid/empty-rows.phtml", ["grid"=>$grid]) ?>'?><?="\n"?>
-    <?='<?=$this->partial("grid/pagination.phtml", ["grid"=>$grid]) ?>'?><?="\n"?>
-    <?='<?=$this->partial("grid/total.phtml", ["grid"=>$grid]) ?>'?><?="\n"?>
+  <?="<?=\$this->partial('grid/total.phtml', ['grid'=>\$grid]) ?>\n"?>
+  <?="<?=\$this->partial('grid/limit.phtml', ['grid'=>\$grid]) ?>\n"?>
+
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+<?php foreach ($columns as $column => $meta) : $columnTitle = ucfirst($column); ?>
+        <th><a href="<?="<?= \$grid->order('{$column}') ?: '#' ?>"?>"><?="<?= __('{$columnTitle}') ?>"?></a></th>
+<?php endforeach; ?>
+        <!-- Place your column headers here, for generate link for order use method $grid->order('column name') -->
+        <th width="160px"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?='<?php foreach($grid->getData() as $row) : ?>'?><?="\n"?>
+      <tr>
+<?php foreach ($columns as $column => $meta) : ?>
+        <td><?="<?= \$row['{$column}'] ?>"?></td>
+<?php endforeach; ?>
+<?php $first = current(array_keys($columns)); ?>
+        <!-- Place your content her, use $row['column name'] -->
+        <td class="controls">
+          <a href="<?="<?= \$this->url('$module', 'crud', ['id' => \$row['$first']]) ?>"?>" class="btn btn-primary"
+             data-ajax-dialog data-ajax-method="get" data-modal-style="modal-lg">
+            <i class="fa fa-pencil"></i>
+          </a>
+          <a href="<?="<?= \$this->url('$module', 'crud', ['id' => \$row['$first']]) ?>"?>" class="btn btn-danger"
+             data-confirm data-ajax data-ajax-method="delete">
+            <i class="fa fa-trash-o"></i>
+          </a>
+        </td>
+      </tr>
+      <?='<?php endforeach; ?>'?><?="\n"?>
+    </tbody>
+  </table>
+
+  <?="<?=\$this->partial('grid/empty-rows.phtml', ['grid'=>\$grid]) ?>\n"?>
+  <?="<?=\$this->partial('grid/pagination.phtml', ['grid'=>\$grid]) ?>\n"?>
+  <?="<?=\$this->partial('grid/total.phtml', ['grid'=>\$grid]) ?>\n"?>
 
 </div>

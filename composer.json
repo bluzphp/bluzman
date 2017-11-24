@@ -11,7 +11,8 @@
     }
   ],
   "require": {
-    "php": ">=7.0",
+    "php": ">=7.1",
+    "bluzphp/framework": "~7.8",
     "codeception/codeception": "~2.3",
     "composer/composer": "~1.5",
     "robmorgan/phinx": "~0.9",
@@ -20,8 +21,7 @@
     "symfony/filesystem": "~3.0",
     "symfony/finder": "~3.0",
     "symfony/process": "~3.0",
-    "symfony/yaml": "~3.0",
-    "bluzphp/framework": "~7.7"
+    "symfony/yaml": "~3.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~6.4",

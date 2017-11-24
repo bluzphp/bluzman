@@ -6,14 +6,10 @@
 
 namespace Bluzman\Command\Generate;
 
-use Bluz\Proxy\Db;
-use Bluz\Validator\Validator as v;
-use Bluzman\Input\InputArgument;
 use Bluzman\Input\InputException;
 use Bluzman\Generator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
  * ModelCommand
@@ -38,13 +34,7 @@ class ModelCommand extends AbstractGenerateCommand
         ;
 
         $this->addModelArgument();
-
-        $table = new InputArgument('table', InputArgument::REQUIRED, 'Table name is required');
-        $table->setValidator(
-            v::create()->string()->alphaNumeric('_')->noWhitespace()
-        );
-
-        $this->getDefinition()->addArgument($table);
+        $this->addTableArgument();
     }
 
     /**
@@ -52,24 +42,19 @@ class ModelCommand extends AbstractGenerateCommand
      * @param OutputInterface $output
      * @return void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : void
     {
+        $this->write('Running <info>generate:model</info> command');
         try {
-            $this->write('Running <info>generate:model</info> command');
-
-            $model = $input->getArgument('model');
-            $this->getDefinition()->getArgument('model')->validate($model);
-
-            $table = $input->getArgument('table');
-            $this->getDefinition()->getArgument('table')->validate($table);
+            // validate
+            $this->validateModelArgument();
+            $this->validateTableArgument();
 
             // generate directories and files
             $this->generate($input, $output);
 
             // verify it
             $this->verify($input, $output);
-
-            $this->write("Model <info>{$model}</info> has been successfully created.");
         } catch (InputException $e) {
             $this->error("ERROR: {$e->getMessage()}");
         }
@@ -81,10 +66,17 @@ class ModelCommand extends AbstractGenerateCommand
      * @return void
      * @throws InputException
      */
-    protected function generate(InputInterface $input, OutputInterface $output)
+    protected function generate(InputInterface $input, OutputInterface $output) : void
     {
-        $modelName = ucfirst($input->getArgument('model'));
-        $tableName = $input->getArgument('table');
+        $model = ucfirst($input->getArgument('model'));
+        $table = $input->getArgument('table');
+
+        $data = [
+            'model' => $model,
+            'table' => $table,
+            'primaryKey' => $this->getPrimaryKey($table),
+            'columns' => $this->getColumns($table)
+        ];
 
         /*
         if ($this->getApplication()->isModelExists($modelName)) {
@@ -100,42 +92,12 @@ class ModelCommand extends AbstractGenerateCommand
         }
         */
         // generate table
-        $tableFile = $this->getApplication()->getModelPath($modelName) . DS . 'Table.php';
-
-        if (file_exists($tableFile)) {
-            $this->comment("Table file <info>$modelName/Table.php</info> already exists");
-        } else {
-            $template = $this->getTemplate('TableTemplate');
-            $template->setFilePath($tableFile);
-            $template->setTemplateData([
-                'model' => $modelName,
-                'table' => $tableName,
-                'primaryKey' => $this->getPrimaryKey($tableName)
-            ]);
-
-            $generator = new Generator\Generator($template);
-            $generator->make();
-        }
+        $tableFile = $this->getApplication()->getModelPath($model) . DS . 'Table.php';
+        $this->generateFile('TableTemplate', $tableFile, $data);
 
         // generate row
-        $rowFile = $this->getApplication()->getModelPath($modelName) . DS . 'Row.php';
-
-        if (file_exists($rowFile)) {
-            $this->comment("Row file <info>$modelName/Row.php</info> already exists");
-        } else {
-            $template = $this->getTemplate('RowTemplate');
-            $template->setFilePath($rowFile);
-            $template->setTemplateData(
-                [
-                    'model' => $modelName,
-                    'table' => $tableName,
-                    'columns' => $this->getColumns($tableName)
-                ]
-            );
-
-            $generator = new Generator\Generator($template);
-            $generator->make();
-        }
+        $rowFile = $this->getApplication()->getModelPath($model) . DS . 'Row.php';
+        $this->generateFile('RowTemplate', $rowFile, $data);
     }
 
     /**
@@ -144,9 +106,10 @@ class ModelCommand extends AbstractGenerateCommand
      * @return void
      * @throws \Bluzman\Generator\GeneratorException
      */
-    public function verify(InputInterface $input, OutputInterface $output)
+    public function verify(InputInterface $input, OutputInterface $output) : void
     {
-        $modelPath = $this->getApplication()->getModelPath($input->getArgument('model'));
+        $model = $input->getArgument('model');
+        $modelPath = $this->getApplication()->getModelPath($model);
 
         $paths = [
             $modelPath . DS . 'Table.php',
@@ -158,46 +121,7 @@ class ModelCommand extends AbstractGenerateCommand
                 throw new Generator\GeneratorException("File `$path` is not exists");
             }
         }
-    }
 
-    /**
-     * @todo move it to DB class
-     * @return array
-     */
-    protected function getPrimaryKey($table)
-    {
-        $connect = Db::getOption('connect');
-
-        return Db::fetchColumn(
-            '
-            SELECT COLUMN_NAME
-            FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
-            WHERE TABLE_SCHEMA = ?
-              AND TABLE_NAME = ?
-             AND CONSTRAINT_NAME = ?
-            ',
-            [$connect['name'], $table, 'PRIMARY']
-        );
-    }
-
-    /**
-     * @todo move it to DB class
-     * @return array
-     */
-    protected function getColumns($table)
-    {
-        $connect = Db::getOption('connect');
-
-        return Db::fetchAll(
-            '
-            SELECT 
-              COLUMN_NAME as name,
-              COLUMN_TYPE as type
-            FROM INFORMATION_SCHEMA.COLUMNS
-            WHERE TABLE_SCHEMA = ?
-              AND TABLE_NAME = ?
-            ',
-            [$connect['name'], $table]
-        );
+        $this->write(" |> Model <info>{$model}</info> has been successfully created.");
     }
 }

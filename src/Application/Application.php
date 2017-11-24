@@ -37,6 +37,7 @@ class Application extends Console\Application
      * init
      *
      * @return void
+     * @throws \Bluz\Config\ConfigException
      */
     public function init()
     {
@@ -98,6 +99,7 @@ class Application extends Console\Application
                 new Command\Generate\CrudCommand,
                 new Command\Generate\GridCommand,
                 new Command\Generate\RestCommand,
+                new Command\Generate\ScaffoldCommand,
                 new Command\Module\InstallCommand,
                 new Command\Module\ListCommand,
                 new Command\Module\RemoveCommand,
@@ -113,7 +115,7 @@ class Application extends Console\Application
      *
      * @return string
      */
-    public function getWorkingPath()
+    public function getWorkingPath() : string
     {
         return getcwd();
     }
@@ -124,7 +126,7 @@ class Application extends Console\Application
      * @param  string $name
      * @return string
      */
-    public function getModulePath($name)
+    public function getModulePath($name) : string
     {
         return $this->getWorkingPath() . DIRECTORY_SEPARATOR
             . 'application' . DIRECTORY_SEPARATOR
@@ -138,7 +140,7 @@ class Application extends Console\Application
      * @param  string $name
      * @return string
      */
-    public function getModelPath($name)
+    public function getModelPath($name) : string
     {
         return $this->getWorkingPath() . DIRECTORY_SEPARATOR
             . 'application' . DIRECTORY_SEPARATOR
@@ -150,7 +152,7 @@ class Application extends Console\Application
      * @param  string $name
      * @return bool
      */
-    public function isModuleExists($name)
+    public function isModuleExists($name) : bool
     {
         return is_dir($this->getModulePath($name));
     }
@@ -159,7 +161,7 @@ class Application extends Console\Application
      * @param  string $name
      * @return bool
      */
-    public function isModelExists($name)
+    public function isModelExists($name) : bool
     {
         return is_dir($this->getModelPath($name));
     }

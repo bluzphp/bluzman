@@ -23,9 +23,9 @@ class Grid extends \Bluz\Grid\Grid
     protected $uid = '<?=strtolower($model)?>';
 
     /**
-     * @return self
+     * @return void
      */
-    public function init()
+    public function init() : void
     {
         // Current table as source of grid
         $adapter = new SelectSource();
@@ -33,8 +33,17 @@ class Grid extends \Bluz\Grid\Grid
 
         $this->setAdapter($adapter);
         $this->setDefaultLimit(25);
-        $this->setAllowOrders([]);
-
-        return $this;
+<?php if (count($columns)) : ?>
+        $this->setAllowFilters([
+<?php foreach ($columns as $column => $meta) : ?>
+            '<?=$column?>',
+<?php endforeach; ?>
+        ]);
+        $this->setAllowOrders([
+<?php foreach ($columns as $column => $meta) : ?>
+            '<?=$column?>',
+<?php endforeach; ?>
+        ]);
+<?php endif; ?>
     }
 }

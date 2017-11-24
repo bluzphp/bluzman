@@ -7,7 +7,6 @@
 namespace Bluzman\Command\Generate;
 
 use Bluzman\Generator;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -33,10 +32,8 @@ class ControllerCommand extends AbstractGenerateCommand
             ->setHelp('This command allows you to generate controller files')
         ;
 
-        $this
-            ->addModuleArgument()
-            ->addControllerArgument()
-        ;
+        $this->addModuleArgument();
+        $this->addControllerArgument();
     }
 
     /**
@@ -44,39 +41,19 @@ class ControllerCommand extends AbstractGenerateCommand
      * @param OutputInterface $output
      * @return void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : void
     {
+        $this->write('Running <info>generate:controller</info> command');
         try {
-            $this->write("Running <info>generate:controller</info> command");
-
-            $module = $input->getArgument('module');
-            $this->getDefinition()->getArgument('module')->validate($module);
-
-            if (!$this->getApplication()->isModuleExists($module)) {
-                $command = $this->getApplication()->find('generate:module');
-
-                $arguments = [
-                    'command' => 'generate:module',
-                    'module' => $module
-                ];
-
-                $greetInput = new ArrayInput($arguments);
-                $command->run($greetInput, $output);
-            }
-
-            $controller = $input->getArgument('controller');
-            $this->getDefinition()->getArgument('controller')->validate($controller);
+            // validate
+            $this->validateModuleArgument();
+            $this->validateControllerArgument();
 
             // generate directories and files
             $this->generate($input, $output);
 
             // verify it
             $this->verify($input, $output);
-
-            $this->write(
-                "Controller <info>{$controller}</info> has been successfully created " .
-                "in the module <info>{$controller}</info>."
-            );
         } catch (\Exception $e) {
             $this->error("ERROR: {$e->getMessage()}");
         }
@@ -85,37 +62,18 @@ class ControllerCommand extends AbstractGenerateCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return $this
+     * @return void
      */
-    protected function generate(InputInterface $input, OutputInterface $output)
+    protected function generate(InputInterface $input, OutputInterface $output) : void
     {
         $module = $input->getArgument('module');
         $controller = $input->getArgument('controller');
 
         $controllerFile = $this->getControllerPath($module, $controller);
-        if (file_exists($controllerFile)) {
-            $this->comment("Controller file <info>$module/$controller</info> already exists");
-        } else {
-            $template = new Generator\Template\ControllerTemplate;
-            $template->setFilePath($controllerFile);
-
-            $generator = new Generator\Generator($template);
-            $generator->make();
-        }
+        $this->generateFile('ControllerTemplate', $controllerFile);
 
         $viewFile = $this->getViewPath($module, $controller);
-        if (file_exists($viewFile)) {
-            $this->comment("View file <info>$module/$controller</info> already exists");
-        } else {
-            $template = new Generator\Template\ViewTemplate;
-            $template->setFilePath($viewFile);
-            $template->setTemplateData(['name' => $controller]);
-
-            $generator = new Generator\Generator($template);
-            $generator->make();
-        }
-
-        return $this;
+        $this->generateFile('ViewTemplate', $viewFile, ['name' => $controller]);
     }
 
     /**
@@ -124,16 +82,19 @@ class ControllerCommand extends AbstractGenerateCommand
      * @return void
      * @throws \Bluzman\Generator\GeneratorException
      */
-    public function verify(InputInterface $input, OutputInterface $output)
+    public function verify(InputInterface $input, OutputInterface $output) : void
     {
-        $modulePath = $this->getApplication()->getModulePath($input->getArgument('module'));
+        $module = $input->getArgument('module');
+        $controller = $input->getArgument('controller');
+
+        $modulePath = $this->getApplication()->getModulePath($module);
 
         $paths = [
             $modulePath,
             $modulePath . DS . 'controllers',
-            $modulePath . DS . 'controllers' . DS . $input->getArgument('controller') . '.php',
+            $modulePath . DS . 'controllers' . DS . $controller . '.php',
             $modulePath . DS . 'views',
-            $modulePath . DS . 'views' . DS . $input->getArgument('controller') . '.phtml',
+            $modulePath . DS . 'views' . DS . $controller . '.phtml',
 
         ];
 
@@ -142,5 +103,10 @@ class ControllerCommand extends AbstractGenerateCommand
                 throw new Generator\GeneratorException("File or directory `$path` is not exists");
             }
         }
+
+        $this->write(
+            " |> Controller <info>{$controller}</info> has been successfully created " .
+            "in the module <info>{$module}</info>."
+        );
     }
 }

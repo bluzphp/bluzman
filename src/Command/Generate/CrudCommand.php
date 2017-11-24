@@ -33,55 +33,30 @@ class CrudCommand extends AbstractGenerateCommand
             // the "--help" option
             ->setHelp('This command allows you to generate CRUD files');
 
-        $this
-            ->addModelArgument()
-            ->addModuleArgument(InputArgument::OPTIONAL)
-        ;
+        $this->addModelArgument();
+        $this->addModuleArgument(InputArgument::OPTIONAL);
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
+     *
      * @return void
+     * @throws \Bluzman\Generator\GeneratorException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : void
     {
+        $this->write('Running <info>generate:crud</info> command');
         try {
-            $this->write("Running <info>generate:crud</info> command");
-
-            $model = $input->getArgument('model');
-            $this->getDefinition()->getArgument('model')->validate($model);
-
-            if (!$this->getApplication()->isModelExists($model)) {
-                throw new InputException(
-                    "Model $model is not exist, " .
-                    "run command <question>bluzman generate:model $model</question> before"
-                );
-            }
-
-            if ($module = $input->getArgument('module')) {
-                $this->getDefinition()->getArgument('module')->validate($module);
-
-                if (!$this->getApplication()->isModuleExists($module)) {
-                    throw new InputException(
-                        "Module $module is not exist, " .
-                        "run command <question>bluzman generate:module $module</question> before"
-                    );
-                }
-            }
+            // validate
+            $this->validateModelArgument();
+            $this->validateModuleArgument();
 
             // generate directories and files
             $this->generate($input, $output);
 
             // verify it
             $this->verify($input, $output);
-
-            $this->write("CRUD for <info>{$model}</info> has been successfully created.");
-            if ($module = $input->getArgument('module')) {
-                $this->write(
-                    "Open page <info>/acl</info> in your browser and set permissions for <info>{$module}</info>"
-                );
-            }
         } catch (InputException $e) {
             $this->error("ERROR: {$e->getMessage()}");
         }
@@ -93,61 +68,42 @@ class CrudCommand extends AbstractGenerateCommand
      * @return void
      * @throws InputException
      */
-    protected function generate(InputInterface $input, OutputInterface $output)
+    protected function generate(InputInterface $input, OutputInterface $output) : void
     {
         $model = ucfirst($input->getArgument('model'));
+        $module = $input->getArgument('module');
 
-        // generate CRUD
+        // template data
+        $data = [
+            'model' => $model,
+            'module' => $module
+        ];
+
+        // generate CRUD class
+        $this->write(" |> Generate CRUD class <info>$model\\Crud</info>");
         $crudFile = $this->getApplication()->getModelPath($model) . DS . 'Crud.php';
+        $this->generateFile('CrudTemplate', $crudFile, $data);
 
-        if (file_exists($crudFile)) {
-            $this->comment("Crud file <info>$model/Crud.php</info> already exists");
-        } else {
-            $template = $this->getTemplate('CrudTemplate');
-            $template->setFilePath($crudFile);
-            $template->setTemplateData(
-                [
-                    'model' => $model
-                ]
-            );
+        if ($module) {
+            if (!$this->getApplication()->isModelExists($model)) {
+                throw new InputException(
+                    "Model $model is not exist, " .
+                    "run command <question>bluzman generate:model $model</question> before"
+                );
+            }
 
-            $generator = new Generator\Generator($template);
-            $generator->make();
-        }
-
-        if ($module = $input->getArgument('module')) {
-            $this->write("Generate <info>$module/controllers/crud.php</info>");
+            $this->write(" |> Generate CRUD controller <info>$module/controllers/crud.php</info>");
 
             $controllerFile = $this->getControllerPath($module, 'crud');
-            if (file_exists($controllerFile)) {
-                $this->comment("Controller file <info>$module/crud</info> already exists");
-            } else {
-                $template = new Generator\Template\CrudControllerTemplate();
-                $template->setFilePath($controllerFile);
-                $template->setTemplateData(['model' => $model]);
+            $this->generateFile('CrudControllerTemplate', $controllerFile, $data);
 
-                $generator = new Generator\Generator($template);
-                $generator->make();
-            }
+            $this->write(" |> Generate CRUD view <info>$module/views/crud.phtml</info>");
 
-            $this->write("Generate <info>$module/views/crud.phtml</info>");
+            $tableInstance = $this->getTableInstance($model);
+            $data['columns'] = $tableInstance::getMeta();
 
             $viewFile = $this->getViewPath($module, 'crud');
-            if (file_exists($viewFile)) {
-                $this->comment("View file <info>$module/crud</info> already exists");
-            } else {
-                $template = new Generator\Template\CrudViewTemplate();
-                $template->setFilePath($viewFile);
-                $template->setTemplateData(
-                    [
-                        'model' => $model,
-                        'module' => $module
-                    ]
-                );
-
-                $generator = new Generator\Generator($template);
-                $generator->make();
-            }
+            $this->generateFile('CrudViewTemplate', $viewFile, $data);
         }
     }
 
@@ -157,9 +113,12 @@ class CrudCommand extends AbstractGenerateCommand
      * @return void
      * @throws \Bluzman\Generator\GeneratorException
      */
-    public function verify(InputInterface $input, OutputInterface $output)
+    public function verify(InputInterface $input, OutputInterface $output) : void
     {
-        $modelPath = $this->getApplication()->getModelPath($input->getArgument('model'));
+        $model = $input->getArgument('model');
+        $module = $input->getArgument('module');
+
+        $modelPath = $this->getApplication()->getModelPath($model);
 
         $paths = [
             $modelPath . DS . 'Crud.php',
@@ -169,6 +128,14 @@ class CrudCommand extends AbstractGenerateCommand
             if (!$this->getFs()->exists($path)) {
                 throw new Generator\GeneratorException("File `$path` is not exists");
             }
+        }
+
+        $this->write(" |> CRUD for <info>{$model}</info> has been successfully created.");
+        if ($module) {
+            $this->write(
+                " |> <options=bold>Open page <info>/acl</info> in your browser " .
+                "and set permission <info>Management</info> for <info>{$module}</info> module</>"
+            );
         }
     }
 }
