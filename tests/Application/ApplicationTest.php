@@ -43,6 +43,7 @@ class ApplicationTest extends BluzmanTestCase
         self::assertInstanceOf(Command::class, $this->application->get('generate:grid'));
         self::assertInstanceOf(Command::class, $this->application->get('generate:model'));
         self::assertInstanceOf(Command::class, $this->application->get('generate:module'));
+        self::assertInstanceOf(Command::class, $this->application->get('generate:scaffold'));
         self::assertInstanceOf(Command::class, $this->application->get('generate:rest'));
         self::assertInstanceOf(Command::class, $this->application->get('module:install'));
         self::assertInstanceOf(Command::class, $this->application->get('module:list'));

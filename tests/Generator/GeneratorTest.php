@@ -9,6 +9,7 @@ namespace Bluzman\Tests\Generator;
 use Bluzman\Generator\Generator;
 use Bluzman\Generator\Template\AbstractTemplate;
 use Bluzman\Tests\BluzmanTestCase;
+use Bluzman\Generator\Template\ControllerTemplate;
 
 /**
  * @author Pavel Machekhin
@@ -76,7 +77,7 @@ class GeneratorTest extends BluzmanTestCase
         return [
             [
                 [
-                    'template' => '\Bluzman\Tests\Generator\DummyTemplate',
+                    'template' => DummyTemplate::class,
                     'defaultTemplateData' => [
 
                     ],
@@ -86,7 +87,7 @@ class GeneratorTest extends BluzmanTestCase
                     'stub' => 'foo=bar'
                 ],
                 [
-                    'template' => '\Bluzman\Generator\Template\ControllerTemplate',
+                    'template' => ControllerTemplate::class,
                     'defaultTemplateData' => [
                         'author' => 'test',
                         'date' => '2000-01-01 23:59:59'
