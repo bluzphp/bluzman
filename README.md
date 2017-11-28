@@ -17,14 +17,14 @@ Bluzman is a set of command-line tools which provides a simple workflow with an 
 
 Features
 -------------------------
-* Code-generator of application components
-* Shorthand for phinx and composer tools (TODO)
+* Code-generator of the application components
+* Shorthand for phinx and composer tools
 * Shorthand for built-in web-server
 
 Requirements
 -------------------------
 * OS: Linux
-* PHP: 7.0 (or later)
+* PHP: 7.1 (or later)
 
 Usage
 -------------------------
@@ -35,9 +35,11 @@ php ./vendor/bin/bluzman list
 
 ## Code generators
 
+All generators don't rewrite exists files, but you can run generate command with flag `--force`, to rewrite all of them
+
 ### Model generator
 
-For create new model you must run the command in terminal:
+For create new model you should run the following command in the terminal:
 ```bash
 bluzman generate:model model_name table_name
 ```
@@ -48,7 +50,7 @@ bluzman generate:model model_name table_name
 
 ### Module generator
 
-For create new module you must run the command in terminal
+For create new module you should run the following command in the terminal:
 ```bash
 bluzman generate:module module_name [controller_name]...
 ```
@@ -58,7 +60,7 @@ bluzman generate:module module_name [controller_name]...
 
 ### Controller generator
 
-For create new controller you must run the command in terminal:
+For create new controller you should run the following command in the terminal:
 ```bash
 bluzman generate:controller module_name controller_name
 ```
@@ -68,14 +70,14 @@ bluzman generate:controller module_name controller_name
  
 ### CRUD generator
 
-For create CRUD class you must run the command in terminal:
+For create CRUD class you should run the following command in the terminal:
 
 ```bash
 bluzman generate:crud model_name 
 ```
 Generator will create a class in `model_name/Crud.php`
 
-If you want to generate CRUD controller and view you must run the command in terminal:
+If you want to generate CRUD controller and view you should run the next command:
 
 ```bash
 bluzman generate:crud model_name module_name
@@ -85,7 +87,7 @@ Generator will create a controller in `module_name/controllers/crud.php` and a v
 
 ### REST generator
 
-For create REST controller you must run the command in terminal:
+For create REST controller you should run the following command in the terminal:
 
 ```bash
 bluzman generate:rest model_name module_name
@@ -95,14 +97,14 @@ Generator will create a controller in `module_name/controllers/rest.php`.
  
 ### GRID generator
 
-For create GRID class you must run the command in terminal:
+For create GRID class you should run the following command in the terminal:
 
 ```bash
 bluzman generate:grid model_name 
 ```
 Generator will create a class in `model_name/Grid.php`
 
-If you want to generate GRID controller and view you must run the command in terminal:
+If you want to generate GRID controller and view you should run the following command in the terminal:
 
 ```bash
 bluzman generate:grid model_name module_name
@@ -110,8 +112,23 @@ bluzman generate:grid model_name module_name
 
 Generator will create a controller in `module_name/controllers/grid.php` and a view `module_name/views/grid.php`
 
+### All-in-one generator - scaffold
+
+Generator `scaffold` will generate:
+
+* [Model](#model-generator)
+* [Module](#module-generator)
+* [Crud](#crud-generator)
+* [Grid](#grid-generator)
+
+For generate all of them run the following command in the terminal:
+
+```bash
+bluzman generate:scaffold model_name table_name module_name
+```
+
 ## Migrations
-> All `db:command` commands is just shorthand to call `php /vendor/bin/phinx command -e default -c phinx.php`. 
+> All `db:command` commands is just shorthand to call `php /vendor/bin/phinx command -e default -c phinx.php`
 
 ### Status
 ```bash
@@ -148,6 +165,8 @@ bluzman db:seed:run UserSeed
 
 ## Install and remove modules
 
+> Information about available modules will retrieve from https://github.com/bluzphp by `bluz-module` tag
+
 Retrieve available modules:
 ```bash
 bluzman module:list
@@ -178,7 +197,7 @@ bluzman test module-options
 
 Bluzman provides a commands list to operate with built-in PHP server.
 
-To launch built-in PHP server you must run the command in terminal:
+To launch built-in PHP server you should run the following command in the terminal:
 ```bash
 bluzman server:start --host[="..."] --port[="..."]
 ```
@@ -195,7 +214,7 @@ And if server launched in the background, it can be stopped with following comma
 bluzman server:stop --host[="..."] --port[="..."]
 ```
 
-If you want to know the status of the server you must run the command in terminal:
+If you want to know the status of the server you should run the command in the terminal:
 ```bash
 bluzman server:status --host[="..."] --port[="..."]
 ```
