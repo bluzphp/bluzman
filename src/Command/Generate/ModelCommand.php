@@ -35,6 +35,7 @@ class ModelCommand extends AbstractGenerateCommand
 
         $this->addModelArgument();
         $this->addTableArgument();
+        $this->addForceOption();
     }
 
     /**

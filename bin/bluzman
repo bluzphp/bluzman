@@ -35,16 +35,23 @@ ini_set('display_errors', 1);
 ini_set('log_errors', 0);
 ini_set('html_errors', 0);
 
-// Get project info from composer.json
-$composerConfig = json_decode(
-    file_get_contents(PATH_VENDOR .DS. 'bluzphp' .DS. 'bluzman' .DS. 'composer.json'),
-    true
-);
-require_once PATH_VENDOR . '/autoload.php';
+try {
+    // Get project info from composer.json
+    $composerConfig = json_decode(
+        file_get_contents(PATH_VENDOR . DS . 'bluzphp' . DS . 'bluzman' . DS . 'composer.json'),
+        true
+    );
+    require_once PATH_VENDOR . '/autoload.php';
 
-$application = new Bluzman\Application\Application(
-    $composerConfig['description'],
-    $composerConfig['version'] ?? 'dev'
-);
-$application->init();
-$application->run();
+    $application = new Bluzman\Application\Application(
+        $composerConfig['description'],
+        $composerConfig['version'] ?? 'dev'
+    );
+    $application->init();
+    $application->run();
+} catch (\Throwable $e) {
+    echo "Error #{$e->getCode()}:\n\n";
+    echo "\t{$e->getFile()}:{$e->getLine()}\n";
+    echo "\t{$e->getMessage()}\n";
+    echo "\n";
+}

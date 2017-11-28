@@ -33,6 +33,7 @@ class ModuleCommand extends AbstractGenerateCommand
         ;
 
         $this->addModuleArgument();
+        $this->addForceOption();
     }
 
     /**

@@ -14,6 +14,7 @@ use Bluzman\Generator\Generator;
 use Bluzman\Generator\GeneratorException;
 use Bluzman\Input\InputArgument;
 use Bluzman\Input\InputException;
+use Bluzman\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -30,6 +31,17 @@ abstract class AbstractGenerateCommand extends AbstractCommand
      * @return mixed
      */
     abstract public function verify(InputInterface $input, OutputInterface $output) : void;
+
+    /**
+     * Add Force Option
+     *
+     * @return void
+     */
+    protected function addForceOption() : void
+    {
+        $force = new InputOption('--force', '-f', InputOption::VALUE_NONE, 'Rewrite previously generated files');
+        $this->getDefinition()->addOption($force);
+    }
 
     /**
      * Add Model Argument
@@ -142,8 +154,9 @@ abstract class AbstractGenerateCommand extends AbstractCommand
      */
     protected function generateFile($class, $file, array $data = []) : void
     {
-        if (file_exists($file)) {
+        if (file_exists($file) && !$this->getInput()->getOption('force')) {
             $this->comment(" |> File <info>$file</info> already exists");
+            return;
         }
 
         $template = $this->getTemplate($class);

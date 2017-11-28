@@ -31,10 +31,12 @@ class CrudCommand extends AbstractGenerateCommand
             ->setDescription('Generate a CRUD for model')
             // the full command description shown when running the command with
             // the "--help" option
-            ->setHelp('This command allows you to generate CRUD files');
+            ->setHelp('This command allows you to generate CRUD files')
+        ;
 
         $this->addModelArgument();
         $this->addModuleArgument(InputArgument::OPTIONAL);
+        $this->addForceOption();
     }
 
     /**

@@ -36,6 +36,7 @@ class ScaffoldCommand extends AbstractGenerateCommand
         $this->addModelArgument();
         $this->addTableArgument();
         $this->addModuleArgument();
+        $this->addForceOption();
     }
 
     /**

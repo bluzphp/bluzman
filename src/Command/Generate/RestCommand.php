@@ -35,6 +35,7 @@ class RestCommand extends AbstractGenerateCommand
 
         $this->addModelArgument();
         $this->addModuleArgument();
+        $this->addForceOption();
     }
 
     /**
