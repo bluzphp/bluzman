@@ -34,6 +34,7 @@ class ControllerCommand extends AbstractGenerateCommand
 
         $this->addModuleArgument();
         $this->addControllerArgument();
+        $this->addForceOption();
     }
 
     /**

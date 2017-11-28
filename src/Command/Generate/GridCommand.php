@@ -36,6 +36,7 @@ class GridCommand extends AbstractGenerateCommand
 
         $this->addModelArgument();
         $this->addModuleArgument(InputArgument::OPTIONAL);
+        $this->addForceOption();
     }
 
     /**
