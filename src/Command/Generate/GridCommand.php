@@ -65,10 +65,11 @@ class GridCommand extends AbstractGenerateCommand
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
+     *
      * @return void
-     * @throws InputException
+     * @throws Generator\GeneratorException
      */
     protected function generate(InputInterface $input, OutputInterface $output) : void
     {
