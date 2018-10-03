@@ -1,6 +1,7 @@
 <?="<?php\n"?>
 /**
- * @var \Bluz\Grid\Grid $grid
+ * @var \Application\<?=$model?>\Grid $grid
+ * @var \Bluz\View\View $this
  */
 if (!$grid) return;
 $uid = $grid->getUid();
@@ -41,16 +42,16 @@ $uid = $grid->getUid();
       <?='<?php foreach($grid->getData() as $row) : ?>'?><?="\n"?>
       <tr>
 <?php foreach ($columns as $column => $meta) : ?>
-        <td><?="<?= \$row['{$column}'] ?>"?></td>
+        <td><?="<?= \$row->{$column} ?>"?></td>
 <?php endforeach; ?>
 <?php $first = current(array_keys($columns)); ?>
         <!-- Place your content her, use $row['column name'] -->
-        <td class="controls">
-          <a href="<?="<?= \$this->url('$module', 'crud', ['id' => \$row['$first']]) ?>"?>" class="btn btn-primary"
+        <td class="controls d-flex justify-content-around">
+          <a href="<?="<?= \$this->url('$module', 'crud', ['id' => \$row->$first]) ?>"?>" class="btn btn-primary"
              data-ajax-dialog data-ajax-method="get" data-modal-style="modal-lg">
             <i class="fa fa-pencil"></i>
           </a>
-          <a href="<?="<?= \$this->url('$module', 'crud', ['id' => \$row['$first']]) ?>"?>" class="btn btn-danger"
+          <a href="<?="<?= \$this->url('$module', 'crud', ['id' => \$row->$first]) ?>"?>" class="btn btn-danger"
              data-confirm data-ajax data-ajax-method="delete">
             <i class="fa fa-trash-o"></i>
           </a>

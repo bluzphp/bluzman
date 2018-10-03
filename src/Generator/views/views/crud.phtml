@@ -1,5 +1,8 @@
 <?="<?php\n"?>
-/** @var \Application\<?=$model?>\Row $row */
+/**
+ * @var \Application\<?=$model?>\Row $row
+ * @var \Bluz\View\View $this
+ */
 $uid = uniqid('form_', false);
 $url = $this->url('<?=$module?>', 'crud');
 <?="?>\n"?>
@@ -7,7 +10,7 @@ $url = $this->url('<?=$module?>', 'crud');
   <input type="hidden" name="_method" value="<?='<?=$method?>'?>"/>
   <div class="modal-header">
     <h4 class="modal-title"><?="<?=__('$model')?>"?></h4>
-    <button type="button" class="close" data-dismiss="modal" aria-label="<?=__('Close')?>">
+    <button type="button" class="close" data-dismiss="modal" aria-label="<?="<?=__('Close')?>"?>">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -35,8 +38,7 @@ $url = $this->url('<?=$module?>', 'crud');
     <!-- Place additional form fields here -->
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary"><?=__('Save')?></button>
-    <a href="#" class="btn btn-default" data-dismiss="modal"><?=__('Close')?></a>
+    <button type="submit" class="btn btn-primary"><?="<?=__('Save')?>"?></button>
   </div>
 </form>
 <?="<?php\n"?>

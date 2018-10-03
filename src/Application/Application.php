@@ -7,6 +7,7 @@
 namespace Bluzman\Application;
 
 use Bluz\Config\Config;
+use Bluz\Config\ConfigLoader;
 use Bluz\Proxy;
 use Bluzman\Command;
 use Symfony\Component\Console;
@@ -41,11 +42,13 @@ class Application extends Console\Application
      */
     public function init()
     {
-        // Init Bluz config
+        $loader = new ConfigLoader();
+        $loader->setPath(PATH_APPLICATION);
+        $loader->setEnvironment(BLUZ_ENV);
+        $loader->load();
+
         $config = new Config();
-        $config->setPath(PATH_APPLICATION);
-        $config->setEnvironment(BLUZ_ENV);
-        $config->init();
+        $config->setFromArray($loader->getConfig());
 
         Proxy\Config::setInstance($config);
     }
