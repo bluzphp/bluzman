@@ -57,9 +57,11 @@ class RunCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
+     *
      * @return int|null|void
+     * @throws \Bluz\Application\Exception\ApplicationException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
