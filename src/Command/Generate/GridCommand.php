@@ -130,7 +130,6 @@ class GridCommand extends AbstractGenerateCommand
             }
         }
 
-        // notifications
         $this->write(" |> GRID for <info>{$model}</info> has been successfully created.");
 
         if ($module) {

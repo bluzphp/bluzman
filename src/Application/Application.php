@@ -148,7 +148,7 @@ class Application extends Console\Application
         return $this->getWorkingPath() . DIRECTORY_SEPARATOR
             . 'application' . DIRECTORY_SEPARATOR
             . 'models' . DIRECTORY_SEPARATOR
-            . $name;
+            . ucfirst(strtolower($name));
     }
 
     /**
