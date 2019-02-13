@@ -6,9 +6,7 @@ php:
   - master
 matrix:
   allow_failures:
-    - php:
-      - 7.3
-      - master
+    - php: master
 install:
   # Composer
   - composer self-update
