@@ -35,7 +35,6 @@ class CrudCommandTest extends AbstractCommandTest
             . DS . 'models'
             . DS . $this->model;
 
-
         $this->getFs()->mkdir(
             $this->modelPath
         );
