@@ -2,10 +2,13 @@ language: php
 php:
   - 7.1
   - 7.2
+  - 7.3
   - master
 matrix:
   allow_failures:
-    - php: master
+    - php:
+      - 7.3
+      - master
 install:
   # Composer
   - composer self-update
