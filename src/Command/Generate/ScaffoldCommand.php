@@ -63,6 +63,7 @@ class ScaffoldCommand extends AbstractGenerateCommand
      * Generate Model
      *
      * @return void
+     * @throws \Symfony\Component\Console\Exception\ExceptionInterface
      */
     protected function runGenerateModel() : void
     {
@@ -83,6 +84,7 @@ class ScaffoldCommand extends AbstractGenerateCommand
      * Generate Module
      *
      * @return void
+     * @throws \Symfony\Component\Console\Exception\ExceptionInterface
      */
     protected function runGenerateModule() : void
     {
@@ -102,6 +104,7 @@ class ScaffoldCommand extends AbstractGenerateCommand
      * Generate Crud
      *
      * @return void
+     * @throws \Symfony\Component\Console\Exception\ExceptionInterface
      */
     protected function runGenerateCrud() : void
     {
@@ -122,6 +125,7 @@ class ScaffoldCommand extends AbstractGenerateCommand
      * Generate Grid
      *
      * @return void
+     * @throws \Symfony\Component\Console\Exception\ExceptionInterface
      */
     protected function runGenerateGrid() : void
     {

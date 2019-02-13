@@ -1,19 +1,22 @@
 Bluzman - Simple workflow manager for Bluz Framework
 ======================================
-Bluzman is a set of command-line tools which provides a simple workflow with an application based and mantained by Bluz framework.
+Bluzman is a set of command-line tools which provides a simple workflow with an application based and maintained by Bluz framework.
 
 ## Achievements
 
-[![Build Status](https://secure.travis-ci.org/bluzphp/bluzman.png?branch=master)](https://travis-ci.org/bluzphp/bluzman)
-[![Dependency Status](https://www.versioneye.com/user/projects/58cbb18f6893fd004792c5da/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/58cbb18f6893fd004792c5da)
+[![PHP >= 7.1+](https://img.shields.io/packagist/php-v/bluzphp/bluzman.svg?style=flat)](https://php.net/)
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bluzphp/bluzman/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/bluzphp/bluzman/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/bluzphp/bluzman/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/bluzphp/bluzman/?branch=master)
+[![Latest Stable Version](https://img.shields.io/packagist/v/bluzphp/bluzman.svg?label=version&style=flat)](https://packagist.org/packages/bluzphp/bluzman)
 
-[![Latest Stable Version](https://poser.pugx.org/bluzphp/bluzman/v/stable.png)](https://packagist.org/packages/bluzphp/bluzman)
-[![Total Downloads](https://poser.pugx.org/bluzphp/bluzman/downloads.png)](https://packagist.org/packages/bluzphp/bluzman)
+[![Build Status](https://img.shields.io/travis/bluzphp/bluzman/master.svg?style=flat)](https://travis-ci.org/bluzphp/bluzman)
 
-[![License](https://poser.pugx.org/bluzphp/bluzman/license.svg)](https://packagist.org/packages/bluzphp/bluzman)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/bluzphp/bluzman.svg?style=flat)](https://scrutinizer-ci.com/g/bluzphp/bluzman/)
+
+[![Coverage Status](https://img.shields.io/coveralls/bluzphp/bluzman/master.svg?style=flat)](https://coveralls.io/r/bluzphp/bluzman?branch=master)
+
+[![Total Downloads](https://img.shields.io/packagist/dt/bluzphp/bluzman.svg?style=flat)](https://packagist.org/packages/bluzphp/bluzman)
+
+[![License](https://img.shields.io/packagist/l/bluzphp/bluzman.svg?style=flat)](https://packagist.org/packages/bluzphp/bluzman)
 
 Features
 -------------------------
