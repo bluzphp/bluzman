@@ -32,9 +32,6 @@
     "satooshi/php-coveralls": "~2.0"
   },
   "bin": ["bin/bluzman"],
-  "scripts": {
-      "test": "make test"
-  },
   "autoload": {
     "psr-4": {
       "Bluzman\\": "src/"
