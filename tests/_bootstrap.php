@@ -3,7 +3,7 @@
  * @copyright Bluz PHP Team
  * @link https://github.com/bluzphp/bluzman
  */
-defined('DS') || define('DS', DIRECTORY_SEPARATOR);
+defined('DS') ?: define('DS', DIRECTORY_SEPARATOR);
 
 // Root path, double level up
 // UP to root from "/tests/"
