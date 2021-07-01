@@ -18,19 +18,16 @@ Bluzman is a set of command-line tools which provides a simple workflow with an 
 
 [![License](https://img.shields.io/packagist/l/bluzphp/bluzman.svg?style=flat)](https://packagist.org/packages/bluzphp/bluzman)
 
-Features
--------------------------
+## Features
 * Code-generator of the application components
 * Shorthand for phinx and composer tools
 * Shorthand for built-in web-server
 
-Requirements
--------------------------
+## Requirements
 * OS: Linux
 * PHP: 7.1 (or later)
 
-Usage
--------------------------
+## Usage
 List of available commands
 ```bash
 php ./vendor/bin/bluzman list
