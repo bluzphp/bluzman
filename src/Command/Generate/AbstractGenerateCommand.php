@@ -59,7 +59,7 @@ abstract class AbstractGenerateCommand extends AbstractCommand
      * Validate Model Argument
      *
      * @return void
-     * @throws \Bluzman\Input\InputException
+     * @throws InputException
      */
     protected function validateModelArgument(): void
     {
@@ -93,7 +93,7 @@ abstract class AbstractGenerateCommand extends AbstractCommand
      * Validate Table Argument
      *
      * @return void
-     * @throws \Bluzman\Input\InputException
+     * @throws InputException
      */
     protected function validateTableArgument(): void
     {
@@ -115,12 +115,12 @@ abstract class AbstractGenerateCommand extends AbstractCommand
     /**
      * Get Table instance
      *
-     * @param  string $model
+     * @param string $model
      *
      * @return Table
-     * @throws \Bluzman\Generator\GeneratorException
+     * @throws GeneratorException
      */
-    protected function getTableInstance($model): Table
+    protected function getTableInstance(string $model): Table
     {
         $file = $this->getApplication()->getModelPath($model) . DS . 'Table.php';
         if (!file_exists($file)) {
@@ -139,10 +139,10 @@ abstract class AbstractGenerateCommand extends AbstractCommand
     /**
      * Required for correct mock it
      *
-     * @param  string $class
+     * @param string $class
      * @return mixed
      */
-    protected function getTemplate($class)
+    protected function getTemplate(string $class)
     {
         $class = '\\Bluzman\\Generator\\Template\\' . $class;
         return new $class();
@@ -157,7 +157,7 @@ abstract class AbstractGenerateCommand extends AbstractCommand
      *
      * @return void
      */
-    protected function generateFile($class, $file, array $data = []): void
+    protected function generateFile(string $class, string $file, array $data = []): void
     {
         if (file_exists($file) && !$this->getInput()->getOption('force')) {
             $this->comment(" |> File <info>$file</info> already exists");
@@ -173,9 +173,11 @@ abstract class AbstractGenerateCommand extends AbstractCommand
     }
 
     /**
+     * @param string $module
+     * @param string $controller
      * @return string
      */
-    protected function getControllerPath($module, $controller): string
+    protected function getControllerPath(string $module, string $controller): string
     {
         return $this->getApplication()->getModulePath($module)
             . DS . 'controllers'
@@ -184,9 +186,11 @@ abstract class AbstractGenerateCommand extends AbstractCommand
     }
 
     /**
+     * @param string $module
+     * @param string $controller
      * @return string
      */
-    protected function getViewPath($module, $controller): string
+    protected function getViewPath(string $module, string $controller): string
     {
         return $this->getApplication()->getModulePath($module)
             . DS . 'views'

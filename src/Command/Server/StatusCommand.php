@@ -43,7 +43,7 @@ class StatusCommand extends AbstractServerCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int|null|void
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -68,8 +68,10 @@ class StatusCommand extends AbstractServerCommand
             }
 
             $this->write("Server <info>$host:$port</info> is running. PID is <info>$pid</info>");
+            return 0;
         } catch (NotRunningException $e) {
             $this->comment('Server is not running');
+            return (int) $e->getCode();
         }
     }
 }

@@ -26,7 +26,7 @@ class TableTemplate extends AbstractTemplate
     /**
      * @param array $templateData
      */
-    public function setTemplateData($templateData)
+    public function setTemplateData(array $templateData)
     {
         // Primary key can be empty in options list
         $primaryKey = '';

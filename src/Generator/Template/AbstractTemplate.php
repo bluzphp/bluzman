@@ -44,7 +44,7 @@ abstract class AbstractTemplate
     /**
      * @param string $templatePath
      */
-    public function setTemplatePath($templatePath)
+    public function setTemplatePath(string $templatePath)
     {
         $this->templatePath = $templatePath;
     }
@@ -52,7 +52,7 @@ abstract class AbstractTemplate
     /**
      * @return array
      */
-    public function getTemplateData()
+    public function getTemplateData(): array
     {
         return array_merge($this->getDefaultTemplateData(), $this->templateData);
     }
@@ -60,7 +60,7 @@ abstract class AbstractTemplate
     /**
      * @param array $templateData
      */
-    public function setTemplateData($templateData)
+    public function setTemplateData(array $templateData)
     {
         $this->templateData = $templateData;
     }
@@ -68,7 +68,7 @@ abstract class AbstractTemplate
     /**
      * @return string
      */
-    public function getFilePath()
+    public function getFilePath(): string
     {
         return $this->filePath;
     }
@@ -76,7 +76,7 @@ abstract class AbstractTemplate
     /**
      * @param string $filePath
      */
-    public function setFilePath($filePath)
+    public function setFilePath(string $filePath)
     {
         $this->filePath = $filePath;
     }
@@ -86,7 +86,7 @@ abstract class AbstractTemplate
      *
      * @return string
      */
-    public function getAuthor()
+    public function getAuthor(): string
     {
         return get_current_user();
     }
@@ -94,7 +94,7 @@ abstract class AbstractTemplate
     /**
      * @return array
      */
-    public function getDefaultTemplateData()
+    public function getDefaultTemplateData(): array
     {
         $date = new \DateTime();
 

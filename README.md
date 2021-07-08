@@ -4,11 +4,11 @@ Bluzman is a set of command-line tools which provides a simple workflow with an 
 
 ## Achievements
 
-[![PHP >= 7.1+](https://img.shields.io/packagist/php-v/bluzphp/bluzman.svg?style=flat)](https://php.net/)
+[![PHP >= 7.3+](https://img.shields.io/packagist/php-v/bluzphp/bluzman.svg?style=flat)](https://php.net/)
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/bluzphp/bluzman.svg?label=version&style=flat)](https://packagist.org/packages/bluzphp/bluzman)
 
-[![Build Status](https://img.shields.io/travis/bluzphp/bluzman/master.svg?style=flat)](https://travis-ci.org/bluzphp/bluzman)
+[![Build Status](https://img.shields.io/travis/bluzphp/bluzman/master.svg?style=flat)](https://travis-ci.com/bluzphp/bluzman)
 
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/bluzphp/bluzman.svg?style=flat)](https://scrutinizer-ci.com/g/bluzphp/bluzman/)
 
@@ -25,7 +25,7 @@ Bluzman is a set of command-line tools which provides a simple workflow with an 
 
 ## Requirements
 * OS: Linux
-* PHP: 7.1 (or later)
+* PHP: 7.3 (or later)
 
 ## Usage
 List of available commands

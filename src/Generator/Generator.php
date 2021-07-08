@@ -46,7 +46,7 @@ class Generator
     /**
      * @return AbstractTemplate
      */
-    public function getTemplate()
+    public function getTemplate(): AbstractTemplate
     {
         return $this->template;
     }
@@ -54,7 +54,7 @@ class Generator
     /**
      * @param AbstractTemplate $template
      */
-    public function setTemplate($template): void
+    public function setTemplate(AbstractTemplate $template): void
     {
         $this->template = $template;
     }
@@ -62,7 +62,7 @@ class Generator
     /**
      * @return string
      */
-    public function getAbsolutePath()
+    public function getAbsolutePath(): string
     {
         return $this->absolutePath;
     }
@@ -70,7 +70,7 @@ class Generator
     /**
      * @param string $absolutePath
      */
-    public function setAbsolutePath($absolutePath): void
+    public function setAbsolutePath(string $absolutePath): void
     {
         $this->absolutePath = $absolutePath;
     }
@@ -78,7 +78,7 @@ class Generator
     /**
      * @return Filesystem
      */
-    public function getFs()
+    public function getFs(): Filesystem
     {
         return $this->fs;
     }
@@ -86,7 +86,7 @@ class Generator
     /**
      * @param Filesystem $fs
      */
-    public function setFs($fs): void
+    public function setFs(Filesystem $fs): void
     {
         $this->fs = $fs;
     }
@@ -102,6 +102,9 @@ class Generator
         );
     }
 
+    /**
+     * @return string
+     */
     public function getCompiledTemplate()
     {
         $view = new View();

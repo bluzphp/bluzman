@@ -45,7 +45,7 @@ class StartCommand extends AbstractServerCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int|null|void
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -93,5 +93,6 @@ class StartCommand extends AbstractServerCommand
                 sleep(1);
             }
         }
+        return 0;
     }
 }

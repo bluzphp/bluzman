@@ -8,6 +8,7 @@
 namespace Bluzman\Application;
 
 use Bluz\Config\Config;
+use Bluz\Config\ConfigException;
 use Bluz\Config\ConfigLoader;
 use Bluz\Proxy;
 use Bluzman\Command;
@@ -28,7 +29,7 @@ class Application extends Console\Application
      * @param string $name
      * @param string $version
      */
-    public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
+    public function __construct(string $name = 'UNKNOWN', string $version = 'UNKNOWN')
     {
         parent::__construct($name, $version);
 
@@ -39,7 +40,7 @@ class Application extends Console\Application
      * init
      *
      * @return void
-     * @throws \Bluz\Config\ConfigException
+     * @throws ConfigException
      */
     public function init()
     {
@@ -59,7 +60,7 @@ class Application extends Console\Application
      *
      * @return InputDefinition An InputDefinition instance
      */
-    protected function getDefaultInputDefinition()
+    protected function getDefaultInputDefinition(): InputDefinition
     {
         return new InputDefinition(
             [
@@ -127,10 +128,10 @@ class Application extends Console\Application
     /**
      * Get Module path
      *
-     * @param  string $name
+     * @param string $name
      * @return string
      */
-    public function getModulePath($name): string
+    public function getModulePath(string $name): string
     {
         return $this->getWorkingPath() . DIRECTORY_SEPARATOR
             . 'application' . DIRECTORY_SEPARATOR
@@ -141,10 +142,10 @@ class Application extends Console\Application
     /**
      * Get Model path
      *
-     * @param  string $name
+     * @param string $name
      * @return string
      */
-    public function getModelPath($name): string
+    public function getModelPath(string $name): string
     {
         return $this->getWorkingPath() . DIRECTORY_SEPARATOR
             . 'application' . DIRECTORY_SEPARATOR
@@ -153,19 +154,19 @@ class Application extends Console\Application
     }
 
     /**
-     * @param  string $name
+     * @param string $name
      * @return bool
      */
-    public function isModuleExists($name): bool
+    public function isModuleExists(string $name): bool
     {
         return is_dir($this->getModulePath($name));
     }
 
     /**
-     * @param  string $name
+     * @param string $name
      * @return bool
      */
-    public function isModelExists($name): bool
+    public function isModelExists(string $name): bool
     {
         return is_dir($this->getModelPath($name));
     }

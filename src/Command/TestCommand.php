@@ -8,6 +8,7 @@
 namespace Bluzman\Command;
 
 use Codeception;
+use Exception;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\StringInput;
@@ -44,7 +45,8 @@ class TestCommand extends AbstractCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int|null|void
+     * @return int
+     * @throws Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -60,13 +62,13 @@ class TestCommand extends AbstractCommand
         $codeceptionInput = new StringInput(implode(' ', $arguments));
         $command = $this->getCodeceptionApplication()->find('run');
 
-        $command->run($codeceptionInput, $output);
+        return $command->run($codeceptionInput, $output);
     }
 
     /**
      * Return CodeceptionApplication
      */
-    protected function getCodeceptionApplication()
+    protected function getCodeceptionApplication(): Codeception\Application
     {
         // @todo need refactoring this part - move functions to separate files
         require_once PATH_VENDOR . DS . 'codeception' . DS . 'codeception' . DS . 'autoload.php';

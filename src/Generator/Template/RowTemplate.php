@@ -26,7 +26,7 @@ class RowTemplate extends AbstractTemplate
     /**
      * @param array $templateData
      */
-    public function setTemplateData($templateData)
+    public function setTemplateData(array $templateData)
     {
         $properties = '';
         if ($templateData['columns']) {

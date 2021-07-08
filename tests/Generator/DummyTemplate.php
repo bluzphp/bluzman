@@ -26,7 +26,7 @@ class DummyTemplate extends AbstractTemplate
      *
      * @return array
      */
-    public function getDefaultTemplateData()
+    public function getDefaultTemplateData(): array
     {
         return [];
     }

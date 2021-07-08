@@ -8,6 +8,7 @@
 namespace Bluzman\Command\Db;
 
 use Bluzman\Command\AbstractCommand;
+use Exception;
 use Phinx\Console\PhinxApplication;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,7 +25,8 @@ abstract class AbstractDbCommand extends AbstractCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int|null|void
+     * @return int
+     * @throws Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -56,6 +58,6 @@ abstract class AbstractDbCommand extends AbstractCommand
         }
 
         $phinxInput = new ArrayInput($phinxArguments);
-        $command->run($phinxInput, $output);
+        return $command->run($phinxInput, $output);
     }
 }

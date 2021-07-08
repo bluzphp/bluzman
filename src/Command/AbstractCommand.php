@@ -7,6 +7,7 @@
 
 namespace Bluzman\Command;
 
+use Bluz\Config\ConfigException;
 use Bluz\Proxy\Config;
 use Bluz\Validator\Validator;
 use Bluzman\Application\Application;
@@ -54,7 +55,7 @@ abstract class AbstractCommand extends Console\Command\Command
     /**
      * @return InputInterface
      */
-    public function getInput()
+    public function getInput(): InputInterface
     {
         return $this->input;
     }
@@ -76,17 +77,17 @@ abstract class AbstractCommand extends Console\Command\Command
     }
 
     /**
-     * @param \Symfony\Component\Filesystem\Filesystem $fs
+     * @param Filesystem $fs
      */
-    public function setFs($fs): void
+    public function setFs(Filesystem $fs): void
     {
         $this->fs = $fs;
     }
 
     /**
-     * @return \Symfony\Component\Filesystem\Filesystem
+     * @return Filesystem
      */
-    public function getFs()
+    public function getFs(): Filesystem
     {
         if (!$this->fs) {
             $this->fs = new Filesystem();
@@ -99,7 +100,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * @param  OutputInterface $output
      *
      * @return void
-     * @throws \Bluz\Config\ConfigException
+     * @throws ConfigException
      */
     final public function initialize(InputInterface $input, OutputInterface $output)
     {
@@ -193,7 +194,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * Validate Module Argument
      *
      * @return void
-     * @throws \Bluzman\Input\InputException
+     * @throws InputException
      */
     protected function validateModuleArgument(): void
     {
@@ -228,7 +229,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * Validate Module Argument
      *
      * @return void
-     * @throws \Bluzman\Input\InputException
+     * @throws InputException
      */
     protected function validateControllerArgument(): void
     {
