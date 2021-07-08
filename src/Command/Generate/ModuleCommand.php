@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Bluz PHP Team
  * @link https://github.com/bluzphp/bluzman
@@ -39,7 +40,7 @@ class ModuleCommand extends AbstractGenerateCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -53,8 +54,10 @@ class ModuleCommand extends AbstractGenerateCommand
 
             // verify it
             $this->verify($input, $output);
+            return 0;
         } catch (\Exception $e) {
             $this->error("ERROR: {$e->getMessage()}");
+            return $e->getCode();
         }
     }
 
@@ -102,7 +105,7 @@ class ModuleCommand extends AbstractGenerateCommand
      * @return void
      * @throws GeneratorException
      */
-    public function verify(InputInterface $input, OutputInterface $output) : void
+    public function verify(InputInterface $input, OutputInterface $output): void
     {
         $module = $input->getArgument('module');
         $modulePath = $this->getApplication()->getModulePath($module);

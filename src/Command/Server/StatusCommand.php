@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Bluz PHP Team
  * @link https://github.com/bluzphp/bluzman
@@ -54,7 +55,7 @@ class StatusCommand extends AbstractServerCommand
             $pid = $this->getProcessId($host, $port) ?: false;
 
             if (!$pid) {
-                throw new NotRunningException;
+                throw new NotRunningException();
             }
 
             $process = new Process("ps -p $pid -o comm=");
@@ -63,7 +64,7 @@ class StatusCommand extends AbstractServerCommand
             $processOutput = $process->getOutput();
 
             if (empty($processOutput)) {
-                throw new NotRunningException;
+                throw new NotRunningException();
             }
 
             $this->write("Server <info>$host:$port</info> is running. PID is <info>$pid</info>");

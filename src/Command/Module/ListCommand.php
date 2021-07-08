@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Bluz PHP Team
  * @link https://github.com/bluzphp/bluzman
@@ -41,7 +42,7 @@ class ListCommand extends AbstractCommand
      * @link https://developer.github.com/v3/search/#search-repositories
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -65,19 +66,19 @@ class ListCommand extends AbstractCommand
 
         if (!$repositories) {
             $this->error('ERROR: Network problems, try again later');
-            return;
+            return 1;
         }
 
         $repositories = json_decode($repositories);
 
         if (!$repositories) {
             $this->error('ERROR: Invalid GitHub response');
-            return;
+            return 2;
         }
 
         if (!$repositories->total_count) {
             $this->error('ERROR: Not found any modules');
-            return;
+            return 3;
         }
 
         $this->write('List of modules (<info>installed</info>, <comment>available</comment>):');
@@ -101,5 +102,6 @@ class ListCommand extends AbstractCommand
         }
 
         $this->write('You can install new module with <info>bluzman module:install name</info> command');
+        return 0;
     }
 }

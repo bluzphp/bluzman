@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Bluz PHP Team
  * @link https://github.com/bluzphp/bluzman
@@ -60,8 +61,7 @@ class RunCommand extends AbstractCommand
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return int|null|void
-     * @throws \Bluz\Application\Exception\ApplicationException
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -74,5 +74,6 @@ class RunCommand extends AbstractCommand
         $app->setOutput($output);
         $app->init($input->getOption('env'));
         $app->run();
+        return 0;
     }
 }

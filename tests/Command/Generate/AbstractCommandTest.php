@@ -15,14 +15,19 @@ use Mockery\Container;
  */
 abstract class AbstractCommandTest extends BluzmanTestCase
 {
-    public function setUp()
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \Mockery\Exception\RuntimeException
+     */
+    public function setUp(): void
     {
         parent::setUp();
 
         $container = new Container;
 
         $app = $container->mock('\Bluzman\Application\Application[getWorkingPath]')
-            ->shouldDeferMissing()
+            ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
         $app->shouldReceive('getWorkingPath')

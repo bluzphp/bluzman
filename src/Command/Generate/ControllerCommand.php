@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Bluz PHP Team
  * @link https://github.com/bluzphp/bluzman
@@ -40,9 +41,9 @@ class ControllerCommand extends AbstractGenerateCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output) : void
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->write('Running <info>generate:controller</info> command');
         try {
@@ -55,8 +56,10 @@ class ControllerCommand extends AbstractGenerateCommand
 
             // verify it
             $this->verify($input, $output);
+            return 0;
         } catch (\Exception $e) {
             $this->error("ERROR: {$e->getMessage()}");
+            return $e->getCode();
         }
     }
 
@@ -65,7 +68,7 @@ class ControllerCommand extends AbstractGenerateCommand
      * @param OutputInterface $output
      * @return void
      */
-    protected function generate(InputInterface $input, OutputInterface $output) : void
+    protected function generate(InputInterface $input, OutputInterface $output): void
     {
         $module = $input->getArgument('module');
         $controller = $input->getArgument('controller');
@@ -83,7 +86,7 @@ class ControllerCommand extends AbstractGenerateCommand
      * @return void
      * @throws \Bluzman\Generator\GeneratorException
      */
-    public function verify(InputInterface $input, OutputInterface $output) : void
+    public function verify(InputInterface $input, OutputInterface $output): void
     {
         $module = $input->getArgument('module');
         $controller = $input->getArgument('controller');

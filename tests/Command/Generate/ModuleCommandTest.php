@@ -20,11 +20,16 @@ class ModuleCommandTest extends AbstractCommandTest
      */
     protected $moduleName;
 
-    public function setUp()
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \Mockery\Exception\RuntimeException
+     */
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->moduleName = $this->getFaker()->lexify();
+        $this->moduleName = uniqid('m');
     }
 
     public function testCorrectWorkflow()
@@ -49,7 +54,7 @@ class ModuleCommandTest extends AbstractCommandTest
         $display = $commandTester->getDisplay();
 
         // check all messages were displayed
-        self::assertRegExp('/Running generate:module command/', $display);
-        self::assertRegExp('/has been successfully created/', $display);
+        self::assertMatchesRegularExpression('/Running generate:module command/', $display);
+        self::assertMatchesRegularExpression('/has been successfully created/', $display);
     }
 }

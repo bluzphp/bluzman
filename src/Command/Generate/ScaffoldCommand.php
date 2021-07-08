@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Bluz PHP Team
  * @link https://github.com/bluzphp/bluzman
@@ -42,7 +43,7 @@ class ScaffoldCommand extends AbstractGenerateCommand
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output) : void
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->write('Running <info>generate:scaffold</info> command');
         try {
@@ -54,8 +55,10 @@ class ScaffoldCommand extends AbstractGenerateCommand
 
             // verify it
             $this->verify($input, $output);
+            return 0;
         } catch (\Exception $e) {
             $this->error("ERROR: {$e->getMessage()}");
+            return $e->getCode();
         }
     }
 
@@ -65,7 +68,7 @@ class ScaffoldCommand extends AbstractGenerateCommand
      * @return void
      * @throws \Symfony\Component\Console\Exception\ExceptionInterface
      */
-    protected function runGenerateModel() : void
+    protected function runGenerateModel(): void
     {
         $command = $this->getApplication()->find('generate:model');
 
@@ -86,7 +89,7 @@ class ScaffoldCommand extends AbstractGenerateCommand
      * @return void
      * @throws \Symfony\Component\Console\Exception\ExceptionInterface
      */
-    protected function runGenerateModule() : void
+    protected function runGenerateModule(): void
     {
         $command = $this->getApplication()->find('generate:module');
 
@@ -106,7 +109,7 @@ class ScaffoldCommand extends AbstractGenerateCommand
      * @return void
      * @throws \Symfony\Component\Console\Exception\ExceptionInterface
      */
-    protected function runGenerateCrud() : void
+    protected function runGenerateCrud(): void
     {
         $command = $this->getApplication()->find('generate:crud');
 
@@ -127,7 +130,7 @@ class ScaffoldCommand extends AbstractGenerateCommand
      * @return void
      * @throws \Symfony\Component\Console\Exception\ExceptionInterface
      */
-    protected function runGenerateGrid() : void
+    protected function runGenerateGrid(): void
     {
         $command = $this->getApplication()->find('generate:grid');
 
@@ -147,7 +150,7 @@ class ScaffoldCommand extends AbstractGenerateCommand
      *
      * @throws GeneratorException
      */
-    public function verify(InputInterface $input, OutputInterface $output) : void
+    public function verify(InputInterface $input, OutputInterface $output): void
     {
         $model = $input->getArgument('model');
         $module = $input->getArgument('module');

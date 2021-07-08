@@ -1,12 +1,11 @@
 language: php
 php:
-  - 7.1
-  - 7.2
   - 7.3
-  - master
+  - 7.4
+  - 8.0
 matrix:
   allow_failures:
-    - php: master
+    - php: 8.0
 install:
   # Composer
   - composer self-update
@@ -15,7 +14,7 @@ before_script:
   - mkdir .reports
 script:
   # Code style
-  - php vendor/bin/phpcs ./src --standard=PSR1,PSR2 --encoding=utf-8
+  - php vendor/bin/phpcs ./src --standard=PSR12 --encoding=utf-8
   # PHPUnit
   - php vendor/bin/phpunit --coverage-clover=.reports/clover.xml
 after_success:

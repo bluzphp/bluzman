@@ -30,12 +30,17 @@ class ControllerCommandTest extends AbstractCommandTest
      */
     protected $modulePath;
 
-    public function setUp()
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \Mockery\Exception\RuntimeException
+     */
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->module = $this->getFaker()->lexify();
-        $this->controller = $this->getFaker()->lexify();
+        $this->module = uniqid('m');
+        $this->controller = uniqid('c');
         $this->modulePath = $this->workingPath
             . DS . 'application'
             . DS . 'modules'
@@ -67,8 +72,8 @@ class ControllerCommandTest extends AbstractCommandTest
         $display = $commandTester->getDisplay();
 
         // check all messages were displayed
-        self::assertRegExp('/Running generate:controller command/', $display);
-        self::assertRegExp('/has been successfully created/', $display);
+        self::assertMatchesRegularExpression('/Running generate:controller command/', $display);
+        self::assertMatchesRegularExpression('/has been successfully created/', $display);
         self::assertFileExists(
             $this->modulePath . DS . 'controllers'
             . DS . $this->controller . '.php'

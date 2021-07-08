@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Bluz PHP Team
  * @link https://github.com/bluzphp/bluzman
@@ -87,28 +88,28 @@ class Application extends Console\Application
     {
         $this->addCommands(
             [
-                new Command\MagicCommand,
-                new Command\RunCommand,
-                new Command\TestCommand,
-                new Command\Db\CreateCommand,
-                new Command\Db\MigrateCommand,
-                new Command\Db\RollbackCommand,
-                new Command\Db\StatusCommand,
-                new Command\Db\SeedCreateCommand,
-                new Command\Db\SeedRunCommand,
-                new Command\Generate\ModuleCommand,
-                new Command\Generate\ControllerCommand,
-                new Command\Generate\ModelCommand,
-                new Command\Generate\CrudCommand,
-                new Command\Generate\GridCommand,
-                new Command\Generate\RestCommand,
-                new Command\Generate\ScaffoldCommand,
-                new Command\Module\InstallCommand,
-                new Command\Module\ListCommand,
-                new Command\Module\RemoveCommand,
-                new Command\Server\StartCommand,
-                new Command\Server\StopCommand,
-                new Command\Server\StatusCommand,
+                new Command\MagicCommand(),
+                new Command\RunCommand(),
+                new Command\TestCommand(),
+                new Command\Db\CreateCommand(),
+                new Command\Db\MigrateCommand(),
+                new Command\Db\RollbackCommand(),
+                new Command\Db\StatusCommand(),
+                new Command\Db\SeedCreateCommand(),
+                new Command\Db\SeedRunCommand(),
+                new Command\Generate\ModuleCommand(),
+                new Command\Generate\ControllerCommand(),
+                new Command\Generate\ModelCommand(),
+                new Command\Generate\CrudCommand(),
+                new Command\Generate\GridCommand(),
+                new Command\Generate\RestCommand(),
+                new Command\Generate\ScaffoldCommand(),
+                new Command\Module\InstallCommand(),
+                new Command\Module\ListCommand(),
+                new Command\Module\RemoveCommand(),
+                new Command\Server\StartCommand(),
+                new Command\Server\StopCommand(),
+                new Command\Server\StatusCommand(),
             ]
         );
     }
@@ -118,7 +119,7 @@ class Application extends Console\Application
      *
      * @return string
      */
-    public function getWorkingPath() : string
+    public function getWorkingPath(): string
     {
         return getcwd();
     }
@@ -129,7 +130,7 @@ class Application extends Console\Application
      * @param  string $name
      * @return string
      */
-    public function getModulePath($name) : string
+    public function getModulePath($name): string
     {
         return $this->getWorkingPath() . DIRECTORY_SEPARATOR
             . 'application' . DIRECTORY_SEPARATOR
@@ -143,7 +144,7 @@ class Application extends Console\Application
      * @param  string $name
      * @return string
      */
-    public function getModelPath($name) : string
+    public function getModelPath($name): string
     {
         return $this->getWorkingPath() . DIRECTORY_SEPARATOR
             . 'application' . DIRECTORY_SEPARATOR
@@ -155,7 +156,7 @@ class Application extends Console\Application
      * @param  string $name
      * @return bool
      */
-    public function isModuleExists($name) : bool
+    public function isModuleExists($name): bool
     {
         return is_dir($this->getModulePath($name));
     }
@@ -164,7 +165,7 @@ class Application extends Console\Application
      * @param  string $name
      * @return bool
      */
-    public function isModelExists($name) : bool
+    public function isModelExists($name): bool
     {
         return is_dir($this->getModelPath($name));
     }

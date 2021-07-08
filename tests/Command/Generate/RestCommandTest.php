@@ -39,7 +39,12 @@ class RestCommandTest extends AbstractCommandTest
      */
     protected $dataForTemplate = ['author' => 'test', 'date' => '00-00-00 00:00:00'];
 
-    public function setUp()
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \Mockery\Exception\RuntimeException
+     */
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -75,7 +80,7 @@ class RestCommandTest extends AbstractCommandTest
     {
         $container = new \Mockery\Container;
         $template = $container->mock('\Bluzman\Generator\Template\RestTemplate[getDefaultTemplateData]')
-            ->shouldDeferMissing()
+            ->makePartial()
             ->shouldAllowMockingProtectedMethods();
         $template->shouldReceive('getDefaultTemplateData')
             ->atLeast(1)
@@ -83,7 +88,7 @@ class RestCommandTest extends AbstractCommandTest
             ->getMock();
 
         $command = $container->mock('\Bluzman\Command\Generate\RestCommand[getTemplate]')
-            ->shouldDeferMissing()
+            ->makePartial()
             ->shouldAllowMockingProtectedMethods();
         $command->shouldReceive('getTemplate')
             ->withArgs(['RestTemplate'])
@@ -108,8 +113,8 @@ class RestCommandTest extends AbstractCommandTest
         $display = $commandTester->getDisplay();
 
         // check all messages were displayed
-        self::assertRegExp('/Running generate:rest command/', $display);
-        self::assertRegExp('/has been successfully created/', $display);
+        self::assertMatchesRegularExpression('/Running generate:rest command/', $display);
+        self::assertMatchesRegularExpression('/has been successfully created/', $display);
 
         $file = $this->modulePath .DS. 'controllers' .DS. 'rest.php';
 
@@ -141,6 +146,6 @@ class RestCommandTest extends AbstractCommandTest
 
         $display = $commandTester->getDisplay();
 
-        self::assertRegExp('/ERROR/', $display);
+        self::assertMatchesRegularExpression('/ERROR/', $display);
     }
 }

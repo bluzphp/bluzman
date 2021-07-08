@@ -36,6 +36,6 @@ class ScaffoldCommandTest extends AbstractCommandTest
 
         $display = $commandTester->getDisplay();
 
-        self::assertRegExp('/ERROR/', $display);
+        self::assertMatchesRegularExpression('/ERROR/', $display);
     }
 }

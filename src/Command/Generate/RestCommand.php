@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Bluz PHP Team
  * @link https://github.com/bluzphp/bluzman
@@ -41,7 +42,7 @@ class RestCommand extends AbstractGenerateCommand
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output) : void
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->write('Running <info>generate:rest</info> command');
         try {
@@ -54,8 +55,10 @@ class RestCommand extends AbstractGenerateCommand
 
             // verify it
             $this->verify($input, $output);
+            return 0;
         } catch (InputException $e) {
             $this->error("ERROR: {$e->getMessage()}");
+            return $e->getCode();
         }
     }
 
@@ -65,7 +68,7 @@ class RestCommand extends AbstractGenerateCommand
      * @return void
      * @throws InputException
      */
-    protected function generate(InputInterface $input, OutputInterface $output) : void
+    protected function generate(InputInterface $input, OutputInterface $output): void
     {
         $model = ucfirst($input->getArgument('model'));
         $module = $input->getArgument('module');
@@ -94,7 +97,7 @@ class RestCommand extends AbstractGenerateCommand
      * @return void
      * @throws \Bluzman\Generator\GeneratorException
      */
-    public function verify(InputInterface $input, OutputInterface $output) : void
+    public function verify(InputInterface $input, OutputInterface $output): void
     {
         $model = $input->getArgument('model');
         $module = $input->getArgument('module');

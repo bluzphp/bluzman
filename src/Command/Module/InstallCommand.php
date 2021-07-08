@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Bluz PHP Team
  * @link https://github.com/bluzphp/bluzman
@@ -50,7 +51,7 @@ class InstallCommand extends AbstractCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int|null|void
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -68,5 +69,7 @@ class InstallCommand extends AbstractCommand
         $application = new ComposerApplication();
         $application->setAutoExit(false); // prevent `$application->run` method from exiting the script
         $application->run($composerInput);
+
+        return 0;
     }
 }

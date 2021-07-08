@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Bluz PHP Team
  * @link https://github.com/bluzphp/bluzman
@@ -43,10 +44,10 @@ class CrudCommand extends AbstractGenerateCommand
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return void
+     * @return int
      * @throws \Bluzman\Generator\GeneratorException
      */
-    protected function execute(InputInterface $input, OutputInterface $output) : void
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->write('Running <info>generate:crud</info> command');
         try {
@@ -59,8 +60,10 @@ class CrudCommand extends AbstractGenerateCommand
 
             // verify it
             $this->verify($input, $output);
+            return 0;
         } catch (InputException $e) {
             $this->error("ERROR: {$e->getMessage()}");
+            return $e->getCode();
         }
     }
 
@@ -72,7 +75,7 @@ class CrudCommand extends AbstractGenerateCommand
      * @throws Generator\GeneratorException
      * @throws InputException
      */
-    protected function generate(InputInterface $input, OutputInterface $output) : void
+    protected function generate(InputInterface $input, OutputInterface $output): void
     {
         $model = ucfirst($input->getArgument('model'));
         $module = $input->getArgument('module');
@@ -117,7 +120,7 @@ class CrudCommand extends AbstractGenerateCommand
      * @return void
      * @throws \Bluzman\Generator\GeneratorException
      */
-    public function verify(InputInterface $input, OutputInterface $output) : void
+    public function verify(InputInterface $input, OutputInterface $output): void
     {
         $model = $input->getArgument('model');
         $module = $input->getArgument('module');

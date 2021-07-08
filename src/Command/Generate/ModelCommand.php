@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Bluz PHP Team
  * @link https://github.com/bluzphp/bluzman
@@ -41,9 +42,10 @@ class ModelCommand extends AbstractGenerateCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
+     * @return int
+     * @throws Generator\GeneratorException
      */
-    protected function execute(InputInterface $input, OutputInterface $output) : void
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->write('Running <info>generate:model</info> command');
         try {
@@ -56,8 +58,10 @@ class ModelCommand extends AbstractGenerateCommand
 
             // verify it
             $this->verify($input, $output);
+            return 0;
         } catch (InputException $e) {
             $this->error("ERROR: {$e->getMessage()}");
+            return $e->getCode();
         }
     }
 
@@ -67,7 +71,7 @@ class ModelCommand extends AbstractGenerateCommand
      * @return void
      * @throws InputException
      */
-    protected function generate(InputInterface $input, OutputInterface $output) : void
+    protected function generate(InputInterface $input, OutputInterface $output): void
     {
         $model = ucfirst($input->getArgument('model'));
         $table = $input->getArgument('table');
@@ -107,7 +111,7 @@ class ModelCommand extends AbstractGenerateCommand
      * @return void
      * @throws \Bluzman\Generator\GeneratorException
      */
-    public function verify(InputInterface $input, OutputInterface $output) : void
+    public function verify(InputInterface $input, OutputInterface $output): void
     {
         $model = $input->getArgument('model');
         $modelPath = $this->getApplication()->getModelPath($model);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Bluz PHP Team
  * @link https://github.com/bluzphp/bluzman
@@ -45,7 +46,7 @@ abstract class AbstractCommand extends Console\Command\Command
     /**
      * @param InputInterface $input
      */
-    public function setInput(InputInterface $input) : void
+    public function setInput(InputInterface $input): void
     {
         $this->input = $input;
     }
@@ -61,7 +62,7 @@ abstract class AbstractCommand extends Console\Command\Command
     /**
      * @param OutputInterface $output
      */
-    public function setOutput(OutputInterface $output) : void
+    public function setOutput(OutputInterface $output): void
     {
         $this->output = $output;
     }
@@ -77,7 +78,7 @@ abstract class AbstractCommand extends Console\Command\Command
     /**
      * @param \Symfony\Component\Filesystem\Filesystem $fs
      */
-    public function setFs($fs) : void
+    public function setFs($fs): void
     {
         $this->fs = $fs;
     }
@@ -124,7 +125,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * @param $message
      * @return void
      */
-    public function write($message) : void
+    public function write($message): void
     {
         $this->getOutput()->writeln($message);
     }
@@ -133,7 +134,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * @param $message
      * @return void
      */
-    public function info($message) : void
+    public function info($message): void
     {
         $this->write("<info>$message</info>");
     }
@@ -142,7 +143,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * @param $message
      * @return void
      */
-    public function comment($message) : void
+    public function comment($message): void
     {
         $this->write("<comment>$message</comment>");
     }
@@ -151,7 +152,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * @param $message
      * @return void
      */
-    public function question($message) : void
+    public function question($message): void
     {
         $this->write("<question>$message</question>:");
     }
@@ -160,7 +161,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * @param $message
      * @return void
      */
-    public function error($message) : void
+    public function error($message): void
     {
         $this->write("<error>$message</error>");
     }
@@ -182,7 +183,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * @param int $required
      * @return void
      */
-    protected function addModuleArgument($required = InputArgument::REQUIRED) : void
+    protected function addModuleArgument($required = InputArgument::REQUIRED): void
     {
         $module = new InputArgument('module', $required, 'Module name is required');
         $this->getDefinition()->addArgument($module);
@@ -194,7 +195,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * @return void
      * @throws \Bluzman\Input\InputException
      */
-    protected function validateModuleArgument() : void
+    protected function validateModuleArgument(): void
     {
         $module = $this->getInput()->getArgument('module');
 
@@ -203,8 +204,10 @@ abstract class AbstractCommand extends Console\Command\Command
             ->alphaNumeric('-_')
             ->noWhitespace();
 
-        if ($this->getDefinition()->getArgument('module')->isRequired()
-            && !$validator->validate($module)) {
+        if (
+            $this->getDefinition()->getArgument('module')->isRequired()
+            && !$validator->validate($module)
+        ) {
             throw new InputException($validator->getError());
         }
     }
@@ -215,7 +218,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * @param int $required
      * @return void
      */
-    protected function addControllerArgument($required = InputArgument::REQUIRED) : void
+    protected function addControllerArgument($required = InputArgument::REQUIRED): void
     {
         $controller = new InputArgument('controller', $required, 'Controller name is required');
         $this->getDefinition()->addArgument($controller);
@@ -227,7 +230,7 @@ abstract class AbstractCommand extends Console\Command\Command
      * @return void
      * @throws \Bluzman\Input\InputException
      */
-    protected function validateControllerArgument() : void
+    protected function validateControllerArgument(): void
     {
         $controller = $this->getInput()->getArgument('controller');
 
@@ -236,8 +239,10 @@ abstract class AbstractCommand extends Console\Command\Command
             ->alphaNumeric('-_')
             ->noWhitespace();
 
-        if ($this->getDefinition()->getArgument('controller')->isRequired()
-            && !$validator->validate($controller)) {
+        if (
+            $this->getDefinition()->getArgument('controller')->isRequired()
+            && !$validator->validate($controller)
+        ) {
             throw new InputException($validator->getError());
         }
     }

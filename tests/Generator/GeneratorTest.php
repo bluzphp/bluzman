@@ -39,14 +39,13 @@ class GeneratorTest extends BluzmanTestCase
     public function testCompiledTemplate($templateOptions)
     {
         $container = new \Mockery\Container;
-        $faker = \Faker\Factory::create();
-        $filePath = $this->workingPath . DS . $faker->lexify . '.' . $faker->fileExtension;
+        $filePath = $this->workingPath . DS . uniqid() . '.' . uniqid();
 
         /**
          * @var $template AbstractTemplate
          */
         $template = $container->mock($templateOptions['template'])
-            ->shouldDeferMissing()
+            ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
         $template->shouldReceive('getDefaultTemplateData')

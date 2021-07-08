@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Bluz PHP Team
  * @link https://github.com/bluzphp/bluzman
@@ -30,14 +31,14 @@ abstract class AbstractGenerateCommand extends AbstractCommand
      * @param OutputInterface $output
      * @return mixed
      */
-    abstract public function verify(InputInterface $input, OutputInterface $output) : void;
+    abstract public function verify(InputInterface $input, OutputInterface $output): void;
 
     /**
      * Add Force Option
      *
      * @return void
      */
-    protected function addForceOption() : void
+    protected function addForceOption(): void
     {
         $force = new InputOption('--force', '-f', InputOption::VALUE_NONE, 'Rewrite previously generated files');
         $this->getDefinition()->addOption($force);
@@ -48,7 +49,7 @@ abstract class AbstractGenerateCommand extends AbstractCommand
      *
      * @return void
      */
-    protected function addModelArgument() : void
+    protected function addModelArgument(): void
     {
         $model = new InputArgument('model', InputArgument::REQUIRED, 'Model name is required');
         $this->getDefinition()->addArgument($model);
@@ -60,7 +61,7 @@ abstract class AbstractGenerateCommand extends AbstractCommand
      * @return void
      * @throws \Bluzman\Input\InputException
      */
-    protected function validateModelArgument() : void
+    protected function validateModelArgument(): void
     {
         $model = $this->getInput()->getArgument('model');
 
@@ -69,8 +70,10 @@ abstract class AbstractGenerateCommand extends AbstractCommand
             ->alphaNumeric()
             ->noWhitespace();
 
-        if ($this->getDefinition()->getArgument('model')->isRequired()
-            && !$validator->validate($model)) {
+        if (
+            $this->getDefinition()->getArgument('model')->isRequired()
+            && !$validator->validate($model)
+        ) {
             throw new InputException($validator->getError());
         }
     }
@@ -80,7 +83,7 @@ abstract class AbstractGenerateCommand extends AbstractCommand
      *
      * @return void
      */
-    protected function addTableArgument() : void
+    protected function addTableArgument(): void
     {
         $table = new InputArgument('table', InputArgument::REQUIRED, 'Table name is required');
         $this->getDefinition()->addArgument($table);
@@ -92,7 +95,7 @@ abstract class AbstractGenerateCommand extends AbstractCommand
      * @return void
      * @throws \Bluzman\Input\InputException
      */
-    protected function validateTableArgument() : void
+    protected function validateTableArgument(): void
     {
         $table = $this->getInput()->getArgument('table');
 
@@ -101,8 +104,10 @@ abstract class AbstractGenerateCommand extends AbstractCommand
             ->alphaNumeric('_')
             ->noWhitespace();
 
-        if ($this->getDefinition()->getArgument('table')->isRequired()
-            && !$validator->validate($table)) {
+        if (
+            $this->getDefinition()->getArgument('table')->isRequired()
+            && !$validator->validate($table)
+        ) {
             throw new InputException($validator->getError());
         }
     }
@@ -115,7 +120,7 @@ abstract class AbstractGenerateCommand extends AbstractCommand
      * @return Table
      * @throws \Bluzman\Generator\GeneratorException
      */
-    protected function getTableInstance($model) : Table
+    protected function getTableInstance($model): Table
     {
         $file = $this->getApplication()->getModelPath($model) . DS . 'Table.php';
         if (!file_exists($file)) {
@@ -140,7 +145,7 @@ abstract class AbstractGenerateCommand extends AbstractCommand
     protected function getTemplate($class)
     {
         $class = '\\Bluzman\\Generator\\Template\\' . $class;
-        return new $class;
+        return new $class();
     }
 
     /**
@@ -152,7 +157,7 @@ abstract class AbstractGenerateCommand extends AbstractCommand
      *
      * @return void
      */
-    protected function generateFile($class, $file, array $data = []) : void
+    protected function generateFile($class, $file, array $data = []): void
     {
         if (file_exists($file) && !$this->getInput()->getOption('force')) {
             $this->comment(" |> File <info>$file</info> already exists");
@@ -170,7 +175,7 @@ abstract class AbstractGenerateCommand extends AbstractCommand
     /**
      * @return string
      */
-    protected function getControllerPath($module, $controller) : string
+    protected function getControllerPath($module, $controller): string
     {
         return $this->getApplication()->getModulePath($module)
             . DS . 'controllers'
@@ -181,7 +186,7 @@ abstract class AbstractGenerateCommand extends AbstractCommand
     /**
      * @return string
      */
-    protected function getViewPath($module, $controller) : string
+    protected function getViewPath($module, $controller): string
     {
         return $this->getApplication()->getModulePath($module)
             . DS . 'views'

@@ -33,7 +33,12 @@ class GridCommandTest extends AbstractCommandTest
         ]
     ];
 
-    public function setUp()
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \Mockery\Exception\RuntimeException
+     */
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -55,7 +60,7 @@ class GridCommandTest extends AbstractCommandTest
     {
         $container = new \Mockery\Container;
         $template = $container->mock('\Bluzman\Generator\Template\GridTemplate[getDefaultTemplateData]')
-            ->shouldDeferMissing()
+            ->makePartial()
             ->shouldAllowMockingProtectedMethods();
         $template->shouldReceive('getDefaultTemplateData')
             ->atLeast(1)
@@ -63,7 +68,7 @@ class GridCommandTest extends AbstractCommandTest
             ->getMock();
 
         $command = $container->mock('\Bluzman\Command\Generate\GridCommand[getTemplate]')
-            ->shouldDeferMissing()
+            ->makePartial()
             ->shouldAllowMockingProtectedMethods();
         $command->shouldReceive('getTemplate')
             ->withArgs(['GridTemplate'])
@@ -88,8 +93,8 @@ class GridCommandTest extends AbstractCommandTest
         $display = $commandTester->getDisplay();
 
         // check all messages were displayed
-        self::assertRegExp('/Running generate:grid command/', $display);
-        self::assertRegExp('/has been successfully created/', $display);
+        self::assertMatchesRegularExpression('/Running generate:grid command/', $display);
+        self::assertMatchesRegularExpression('/has been successfully created/', $display);
 
         $file = $this->modelPath . DS . 'Grid.php';
 
@@ -120,6 +125,6 @@ class GridCommandTest extends AbstractCommandTest
 
         $display = $commandTester->getDisplay();
 
-        self::assertRegExp('/ERROR/', $display);
+        self::assertMatchesRegularExpression('/ERROR/', $display);
     }
 }

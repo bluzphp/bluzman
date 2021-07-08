@@ -31,7 +31,12 @@ class ModelCommandTest extends AbstractCommandTest
 
     protected $dataForTemplate = ['author' => 'test', 'date' => '00-00-00 00:00:00'];
 
-    public function setUp()
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \Mockery\Exception\RuntimeException
+     */
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -50,7 +55,7 @@ class ModelCommandTest extends AbstractCommandTest
     {
         $container = new \Mockery\Container;
         $templateRow = $container->mock('\Bluzman\Generator\Template\RowTemplate')
-            ->shouldDeferMissing()
+            ->makePartial()
             ->shouldAllowMockingProtectedMethods();
         $templateRow->shouldReceive('getDefaultTemplateData')
             ->atLeast(1)
@@ -58,7 +63,7 @@ class ModelCommandTest extends AbstractCommandTest
             ->getMock();
 
         $templateTable = $container->mock('\Bluzman\Generator\Template\TableTemplate')
-            ->shouldDeferMissing()
+            ->makePartial()
             ->shouldAllowMockingProtectedMethods();
         $templateTable->shouldReceive('getDefaultTemplateData')
             ->atLeast(1)
@@ -66,7 +71,7 @@ class ModelCommandTest extends AbstractCommandTest
             ->getMock();
 
         $command = $container->mock('\Bluzman\Command\Generate\ModelCommand[getPrimaryKey, getColumns, getTemplate]')
-            ->shouldDeferMissing()
+            ->makePartial()
             ->shouldAllowMockingProtectedMethods();
         $command->shouldReceive('getPrimaryKey')
             ->atLeast(1)
@@ -103,8 +108,8 @@ class ModelCommandTest extends AbstractCommandTest
         $display = $commandTester->getDisplay();
 
         // check all messages were displayed
-        self::assertRegExp('/Running generate:model command/', $display);
-        self::assertRegExp('/has been successfully created/', $display);
+        self::assertMatchesRegularExpression('/Running generate:model command/', $display);
+        self::assertMatchesRegularExpression('/has been successfully created/', $display);
 
         $table = $this->modelPath . DS . 'Table.php';
         $row = $this->modelPath . DS . 'Row.php';
@@ -148,7 +153,7 @@ class ModelCommandTest extends AbstractCommandTest
     {
         $container = new \Mockery\Container;
         $command = $container->mock('\Bluzman\Command\Generate\ModelCommand[getPrimaryKey, getColumns]')
-            ->shouldDeferMissing()
+            ->makePartial()
             ->shouldAllowMockingProtectedMethods();
         $command->shouldReceive('getPrimaryKey')
             ->atLeast(1)
@@ -173,6 +178,6 @@ class ModelCommandTest extends AbstractCommandTest
 
         $display = $commandTester->getDisplay();
 
-        self::assertRegExp('/ERROR/', $display);
+        self::assertMatchesRegularExpression('/ERROR/', $display);
     }
 }

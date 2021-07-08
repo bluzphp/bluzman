@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Bluz PHP Team
  * @link https://github.com/bluzphp/bluzman
@@ -53,7 +54,7 @@ class Generator
     /**
      * @param AbstractTemplate $template
      */
-    public function setTemplate($template) : void
+    public function setTemplate($template): void
     {
         $this->template = $template;
     }
@@ -69,7 +70,7 @@ class Generator
     /**
      * @param string $absolutePath
      */
-    public function setAbsolutePath($absolutePath) : void
+    public function setAbsolutePath($absolutePath): void
     {
         $this->absolutePath = $absolutePath;
     }
@@ -85,7 +86,7 @@ class Generator
     /**
      * @param Filesystem $fs
      */
-    public function setFs($fs) : void
+    public function setFs($fs): void
     {
         $this->fs = $fs;
     }
@@ -93,7 +94,7 @@ class Generator
     /**
      * @internal param $path
      */
-    public function make() : void
+    public function make(): void
     {
         $this->getFs()->dumpFile(
             $this->getTemplate()->getFilePath(),

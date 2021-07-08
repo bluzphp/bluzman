@@ -6,7 +6,6 @@
 
 namespace Bluzman\Tests;
 
-use Faker;
 use Mockery;
 use Nelmio\Alice\Loader\NativeLoader;
 use Symfony\Component\Filesystem\Filesystem;
@@ -33,14 +32,9 @@ class BluzmanTestCase extends \PHPUnit\Framework\TestCase
     protected $fs;
 
     /**
-     * @var Faker\Generator
-     */
-    protected $faker;
-
-    /**
      * @return Filesystem
      */
-    public function getFs()
+    public function getFs(): Filesystem
     {
         return $this->fs;
     }
@@ -48,29 +42,9 @@ class BluzmanTestCase extends \PHPUnit\Framework\TestCase
     /**
      * @param Filesystem $fs
      */
-    public function setFs($fs)
+    public function setFs(Filesystem $fs)
     {
         $this->fs = $fs;
-    }
-
-    /**
-     * @return Faker\Generator
-     */
-    public function getFaker()
-    {
-        if (!$this->faker) {
-            $this->faker = Faker\Factory::create();
-        }
-
-        return $this->faker;
-    }
-
-    /**
-     * @param Faker\Generator $faker
-     */
-    public function setFaker($faker)
-    {
-        $this->faker = $faker;
     }
 
     /**
@@ -92,12 +66,12 @@ class BluzmanTestCase extends \PHPUnit\Framework\TestCase
     /**
      * Setup FileSystem and Application fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->setFs(new Filesystem());
 
         // generate unique working path for future use in commands
-        $this->setWorkingPath(PATH_TMP . DS . $this->getFaker()->uuid);
+        $this->setWorkingPath(PATH_TMP . DS . uniqid('bluzman_'));
 
         $loader = new NativeLoader();
         $fixture = $loader->loadfile(__DIR__ . DS . 'Resources' . DS . 'fixtures' . DS . 'application.yml');
@@ -124,7 +98,7 @@ class BluzmanTestCase extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         Mockery::close();
 
