@@ -58,7 +58,7 @@ class StatusCommand extends AbstractServerCommand
                 throw new NotRunningException();
             }
 
-            $process = new Process("ps -p $pid -o comm=");
+            $process = Process::fromShellCommandline("ps -p $pid -o comm=");
             $process->run();
 
             $processOutput = $process->getOutput();

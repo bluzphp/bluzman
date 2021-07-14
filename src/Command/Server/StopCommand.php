@@ -59,7 +59,7 @@ class StopCommand extends AbstractServerCommand
             return 1;
         }
 
-        $process = new Process("kill -9 $pid");
+        $process = Process::fromShellCommandline("kill -9 $pid");
         $process->run();
 
         $this->write("Server <info>$host:$port</info> stopped");
