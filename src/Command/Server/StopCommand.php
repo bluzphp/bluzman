@@ -45,7 +45,7 @@ class StopCommand extends AbstractServerCommand
      * @param OutputInterface $output
      * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->info('Running "server:stop" command');
 

@@ -47,7 +47,7 @@ class StartCommand extends AbstractServerCommand
      * @param OutputInterface $output
      * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->info('Running "server:start" command ... [' . $input->getOption('env') . ']');
 
@@ -55,14 +55,12 @@ class StartCommand extends AbstractServerCommand
         $port = $input->getOption('port');
         $env = $input->getOption('env');
 
-        $publicDir = $this->getApplication()->getWorkingPath() . DS . 'public';
-
         // setup BLUZ_ENV to environment
         // enable BLUZ_DEBUG
         // use public/routing.php
         $process = Process::fromShellCommandline(
             "export BLUZ_ENV=$env && export BLUZ_DEBUG=1 && export BLUZ_LOG=1 && php -S $host:$port routing.php",
-            $publicDir
+            $this->getApplication()->getWorkingPath() . DS . 'public'
         );
 
         $this->write("Server has been started at <info>$host:$port</info>");

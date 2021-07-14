@@ -63,7 +63,7 @@ class RunCommand extends AbstractCommand
      *
      * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getOption('debug')) {
             error_reporting(E_ALL);
