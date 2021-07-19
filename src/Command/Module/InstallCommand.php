@@ -9,7 +9,7 @@ namespace Bluzman\Command\Module;
 
 use Bluzman\Command\AbstractCommand;
 use Exception;
-use Symfony\Component\Console\Application;
+use Composer\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
