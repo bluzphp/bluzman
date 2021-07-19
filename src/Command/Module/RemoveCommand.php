@@ -8,7 +8,8 @@
 namespace Bluzman\Command\Module;
 
 use Bluzman\Command\AbstractCommand;
-use Composer\Console\Application as ComposerApplication;
+use Exception;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -52,8 +53,9 @@ class RemoveCommand extends AbstractCommand
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
+     * @throws Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Composer\Factory::getHomeDir() method
         // needs COMPOSER_HOME environment variable set
@@ -66,9 +68,8 @@ class RemoveCommand extends AbstractCommand
 
         // call `composer install` command programmatically
         $composerInput = new ArrayInput($arguments);
-        $application = new ComposerApplication();
+        $application = new Application();
         $application->setAutoExit(false); // prevent `$application->run` method from exiting the script
-        $application->run($composerInput);
-        return 0;
+        return $application->run($composerInput);
     }
 }
