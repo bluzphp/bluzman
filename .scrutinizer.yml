@@ -22,7 +22,7 @@ filter:
     - "bin/"
     - "tests/"
   dependency_paths:
-    - "vendor/"
+    - "vendor/*"
 tools:
   external_code_coverage: false
   php_analyzer: true
