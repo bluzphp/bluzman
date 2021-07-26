@@ -7,9 +7,8 @@ if (!$grid) return;
 $uid = $grid->getUid();
 <?="?>\n"?>
 <div class="clearfix" data-spy="grid" data-grid="<?='<?=$uid?>'?>">
-  <script>
-    // use data-spy="grid" for use AJAX for reload grid
-    require(['bluz.grid']);
+  <script type="module">
+    import <?="'<?=\$this->baseUrl('/js/bluz.grid.js');?>'"?>;
   </script>
 
   <nav class="navbar navbar-light bg-light justify-content-between">
@@ -49,11 +48,11 @@ $uid = $grid->getUid();
         <td class="controls d-flex justify-content-around">
           <a href="<?="<?= \$this->url('$module', 'crud', ['id' => \$row->$first]) ?>"?>" class="btn btn-primary"
              data-ajax-dialog data-ajax-method="get" data-modal-style="modal-lg">
-            <i class="fas fa-pencil-alt"></i>
+              <i class="bi bi-pencil"></i>
           </a>
           <a href="<?="<?= \$this->url('$module', 'crud', ['id' => \$row->$first]) ?>"?>" class="btn btn-danger"
              data-confirm data-ajax data-ajax-method="delete">
-            <i class="fa fa-trash"></i>
+              <i class="bi bi-trash"></i>
           </a>
         </td>
       </tr>
