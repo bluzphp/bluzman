@@ -10,9 +10,7 @@ $url = $this->url('<?=$module?>', 'crud');
   <input type="hidden" name="_method" value="<?='<?=$method?>'?>"/>
   <div class="modal-header">
     <h4 class="modal-title"><?="<?=__('$model')?>"?></h4>
-    <button type="button" class="close" data-dismiss="modal" aria-label="<?="<?=__('Close')?>"?>">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="btn-close" aria-label="<?="<?=__('Close')?>"?>" data-bs-dismiss="modal"></button>
   </div>
   <div class="modal-body">
 <?php foreach ($columns as $column => $meta) : $columnTitle = ucfirst($column); ?>
