@@ -1,5 +1,7 @@
+# Local environment
 .DS_Store
 .idea
-vendor
-composer.lock
+# Tools
 composer.phar
+# Vendors
+/vendor
